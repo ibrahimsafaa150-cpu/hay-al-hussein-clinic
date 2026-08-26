@@ -221,17 +221,17 @@
             </div>
         </div>
 
-        <!-- Integrated Pharmacy Info Card -->
+        <!-- Integrated Clinic Timings Info Card -->
         <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex flex-col gap-2">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-950/90 border border-emerald-500/30 flex items-center justify-center text-sm">💊</div>
-                    <h4 class="text-xs font-black text-white">صيدلية العيادة المتكاملة</h4>
+                    <div class="w-7 h-7 rounded-lg bg-cyan-950/90 border border-cyan-500/30 flex items-center justify-center text-sm">🩺</div>
+                    <h4 class="text-xs font-black text-white">عيادة حي الحسين التمريضية</h4>
                 </div>
-                <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md font-bold">2:00 ظهراً - 2:00 ليلاً</span>
+                <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded-md font-bold">طوارئ 24 ساعة</span>
             </div>
             <p class="text-[10px] text-slate-300 leading-relaxed font-semibold">
-                توفير كافة المستلزمات الطبية، المعقمات، المغذيات والعلاجات الوريدية اليومية، مع استمرار خدمات العيادة التمريضية والزيارات على مدار <b>24 ساعة</b>.
+                تقديم كافة الخدمات التمريضية السريرية والمنزلية، زرق الإبر، تركيب الكانيولا والمغذيات، وخياطة وتضميد الجروح مع استمرار العمل على مدار <b>24 ساعة طول اليوم</b>.
             </p>
         </div>
 
@@ -472,7 +472,7 @@
                 <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
             <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة 24 ساعة)</p>
-            <p class="text-[11px] text-emerald-400 font-bold">💊 الصيدلية: مفتوحة يومياً من 2:00 ظهراً إلى 2:00 ليلاً</p>
+            <p class="text-[11px] text-cyan-400 font-bold">🩺 عيادة حي الحسين التمريضية: طوارئ 24 ساعة طول اليوم</p>
             <div class="pt-1">
                 <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
                     <span>🗺️</span> <span>عرض الموقع على الخريطة</span>
@@ -612,7 +612,6 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Vital Tips with Updated Natural Concise Points
         const vitalTips = [
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
@@ -673,7 +672,6 @@
             vitalTimer = setInterval(nextVitalTip, 10000);
         }
 
-        // Touch Swipe
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeBox = document.getElementById('vitalSwipeContainer');
@@ -695,7 +693,6 @@
             }
         }
 
-        // PWA Native Prompt Handlers & Lifetime Installed Detection
         let deferredPrompt = null;
         const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('clinic_pwa_installed') === 'true';
 
