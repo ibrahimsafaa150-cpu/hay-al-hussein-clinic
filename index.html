@@ -9,77 +9,54 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="عيادة حي الحسين">
+    <link rel="manifest" href="data:application/manifest+json;utf-8,%7B%22name%22%3A%22%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%8A%D8%A9%22%2C%22short_name%22%3A%22%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%23030712%22%7D">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-            background-color: #030712;
-            color: #f3f4f6;
-            margin: 0;
-            padding: 0;
-        }
-
-        .dark-glass {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(3, 7, 18, 0.96) 100%);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(14, 165, 233, 0.2);
-        }
-
-        .dark-glass-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        html, body { width: 100%; overflow-x: hidden; background-color: #030712; color: #f3f4f6; margin: 0; padding: 0; }
+        .dark-glass { background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(3, 7, 18, 0.98) 100%); backdrop-filter: blur(14px); border: 1px solid rgba(14, 165, 233, 0.2); }
+        .dark-glass-card { background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .modal-active { display: flex !important; }
-
-        #sideDrawer {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        #sideDrawer.drawer-closed {
-            transform: translateX(100%);
-        }
-
-        #customToast {
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: translate(-50%, -150%);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 999999 !important;
-        }
-        #customToast.toast-show {
-            transform: translate(-50%, 0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .swipe-card {
-            transition: transform 0.35s ease, opacity 0.35s ease;
-            touch-action: pan-y;
-        }
+        #sideDrawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #sideDrawer.drawer-closed { transform: translateX(100%); }
+        #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
+        #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+        .swipe-card { transition: transform 0.35s ease, opacity 0.35s ease; touch-action: pan-y; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen relative w-full pb-24 select-none">
 
-    <!-- Toast Notification -->
     <div id="customToast" class="fixed top-5 left-1/2 bg-slate-900 border border-cyan-400 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 text-xs font-black text-white max-w-[92vw]">
         <span id="toastIcon" class="text-lg">✨</span>
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- PWA Install Dialog (Auto-Popup on Entry) -->
+    <div id="pwaPromptModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#111827] border border-cyan-500/30 rounded-3xl p-5 w-full max-w-xs shadow-2xl text-center space-y-4">
+            <h3 class="text-sm font-black text-white">تثبيت التطبيق</h3>
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-950/80 border border-cyan-400 flex items-center justify-center text-cyan-400 shadow">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
+                </svg>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-white">عيادة حي الحسين التمريضية</h4>
+                <p class="text-[10px] text-slate-400 mt-1">تثبيت التطبيق على الشاشة للوصول السريع وحجز المواعيد</p>
+            </div>
+            <div class="flex gap-2 pt-1">
+                <button onclick="dismissPwaPrompt()" class="flex-1 bg-slate-800 text-slate-300 py-2 rounded-xl text-xs font-semibold">إلغاء</button>
+                <button onclick="confirmPwaInstall()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-2 rounded-xl text-xs font-bold shadow">تثبيت</button>
+            </div>
+        </div>
     </div>
 
     <!-- Header Navigation -->
@@ -91,10 +68,10 @@
                     <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                <!-- Medical Emblem (5 Taps for Admin) -->
-                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-950 to-slate-950 border border-cyan-500/40 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition">
-                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
+                <!-- Medical Eagle Emblem Logo (Falcon Style) -->
+                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-1">
+                    <svg class="w-7 h-7 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/>
                     </svg>
                 </div>
 
@@ -130,7 +107,6 @@
             </div>
         </div>
 
-        <!-- Search Bar -->
         <div class="mt-2.5 relative w-full max-w-xl mx-auto flex items-center">
             <span class="absolute right-3 top-2.5 text-slate-500 text-xs pointer-events-none">🔍</span>
             <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة تمريضية أو تحليل مختبري..." 
@@ -144,7 +120,9 @@
         <div class="space-y-3.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/></svg>
+                    </div>
                     <div>
                         <h3 class="text-xs font-black text-white">عيادة حي الحسين التمريضية</h3>
                         <span class="text-[9px] text-cyan-400">المركزية الخافرة 24 ساعة</span>
@@ -171,6 +149,9 @@
                 </button>
                 <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
+                </button>
+                <button onclick="showPwaPromptModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
+                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
         </div>
@@ -203,7 +184,7 @@
     <!-- Main Content Container -->
     <main class="flex-grow w-full px-3 py-3 space-y-3 max-w-xl mx-auto">
         
-        <!-- Interactive Swipeable Vital Banner (10s Auto-Cycle & Touch Swipe) -->
+        <!-- Interactive Swipeable Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
             <div id="vitalCardInner" class="space-y-1 text-right"></div>
             <div class="flex justify-center gap-1.5 mt-2">
@@ -212,7 +193,7 @@
             </div>
         </div>
 
-        <!-- Integrated Pharmacy & Clinic Timings Info Card -->
+        <!-- Integrated Pharmacy Info Card -->
         <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex flex-col gap-2">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -248,7 +229,7 @@
                     <p class="text-xs text-slate-300 mt-1">تواصل مع كادر العيادة للحصول على توجيه لحالتك الصحية فوراً</p>
                 </div>
                 <button onclick="startClinicCallExperience()" class="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
-                    <span>📞</span> <span>طلب استشارة هاتفية فورية (مع نغمة العيادة)</span>
+                    <span>📞</span> <span>طلب استشارة هاتفية فورية</span>
                 </button>
             </div>
         </div>
@@ -306,7 +287,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Clean 3-Tab Layout) -->
+    <!-- Bottom Navigation Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -322,7 +303,7 @@
         </button>
     </div>
 
-    <!-- Product / Service 1080p Detail Modal -->
+    <!-- Product / Service Detail Modal -->
     <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -472,15 +453,15 @@
         </div>
     </div>
 
-    <!-- Interactive Call Simulation Modal -->
+    <!-- Direct Call Simulation Modal -->
     <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
                 📞
             </div>
             <div>
-                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
-                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">نغمة العيادة الهادئة قيد التشغيل 🎵</p>
+                <h4 class="text-xs font-black text-white">الاتصال المباشر بالعيادة</h4>
+                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">كادر عيادة حي الحسين متاح على مدار 24 ساعة</p>
             </div>
             
             <button onclick="toggleAudioMute()" id="muteAudioBtn" class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full mx-auto flex items-center gap-1">
@@ -596,7 +577,6 @@
         let ordersList = [];
         let cart = [];
 
-        // Audio synthesizer variables
         let audioCtx = null;
         let melodyInterval = null;
         let isMuted = false;
@@ -606,24 +586,24 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Swipeable Vital Guide Data
+        // Vital Tips with Clinical Guidelines
         const vitalTips = [
             {
-                title: "🫀 الدليل الطبي للقياس الدقيق لضغط الدم:",
+                title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
                 points: [
                     "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات.",
                     "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب.",
                     "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد.",
-                    "• المعدل السريري المثالي الطبيعي: 120/80 ملم زئبق."
+                    "• المعدل الطبيعي المعتمد: 120/80 ملم زئبق."
                 ]
             },
             {
-                title: "🩸 إرشادات وشروط فحص السكر بالدم:",
+                title: "🩸 نصائح وإرشادات فحص السكر بالدم:",
                 points: [
-                    "• فحص السكر الصائم (Fasting): يتطلب صيام 8 إلى 10 ساعات (طبيعي: 70-99 ملغ/دسل).",
-                    "• فحص السكر العشوائي (Random): أقل من 140 ملغ/دسل بعد الأكل بساعتين.",
-                    "• غسل اليدين وتجفيفهما جيداً قبل وخز الإصبع لتفادي قراءات مضللة.",
-                    "• فحص السكر التراكمي (HbA1c): لا يتطلب صياماً ويعكس انتظام السكر لـ 3 أشهر."
+                    "• فحص السكر الصائم الطبيعي: من 70 إلى 99 ملغ/دسل (بعد صيام 8 ساعات).",
+                    "• فحص السكر العشوائي الطبيعي: أقل من 140 ملغ/دسل.",
+                    "• غسل اليدين بالماء وتجفيفهما جيداً قبل وخز الإصبع لتفادي أي قراءة غير دقيقة.",
+                    "• فحص التراكمي HbA1c الطبيعي: أقل من 5.7% (يعكس معدل السكر لآخر 3 أشهر)."
                 ]
             }
         ];
@@ -668,7 +648,7 @@
             vitalTimer = setInterval(nextVitalTip, 10000);
         }
 
-        // Swipe Gesture Handling for Touch Devices
+        // Touch Swipe
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeBox = document.getElementById('vitalSwipeContainer');
@@ -685,12 +665,49 @@
         function handleSwipeGesture() {
             const diff = touchEndX - touchStartX;
             if (Math.abs(diff) > 40) {
-                if (diff < 0) {
-                    nextVitalTip();
-                } else {
-                    prevVitalTip();
-                }
+                if (diff < 0) { nextVitalTip(); } else { prevVitalTip(); }
                 restartVitalTimer();
+            }
+        }
+
+        // PWA Auto Prompt
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                if (!localStorage.getItem('pwa_prompt_dismissed')) {
+                    showPwaPromptModal();
+                }
+            }, 2000);
+        });
+
+        function showPwaPromptModal() {
+            closeDrawer();
+            const m = document.getElementById('pwaPromptModal');
+            m.classList.remove('hidden');
+            m.classList.add('modal-active');
+        }
+
+        function dismissPwaPrompt() {
+            localStorage.setItem('pwa_prompt_dismissed', 'true');
+            const m = document.getElementById('pwaPromptModal');
+            m.classList.remove('modal-active');
+            m.classList.add('hidden');
+        }
+
+        function confirmPwaInstall() {
+            dismissPwaPrompt();
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('تم تثبيت التطبيق بنجاح ✅');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                showToast('اضغط قائمة المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
             }
         }
 
