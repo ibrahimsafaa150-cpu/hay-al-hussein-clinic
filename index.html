@@ -1,1 +1,1257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>عيادة حي الحسين التمريضية والطبية | 24 ساعة</title>
+    
+    <meta name="theme-color" content="#030712">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="عيادة حي الحسين">
 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #030712;
+            color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dark-glass {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+        }
+
+        .dark-glass-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .glow-border-cyan {
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .modal-active { display: flex !important; }
+
+        #sideDrawer {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sideDrawer.drawer-closed {
+            transform: translateX(100%);
+        }
+
+        #customToast {
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -150%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999999 !important;
+        }
+        #customToast.toast-show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.03); }
+        }
+        .pulse-soft {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes marqueeSmooth {
+            0% { transform: translateX(25px); }
+            50% { transform: translateX(-25px); }
+            100% { transform: translateX(25px); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeSmooth 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen relative w-full pb-24 select-none">
+
+    <!-- Toast Notification -->
+    <div id="customToast" class="fixed top-5 left-1/2 bg-slate-900 border border-cyan-400 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 text-xs font-black text-white max-w-[92vw]">
+        <span id="toastIcon" class="text-lg">✨</span>
+        <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- Top Running Emergency Bar -->
+    <div class="w-full bg-gradient-to-r from-cyan-950 via-slate-900 to-cyan-950 border-b border-cyan-500/20 text-[10px] py-1.5 px-2 text-center text-cyan-300 flex justify-center items-center overflow-hidden">
+        <div class="animate-marquee flex items-center gap-2">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="font-bold">عيادة حي الحسين التمريضية المركزية الخافرة • كادر متمرس (رجالي - نسائي) • خدمة طبية ومنزلية 24 ساعة</span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2.5 w-full">
+        <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
+            
+            <div class="flex items-center gap-2.5 min-w-0">
+                <button onclick="playUiClick(); openDrawer()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center text-white active:scale-90 transition">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+
+                <!-- Custom Luxury Medical Eagle Emblem -->
+                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-900/60 to-slate-950 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.25)] flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
+                    </svg>
+                </div>
+
+                <div class="flex flex-col min-w-0 cursor-pointer" onclick="playUiClick(); switchMainTab('services')">
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="text-xs sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 truncate">
+                            عيادة حي الحسين
+                        </h1>
+                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[8px] font-black px-1.5 py-0.2 rounded-full">24H</span>
+                    </div>
+                    <span class="text-[8px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="playUiClick(); openCartModal()" class="relative w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
+                    <span class="text-sm">📋</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+
+                <!-- Admin Action Suite -->
+                <div id="adminActionHeader" class="hidden items-center gap-1.5">
+                    <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950/80 border border-teal-500/60 text-teal-300 font-bold text-[10px] px-2 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                        <span>🔔</span> <span class="hidden sm:inline">الحجوزات</span>
+                        <span id="pendingOrdersBadge" class="hidden absolute -top-1.5 -left-1.5 bg-rose-600 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-pulse">0</span>
+                    </button>
+                    <button onclick="playUiClick(); openAddModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold text-[10px] px-2.5 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                        <span>➕</span>
+                    </button>
+                    <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950/80 border border-rose-800 text-rose-300 font-bold text-[10px] px-2 py-2 rounded-xl active:scale-95">
+                        <span>🔒</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mt-2.5 relative w-full max-w-xl mx-auto flex items-center">
+            <span class="absolute right-3 top-2.5 text-slate-500 text-xs pointer-events-none">🔍</span>
+            <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة، تحليل، دواء، أو كادر طبي..." 
+                   class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-2 border border-slate-800 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition shadow-inner">
+        </div>
+    </header>
+
+    <!-- Side Drawer Menu -->
+    <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+    <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
+        <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
+                    <div>
+                        <h3 class="text-xs font-black text-white">عيادة حي الحسين</h3>
+                        <span class="text-[9px] text-cyan-400">المركزية الخافرة 24 ساعة</span>
+                    </div>
+                </div>
+                <button onclick="playUiClick(); closeDrawer()" class="text-slate-400 hover:text-white font-bold text-sm p-1">✕</button>
+            </div>
+
+            <div class="space-y-1.5 text-xs">
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 transition text-right">
+                    <span>🩺</span> <span class="font-bold">الخدمات التمريضية والجراحية</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
+                    <span>🧪</span> <span class="font-bold">قسم المختبر وسحب العينات</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('pharmacy')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
+                    <span>💊</span> <span class="font-bold">الصيدلية والمستلزمات الطبية</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
+                    <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية / أطباء</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); openStaticModal('vitalEducationModal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-cyan-300 transition text-right">
+                    <span>📊</span> <span class="font-bold">دليل قياس الضغط والسكر</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
+                    <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 text-center">
+            <p class="text-[9px] text-slate-500 font-bold">العيادة المركزية الخافرة - حي الحسين © 2026</p>
+        </div>
+    </div>
+
+    <!-- Main Navigation Top Pills -->
+    <nav class="bg-slate-950 border-b border-slate-800/80 py-2.5 px-3">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="mainSectionPills">
+            <button onclick="playUiClick(); switchMainTab('services')" id="pill-services" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow">
+                <span>🩺</span> <span>الخدمات التمريضية</span>
+            </button>
+            <button onclick="playUiClick(); switchMainTab('lab')" id="pill-lab" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
+                <span>🧪</span> <span>المختبر والتحاليل</span>
+            </button>
+            <button onclick="playUiClick(); switchMainTab('pharmacy')" id="pill-pharmacy" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
+                <span>💊</span> <span>الصيدلية والعلاجات</span>
+            </button>
+            <button onclick="playUiClick(); switchMainTab('consult')" id="pill-consult" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
+                <span>👨‍⚕️</span> <span>الاستشارات والتحويل</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Subcategories Scroll Bar (Dynamic for Services/Lab/Pharmacy) -->
+    <div id="subFilterBar" class="bg-[#050b14] border-b border-slate-800/40 py-2 px-3">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="subCategoryPills"></div>
+    </div>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="flex-grow w-full px-3 py-3 space-y-4 max-w-xl mx-auto">
+        
+        <!-- Emergency & Clinical Trust Hero Card -->
+        <div class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-[#041b2d] shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-[11px] font-black text-cyan-300">عيادة خافرة 24 ساعة</span>
+                </div>
+                <span class="text-[10px] text-slate-400 font-semibold">كوادر رجالية ونسائية معتمدة</span>
+            </div>
+            
+            <div class="mt-2.5 grid grid-cols-3 gap-2 text-center text-[10px] font-bold">
+                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
+                    <span class="block text-cyan-400 text-xs">🏡 100%</span>
+                    <span class="text-slate-300">زيارات منزلية</span>
+                </div>
+                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
+                    <span class="block text-teal-400 text-xs">🧪 فوري</span>
+                    <span class="text-slate-300">سحب وسرعة تحاليل</span>
+                </div>
+                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
+                    <span class="block text-amber-400 text-xs">🩺 تعقيم دقيق</span>
+                    <span class="text-slate-300">جراحة وتمريض</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Section Header -->
+        <div class="flex items-center justify-between px-1">
+            <h3 id="currentSectionTitle" class="text-xs font-black text-white flex items-center gap-1.5">
+                <span class="text-cyan-400">●</span> جميع الخدمات التمريضية والسريرية
+            </h3>
+            <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
+        </div>
+
+        <!-- Dynamic Grid View -->
+        <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
+
+        <!-- Consultation Hub View (Special Tab) -->
+        <div id="consultationView" class="hidden space-y-3">
+            <div class="dark-glass rounded-2xl p-4 border border-cyan-500/30 text-center space-y-3">
+                <div class="w-14 h-14 mx-auto rounded-full bg-cyan-950/80 border border-cyan-400 flex items-center justify-center text-2xl pulse-soft">
+                    👨‍⚕️
+                </div>
+                <div>
+                    <h4 class="text-sm font-black text-white">مركز الاستشارات الطبية السريعة</h4>
+                    <p class="text-xs text-slate-300 mt-1">تواصل مع أطباء واستشاريين أو احصل على توجيه لحالتك الصحية فوراً</p>
+                </div>
+                <button onclick="startClinicCallExperience()" class="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
+                    <span>📞</span> <span>طلب استشارة هاتفية فورية (مع نغمة العيادة)</span>
+                </button>
+            </div>
+
+            <div class="space-y-2">
+                <h5 class="text-xs font-black text-slate-300 px-1">نخبة التخصصات والأطباء المعتمدين:</h5>
+                <div class="grid grid-cols-1 gap-2" id="doctorsListContainer">
+                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-lg">🫀</div>
+                            <div class="text-right">
+                                <h6 class="text-xs font-black text-white">استشارة باطنية وقلبية</h6>
+                                <p class="text-[10px] text-slate-400">تقييم الضغط، السكر، وتخطيط القلب ECG</p>
+                            </div>
+                        </div>
+                        <button onclick="directConsultWhatsApp('باطنية وقلبية')" class="bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
+                    </div>
+
+                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-emerald-500/30 flex items-center justify-center text-lg">🩹</div>
+                            <div class="text-right">
+                                <h6 class="text-xs font-black text-white">استشارة جراحة صغرى وعناية بالجروح</h6>
+                                <p class="text-[10px] text-slate-400">خياطة، حروق، وقروح السكري والعمليات</p>
+                            </div>
+                        </div>
+                        <button onclick="directConsultWhatsApp('جراحة صغرى وجروح')" class="bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
+                    </div>
+
+                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-amber-500/30 flex items-center justify-center text-lg">🦴</div>
+                            <div class="text-right">
+                                <h6 class="text-xs font-black text-white">علاج طبيعي وتأهيل منزلي</h6>
+                                <p class="text-[10px] text-slate-400">جلسات بالأجهزة بعد الجلطات والكسور</p>
+                            </div>
+                        </div>
+                        <button onclick="directConsultWhatsApp('علاج طبيعي وتأهيل')" class="bg-amber-950 border border-amber-500/40 text-amber-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
+            <div class="text-3xl mb-2">🔍</div>
+            <h4 class="text-xs font-bold text-white">لم يتم العثور على أي نتائج</h4>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
+        <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">🩺</span>
+            <span>التمريض</span>
+        </button>
+        <button onclick="playUiClick(); switchMainTab('lab')" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">🧪</span>
+            <span>المختبر</span>
+        </button>
+        <button onclick="playUiClick(); switchMainTab('pharmacy')" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">💊</span>
+            <span>الصيدلية</span>
+        </button>
+        <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
+            <span class="text-lg">📋</span>
+            <span>الحجز</span>
+        </button>
+    </div>
+
+    <!-- Booking / Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
+            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1"><span>📋</span> سلة الخدمات والتحاليل المطلوبة</h3>
+                <button onclick="playUiClick(); closeCartModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+
+            <div id="cartItemsList" class="overflow-y-auto space-y-2 flex-grow my-2 pr-0.5 no-scrollbar"></div>
+
+            <div class="border-t border-slate-800 pt-2.5 space-y-2">
+                <div class="flex justify-between items-center text-xs font-bold text-white">
+                    <span>المجموع التقديري:</span>
+                    <span id="cartTotalPrice" class="text-cyan-400 font-black text-sm">0 د.ع</span>
+                </div>
+                <button onclick="playUiClick(); openCustomerDetailsModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition">
+                    <span>📝</span> <span>تثبيت الموعد وتأكيد الطلب</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Details Modal -->
+    <div id="customerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative">
+            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1"><span>🩺</span> بيانات تأكيد الحجز الطبي</h3>
+                <button onclick="playUiClick(); closeCustomerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+
+            <form onsubmit="processBookingSubmission(event)" class="space-y-2.5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">اسم المريض الثلاثي:</label>
+                    <input type="text" id="custName" required placeholder="مثال: علي محمد حسين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">رقم الهاتف:</label>
+                        <input type="tel" id="custPhone" required placeholder="077XXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">نوع الكادر المفضل:</label>
+                        <select id="staffPref" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="كادر رجالي">👨‍⚕️ كادر رجالي</option>
+                            <option value="كادر نسائي">👩‍⚕️ كادر نسائي</option>
+                            <option value="لا يوجد تفضيل">⚡ الأسرع متاحاً</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">مكان تقديم الخدمة:</label>
+                    <select id="custType" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                        <option value="حضور في العيادة">🏥 الحضور داخل العيادة</option>
+                        <option value="زيارة تمريضية منزلية">🏡 طلب زيارة منزلية (Home Care)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">العنوان بالتفصيل / أقرب نقطة دالة:</label>
+                    <input type="text" id="custAddress" required placeholder="حي الحسين - قرب..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="pt-2 border-t border-slate-800">
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition">
+                        <span>📲</span> <span>إرسال الحجز فوراً عبر WhatsApp</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vital Education (Blood Pressure & Sugar Infographic Modal) -->
+    <div id="vitalEducationModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-cyan-300 flex items-center gap-1.5">
+                    <span>📊</span> دليل القياس السريري المعتمد
+                </h3>
+                <button onclick="playUiClick(); closeStaticModal('vitalEducationModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+
+            <!-- Blood Pressure Card -->
+            <div class="dark-glass-card p-3 rounded-xl border border-cyan-500/30 space-y-2 text-right">
+                <h4 class="text-xs font-black text-white flex items-center gap-1"><span>🫀</span> خطوات القياس الدقيق لضغط الدم:</h4>
+                <div class="space-y-1 text-[10.5px] text-slate-300">
+                    <p>✔️ <b>الراحة قبل القياس:</b> الاسترخاء لمدة 5 دقائق وتجنب التدخين أو المنبهات.</p>
+                    <p>✔️ <b>وضعية صحيحة:</b> الجلوس باستقامة مع إسناد الظهر ووضع الذراع بمستوى القلب.</p>
+                    <p>✔️ <b>كفة مناسبة:</b> لف الكفة فوق الكوع بـ 2 سم بدون شد مفرط.</p>
+                    <p>✔️ <b>المعدل الطبيعي:</b> حوالي 120/80 ملم زئبق.</p>
+                </div>
+            </div>
+
+            <!-- Blood Sugar Card -->
+            <div class="dark-glass-card p-3 rounded-xl border border-teal-500/30 space-y-2 text-right">
+                <h4 class="text-xs font-black text-white flex items-center gap-1"><span>🩸</span> مستويات فحص السكر بالدم:</h4>
+                <div class="space-y-1 text-[10.5px] text-slate-300">
+                    <p>🟢 <b>السكر الصائم (Fasting):</b> من 70 إلى 99 ملغ/دسل (طبيعي).</p>
+                    <p>🟡 <b>السكر العشوائي / بعد الأكل:</b> أقل من 140 ملغ/دسل.</p>
+                    <p>🔴 <b>مرحلة الخطر/الارتفاع:</b> أعلى من 180 ملغ/دسل يستوجب استشارة طبية عاجلة.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinic Location Modal -->
+    <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white">📍 موقع العيادة المركزية</h3>
+                <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة مستمرة 24 ساعة).</p>
+            <div class="pt-2">
+                <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
+                    <span>🗺️</span> <span>فتح الموقع على خرائط Google</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Call Simulation Modal -->
+    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto pulse-soft">
+                📞
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
+                <p class="text-[10px] text-cyan-300 mt-1">نغمة الانتظار الطبية قيد التشغيل 🎵</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold">إنهاء</button>
+                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1">اتصال هاتفي</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin PIN Entry Modal -->
+    <div id="adminPinModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative text-center space-y-3">
+            <div class="text-3xl">🔐</div>
+            <h3 class="text-xs font-black text-white">لوحة تحكم المشرف الطبي</h3>
+            <input type="password" id="adminPinInput" placeholder="أدخل رمز المرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center text-xs text-white focus:outline-none focus:border-cyan-400">
+            <div class="flex gap-2 pt-1">
+                <button onclick="playUiClick(); closePinModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs font-semibold">إلغاء</button>
+                <button onclick="playUiClick(); verifyAdminPin()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-1.5 rounded-xl text-xs font-bold shadow">دخول</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Orders & Lab Queue Modal -->
+    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
+            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">🔔</span> سجل الحجوزات والعينات المسحوبة
+                </h3>
+                <button onclick="playUiClick(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            <div class="flex-grow overflow-y-auto space-y-2 pr-0.5 no-scrollbar my-2" id="ordersQueueList"></div>
+        </div>
+    </div>
+
+    <!-- Admin Add/Edit Item Modal -->
+    <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر جديد</h3>
+                <button onclick="playUiClick(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            
+            <form id="itemForm" onsubmit="saveItemRecord(event)" class="space-y-2.5">
+                <input type="hidden" id="editItemId">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">القسم الرئيسي:</label>
+                    <select id="itemSectionType" onchange="updateCategoryDropdownOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                        <option value="services">🩺 خدمات تمريضية</option>
+                        <option value="lab">🧪 تحاليل مختبرية</option>
+                        <option value="pharmacy">💊 صيدلية وعلاجات</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">التصنيف الفرعي:</label>
+                    <select id="itemSubCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"></select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الاسم أو الإجراء الطبي:</label>
+                    <input type="text" id="itemName" required placeholder="مثال: تحليل صورة الدم الكاملة CBC" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الوصف / شروط العينة / طريقة الاستخدام:</label>
+                    <input type="text" id="itemUsage" required placeholder="مثال: سحب دم وريدي - النتيجة خلال ساعتين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة:</label>
+                        <input type="text" id="itemPrice" required placeholder="8,000 د.ع" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (اختياري):</label>
+                        <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button type="button" onclick="playUiClick(); closeAdminItemModal()" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
+                    <button type="submit" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">حفظ العنصر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        // Firebase Configuration Connected to your Project
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWFCDMuys366TxAn_ubNRSPF6fVDGD6N4",
+            authDomain: "hay-al-hussein-clinic.firebaseapp.com",
+            databaseURL: "https://hay-al-hussein-clinic-default-rtdb.firebaseio.com",
+            projectId: "hay-al-hussein-clinic",
+            storageBucket: "hay-al-hussein-clinic.firebasestorage.app",
+            messagingSenderId: "181778867349",
+            appId: "1:181778867349:web:2ffe53efdedb9eaba6279c"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const dataRef = db.ref('clinic_master_data');
+        const ordersRef = db.ref('clinic_bookings_queue');
+
+        let isAdmin = localStorage.getItem('clinic_admin_auth') === 'true';
+        let currentMainTab = 'services'; // services | lab | pharmacy | consult
+        let currentSubFilter = 'الكل';
+        let allClinicData = { services: [], lab: [], pharmacy: [] };
+        let ordersList = [];
+        let cart = [];
+        let callAudioInterval = null;
+
+        const subCategoriesConfig = {
+            services: ["الكل", "تمريض منزلي", "كانيولا وزرق إبر", "خياطة وتضميد جروح", "فحوصات وECG", "قسطرة وتجبير", "حجامة طبية"],
+            lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"],
+            pharmacy: ["الكل", "علاجات ومغذيات وريدية", "مستلزمات وتضميد معقم", "أجهزة قياس وفحص", "إسعافات أولية"]
+        };
+
+        // UI Audio Synthesis
+        function playUiClick() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(540, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.04);
+            } catch(e) {}
+        }
+
+        // Clinic Soft Melody Ringtone for Waiting
+        function startClinicCallExperience() {
+            document.getElementById('callAudioModal').classList.remove('hidden');
+            document.getElementById('callAudioModal').classList.add('modal-active');
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [440, 493.88, 554.37, 587.33, 659.25];
+                let noteIdx = 0;
+                callAudioInterval = setInterval(() => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(notes[noteIdx % notes.length], ctx.currentTime);
+                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.35);
+                    noteIdx++;
+                }, 400);
+            } catch(e) {}
+        }
+
+        function stopClinicCallExperience() {
+            clearInterval(callAudioInterval);
+            document.getElementById('callAudioModal').classList.remove('modal-active');
+            document.getElementById('callAudioModal').classList.add('hidden');
+        }
+
+        function showToast(msg, icon = "✨") {
+            const toast = document.getElementById('customToast');
+            document.getElementById('toastMessage').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('toast-show');
+            void toast.offsetWidth;
+            toast.classList.add('toast-show');
+            setTimeout(() => toast.classList.remove('toast-show'), 2200);
+        }
+
+        function openDrawer() {
+            document.getElementById('sideDrawer').classList.remove('drawer-closed');
+            document.getElementById('drawerBackdrop').classList.remove('hidden');
+        }
+        function closeDrawer() {
+            document.getElementById('sideDrawer').classList.add('drawer-closed');
+            document.getElementById('drawerBackdrop').classList.add('hidden');
+        }
+
+        function openStaticModal(id) {
+            closeDrawer();
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('modal-active');
+        }
+        function closeStaticModal(id) {
+            document.getElementById(id).classList.remove('modal-active');
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        // Initialize and Seed Default Clinical Data
+        function initClinicSystem() {
+            dataRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val && val.services && val.services.length > 0) {
+                    allClinicData = val;
+                } else {
+                    allClinicData = {
+                        services: [
+                            { id: "srv_1", category: "تمريض منزلي", name: "زيارة تمريضية منزلية متكاملة", usage: "متابعة ما بعد العمليات، فحص المؤشرات وإعطاء العلاج (كادر رجالي/نسائي)", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80" },
+                            { id: "srv_2", category: "كانيولا وزرق إبر", name: "تركيب كانيولا وإعطاء مغذي وريدي", usage: "تركيب معقم ومراقبة انسياب المحاليل الوريدية بدقة", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=500&q=80" },
+                            { id: "srv_3", category: "خياطة وتضميد جروح", name: "خياطة وكبس وتضميد الجروح والحروق", usage: "تنظيف وتعقيم بأحدث المواد الطبية ورفع الخيوط", price: "12,000 د.ع", image: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=500&q=80" },
+                            { id: "srv_4", category: "فحوصات وECG", name: "تخطيط القلب السريري ECG", usage: "تخطيط دقيق للنشاط الكهربائي للقلب وقراءة فورية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=500&q=80" },
+                            { id: "srv_5", category: "قسطرة وتجبير", name: "تركيب وتبديل القسطرة البولية", usage: "إجراء تمريضي معقم بالكامل مع كيس جمع البول", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=500&q=80" },
+                            { id: "srv_6", category: "حجامة طبية", name: "حجامة وقائية وعلاجية معقمة", usage: "بإشراف كادر مختص وكؤوس استخدام مفرد لمرة واحدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=500&q=80" }
+                        ],
+                        lab: [
+                            { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=500&q=80" },
+                            { id: "lab_2", category: "وظائف كبد وكلى", name: "وظائف الكلى (Urea & Creatinine)", usage: "تقييم كفاءة الكلى ونسبة اليوريا والكرياتينين بالدم", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=500&q=80" },
+                            { id: "lab_3", category: "الهرمونات والفيتامينات", name: "فحص فيتامين د (Vitamin D3)", usage: "فحص دقيق لمستوى فيتامين د بجهاز التوهج المناعي", price: "18,000 د.ع", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=500&q=80" },
+                            { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=500&q=80" }
+                        ],
+                        pharmacy: [
+                            { id: "ph_1", category: "علاجات ومغذيات وريدية", name: "مغذي وريدي Normal Saline / Glucose", usage: "محلول وريدي معقم 500 مل للترطيب والتعويض", price: "3,000 د.ع", image: "https://images.unsplash.com/photo-1583912267670-6575ad472688?auto=format&fit=crop&w=500&q=80" },
+                            { id: "ph_2", category: "مستلزمات وتضميد معقم", name: "بكج غيار وتضميد جروح معقم متكامل", usage: "شاش، بلاستر طبي، بيتادين، وضماد حروق جلدي", price: "5,000 د.ع", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=500&q=80" }
+                        ]
+                    };
+                    dataRef.set(allClinicData);
+                }
+                renderActiveTabContent();
+            });
+
+            // Realtime Sync for Orders Queue
+            ordersRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    ordersList = Object.keys(val).map(k => ({ keyId: k, ...val[k] })).reverse();
+                } else {
+                    ordersList = [];
+                }
+                updateAdminBadge();
+                if (document.getElementById('ordersQueueModal').classList.contains('modal-active')) {
+                    renderOrdersQueue();
+                }
+            });
+
+            try {
+                cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || [];
+            } catch(e) { cart = []; }
+
+            updateAdminUI();
+            updateCartBadge();
+        }
+
+        function switchMainTab(tab) {
+            currentMainTab = tab;
+            currentSubFilter = 'الكل';
+            
+            ['services', 'lab', 'pharmacy', 'consult'].forEach(t => {
+                const el = document.getElementById(`pill-${t}`);
+                if (el) {
+                    if (t === tab) {
+                        el.className = "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow";
+                    } else {
+                        el.className = "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition";
+                    }
+                }
+            });
+
+            renderActiveTabContent();
+        }
+
+        function renderSubCategories() {
+            const container = document.getElementById('subCategoryPills');
+            const subFilterBar = document.getElementById('subFilterBar');
+
+            if (currentMainTab === 'consult') {
+                subFilterBar.classList.add('hidden');
+                return;
+            } else {
+                subFilterBar.classList.remove('hidden');
+            }
+
+            const list = subCategoriesConfig[currentMainTab] || [];
+            let html = '';
+            list.forEach(sub => {
+                const isActive = currentSubFilter === sub;
+                html += `
+                    <button onclick="playUiClick(); filterBySub('${sub}')" 
+                            class="px-3 py-1 rounded-xl text-[10.5px] font-bold border transition shrink-0 ${
+                                isActive ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                            }">
+                        ${sub}
+                    </button>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterBySub(sub) {
+            currentSubFilter = sub;
+            renderSubCategories();
+            renderActiveTabContent();
+        }
+
+        function renderActiveTabContent() {
+            renderSubCategories();
+            const grid = document.getElementById('mainItemsGrid');
+            const consultView = document.getElementById('consultationView');
+            const noResults = document.getElementById('noResults');
+            const sectionTitle = document.getElementById('currentSectionTitle');
+            const counterText = document.getElementById('itemsCounterText');
+
+            if (currentMainTab === 'consult') {
+                grid.classList.add('hidden');
+                consultView.classList.remove('hidden');
+                noResults.classList.add('hidden');
+                sectionTitle.innerHTML = '<span class="text-cyan-400">●</span> الاستشارات والتحويل الطبي';
+                counterText.innerText = '';
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            consultView.classList.add('hidden');
+
+            let dataset = allClinicData[currentMainTab] || [];
+            if (currentSubFilter !== 'الكل') {
+                dataset = dataset.filter(item => item.category === currentSubFilter);
+            }
+
+            const titlesMap = {
+                services: "الخدمات التمريضية والسريرية",
+                lab: "قسم المختبر والتحاليل وسحب العينات",
+                pharmacy: "صيدلية العيادة والعلاجات الوريدية"
+            };
+            sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${titlesMap[currentMainTab]} ${currentSubFilter !== 'الكل' ? `(${currentSubFilter})` : ''}`;
+            counterText.innerText = `${dataset.length} عنصر`;
+
+            grid.innerHTML = '';
+            if (dataset.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            dataset.forEach(item => {
+                grid.innerHTML += `
+                    <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
+                                <img src="${item.image || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80'}" class="object-cover w-full h-full" loading="lazy">
+                                <span class="absolute top-1.5 right-1.5 bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-[8.5px] font-black text-cyan-300 px-2 py-0.5 rounded-md">${item.category}</span>
+                            </div>
+
+                            <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
+                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2">${item.usage}</p>
+                                <div class="pt-1 border-t border-slate-800/60 flex items-center justify-between">
+                                    <span class="text-xs font-black text-cyan-400">${item.price}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5 pt-1 border-t border-slate-800">
+                            <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:opacity-95 text-white font-black py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1 shadow active:scale-95">
+                                <span>➕</span> <span>طلب للحجز</span>
+                            </button>
+                            ${isAdmin ? `
+                            <div class="flex items-center justify-between gap-1 pt-0.5">
+                                <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
+                                <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function handleGlobalSearch(q) {
+            const query = q.trim().toLowerCase();
+            if (!query) { renderActiveTabContent(); return; }
+            if (currentMainTab === 'consult') return;
+
+            let dataset = allClinicData[currentMainTab] || [];
+            const filtered = dataset.filter(i => i.name.toLowerCase().includes(query) || i.usage.toLowerCase().includes(query));
+            
+            const grid = document.getElementById('mainItemsGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            filtered.forEach(item => {
+                grid.innerHTML += `
+                    <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
+                        <div class="flex flex-col gap-2">
+                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 overflow-hidden">
+                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
+                            </div>
+                            <div class="space-y-1 text-right">
+                                <h4 class="text-xs font-black text-white leading-snug">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold">${item.usage}</p>
+                                <span class="text-xs font-black text-cyan-400">${item.price}</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(id, section) {
+            const item = (allClinicData[section] || []).find(x => String(x.id) === String(id));
+            if (!item) return;
+            const exist = cart.find(c => String(c.id) === String(id));
+            if (exist) {
+                exist.qty += 1;
+            } else {
+                cart.push({ ...item, section, qty: 1 });
+            }
+            playUiClick();
+            localStorage.setItem('clinic_h_cart', JSON.stringify(cart));
+            updateCartBadge();
+            showToast(`تمت إضافة "${item.name}" للسلة`, '📋');
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            document.getElementById('cartBadge').innerText = count;
+        }
+
+        function openCartModal() {
+            renderCartContent();
+            document.getElementById('cartModal').classList.remove('hidden');
+            document.getElementById('cartModal').classList.add('modal-active');
+        }
+        function closeCartModal() {
+            document.getElementById('cartModal').classList.remove('modal-active');
+            document.getElementById('cartModal').classList.add('hidden');
+        }
+
+        function renderCartContent() {
+            const list = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('cartTotalPrice');
+            list.innerHTML = '';
+
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">قائمة الحجز فارغة حالياً</div>`;
+                totalEl.innerText = '0 د.ع';
+                return;
+            }
+
+            let total = 0;
+            cart.forEach((item, idx) => {
+                let num = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
+                total += num * item.qty;
+                list.innerHTML += `
+                    <div class="flex items-center justify-between bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800">
+                        <div class="min-w-0 text-right">
+                            <h5 class="text-xs font-black text-white truncate">${item.name}</h5>
+                            <span class="text-[10px] text-cyan-400 font-bold">${item.price} (${item.section})</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeCartQty(${idx}, -1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">-</button>
+                            <span class="text-xs font-bold text-cyan-300">${item.qty}</span>
+                            <button onclick="changeCartQty(${idx}, 1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">+</button>
+                            <button onclick="removeCartItem(${idx})" class="text-rose-400 text-xs p-1">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            totalEl.innerText = total.toLocaleString() + ' د.ع';
+        }
+
+        function changeCartQty(idx, d) {
+            cart[idx].qty += d;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
+            localStorage.setItem('clinic_h_cart', JSON.stringify(cart));
+            updateCartBadge();
+            renderCartContent();
+        }
+
+        function removeCartItem(idx) {
+            cart.splice(idx, 1);
+            localStorage.setItem('clinic_h_cart', JSON.stringify(cart));
+            updateCartBadge();
+            renderCartContent();
+        }
+
+        function openCustomerDetailsModal() {
+            if (cart.length === 0) { showToast('يرجى اختيار عناصر أولاً', '⚠️'); return; }
+            closeCartModal();
+            document.getElementById('customerModal').classList.remove('hidden');
+            document.getElementById('customerModal').classList.add('modal-active');
+        }
+        function closeCustomerModal() {
+            document.getElementById('customerModal').classList.remove('modal-active');
+            document.getElementById('customerModal').classList.add('hidden');
+        }
+
+        function processBookingSubmission(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const staff = document.getElementById('staffPref').value;
+            const type = document.getElementById('custType').value;
+            const address = document.getElementById('custAddress').value.trim();
+
+            let total = 0;
+            let itemsSummary = [];
+            let msg = `🩺 *طلب موعد وحجز - عيادة حي الحسين المركزية*\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `👤 *المريض:* ${name}\n`;
+            msg += `📞 *الهاتف:* ${phone}\n`;
+            msg += `👥 *الكادر المطلوب:* ${staff}\n`;
+            msg += `📍 *المكان:* ${type}\n`;
+            msg += `🏠 *العنوان:* ${address}\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n📦 *الخدمات والتحاليل المطلوبة:*\n`;
+
+            cart.forEach((c, i) => {
+                let num = parseFloat(c.price.replace(/[^0-9.]/g, '')) || 0;
+                total += num * c.qty;
+                itemsSummary.push({ name: c.name, price: c.price, qty: c.qty, section: c.section });
+                msg += `${i + 1}. ${c.name} (${c.qty}x) - ${c.price}\n`;
+            });
+
+            msg += `\n💰 *المجموع التقديري:* ${total.toLocaleString()} د.ع\n`;
+            msg += `⏰ *وقت التسجيل:* ${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`;
+
+            // Save to Firebase Queue with Lab Sample Tracking
+            ordersRef.push({
+                patientName: name,
+                patientPhone: phone,
+                staffPreference: staff,
+                locationType: type,
+                address: address,
+                items: itemsSummary,
+                totalPrice: total.toLocaleString() + ' د.ع',
+                sampleDrawnTime: new Date().toLocaleTimeString('ar-IQ'),
+                dateCreated: `${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`,
+                status: 'pending'
+            });
+
+            cart = [];
+            localStorage.setItem('clinic_h_cart', JSON.stringify(cart));
+            updateCartBadge();
+            closeCustomerModal();
+
+            // Direct WhatsApp Trigger
+            const targetPhone = "9647726053522";
+            window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
+        }
+
+        function directConsultWhatsApp(type) {
+            const msg = `👨‍⚕️ مرحباً، أود حجز استشارة طبية بخصوص (${type}) من خلال تطبيق عيادة حي الحسين.`;
+            window.location.href = `https://api.whatsapp.com/send?phone=9647726053522&text=${encodeURIComponent(msg)}`;
+        }
+
+        // Secret Admin Trigger (5 Clicks on Emblem)
+        let emblemClicks = 0;
+        let emblemTimer = null;
+        document.getElementById('secretLogoTrigger').addEventListener('click', () => {
+            playUiClick();
+            emblemClicks++;
+            clearTimeout(emblemTimer);
+            emblemTimer = setTimeout(() => { emblemClicks = 0; }, 1800);
+            if (emblemClicks === 5) {
+                emblemClicks = 0;
+                if (!isAdmin) {
+                    document.getElementById('adminPinInput').value = '';
+                    document.getElementById('adminPinModal').classList.remove('hidden');
+                    document.getElementById('adminPinModal').classList.add('modal-active');
+                } else {
+                    showToast('أنت مسجل كـ مشرف طبي حالياً', 'ℹ️');
+                }
+            }
+        });
+
+        function closePinModal() {
+            document.getElementById('adminPinModal').classList.remove('modal-active');
+            document.getElementById('adminPinModal').classList.add('hidden');
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPinInput').value.trim();
+            if (pin === 'google@20262027') {
+                isAdmin = true;
+                localStorage.setItem('clinic_admin_auth', 'true');
+                closePinModal();
+                updateAdminUI();
+                showToast('مرحباً بك في لوحة الإدارة الطبية 🚀');
+            } else {
+                showToast('رمز المرور غير صحيح', '❌');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            localStorage.setItem('clinic_admin_auth', 'false');
+            updateAdminUI();
+            showToast('تم إغلاق لوحة الإدارة', '🔒');
+        }
+
+        function updateAdminUI() {
+            const h = document.getElementById('adminActionHeader');
+            if (isAdmin) {
+                h.classList.remove('hidden');
+                h.classList.add('flex');
+            } else {
+                h.classList.add('hidden');
+                h.classList.remove('flex');
+            }
+            updateAdminBadge();
+            renderActiveTabContent();
+        }
+
+        function updateAdminBadge() {
+            const pending = ordersList.filter(o => o.status === 'pending').length;
+            const b = document.getElementById('pendingOrdersBadge');
+            if (pending > 0 && isAdmin) {
+                b.innerText = pending;
+                b.classList.remove('hidden');
+            } else {
+                b.classList.add('hidden');
+            }
+        }
+
+        function openOrdersQueueModal() {
+            renderOrdersQueue();
+            document.getElementById('ordersQueueModal').classList.remove('hidden');
+            document.getElementById('ordersQueueModal').classList.add('modal-active');
+        }
+        function closeOrdersQueueModal() {
+            document.getElementById('ordersQueueModal').classList.remove('modal-active');
+            document.getElementById('ordersQueueModal').classList.add('hidden');
+        }
+
+        function renderOrdersQueue() {
+            const c = document.getElementById('ordersQueueList');
+            c.innerHTML = '';
+            if (ordersList.length === 0) {
+                c.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">لا توجد حجوزات مسجلة حالياً</div>`;
+                return;
+            }
+
+            ordersList.forEach(o => {
+                c.innerHTML += `
+                    <div class="bg-slate-950 p-3 rounded-2xl border ${o.status === 'pending' ? 'border-cyan-500/60' : 'border-slate-800'} space-y-1.5 text-right">
+                        <div class="flex justify-between items-center">
+                            <h5 class="text-xs font-black text-white">${o.patientName} (${o.locationType})</h5>
+                            <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
+                        </div>
+                        <p class="text-[10px] text-cyan-400">📞 ${o.patientPhone} | 📍 ${o.address} | 👥 ${o.staffPreference}</p>
+                        <p class="text-[9.5px] text-slate-300">🩸 أول عينة مسحوبة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
+                        <div class="text-[9.5px] text-slate-400">
+                            ${(o.items || []).map(i => `<span>• ${i.name} (${i.qty}x)</span>`).join(' ')}
+                        </div>
+                        <div class="flex justify-between items-center pt-1 border-t border-slate-800">
+                            <span class="text-xs font-black text-cyan-300">💰 ${o.totalPrice}</span>
+                            ${o.status === 'pending' ? `
+                                <button onclick="markOrderCompleted('${o.keyId}')" class="bg-emerald-700 text-white text-[10px] font-bold px-3 py-1 rounded-lg">إنجاز الخدمة ✅</button>
+                            ` : `
+                                <button onclick="deleteOrderRecord('${o.keyId}')" class="text-rose-400 text-[10px] font-bold">حذف 🗑️</button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function markOrderCompleted(k) {
+            ordersRef.child(k).update({ status: 'completed' });
+            showToast('تم تأكيد إنجاز الخدمة ✅');
+        }
+        function deleteOrderRecord(k) {
+            ordersRef.child(k).remove();
+            showToast('تم حذف السجل');
+        }
+
+        function updateCategoryDropdownOptions() {
+            const sec = document.getElementById('itemSectionType').value;
+            const subDropdown = document.getElementById('itemSubCategory');
+            subDropdown.innerHTML = '';
+            const list = (subCategoriesConfig[sec] || []).filter(x => x !== 'الكل');
+            list.forEach(c => {
+                subDropdown.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+        }
+
+        function openAddModal() {
+            document.getElementById('adminModalTitle').innerHTML = '<span>✨</span> إضافة عنصر طبي جديد';
+            document.getElementById('editItemId').value = '';
+            document.getElementById('itemSectionType').value = currentMainTab === 'consult' ? 'services' : currentMainTab;
+            updateCategoryDropdownOptions();
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemUsage').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemImage').value = '';
+            document.getElementById('adminItemModal').classList.remove('hidden');
+            document.getElementById('adminItemModal').classList.add('modal-active');
+        }
+
+        function openEditItemModal(id, sec) {
+            const item = (allClinicData[sec] || []).find(x => String(x.id) === String(id));
+            if (!item) return;
+            document.getElementById('adminModalTitle').innerHTML = '<span>✏️</span> تعديل العنصر الطبي';
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('itemSectionType').value = sec;
+            updateCategoryDropdownOptions();
+            document.getElementById('itemSubCategory').value = item.category;
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemUsage').value = item.usage;
+            document.getElementById('itemPrice').value = item.price;
+            document.getElementById('itemImage').value = item.image || '';
+            document.getElementById('adminItemModal').classList.remove('hidden');
+            document.getElementById('adminItemModal').classList.add('modal-active');
+        }
+
+        function closeAdminItemModal() {
+            document.getElementById('adminItemModal').classList.remove('modal-active');
+            document.getElementById('adminItemModal').classList.add('hidden');
+        }
+
+        function saveItemRecord(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editItemId').value;
+            const sec = document.getElementById('itemSectionType').value;
+            const subCat = document.getElementById('itemSubCategory').value;
+            const name = document.getElementById('itemName').value.trim();
+            const usage = document.getElementById('itemUsage').value.trim();
+            let rawPrice = document.getElementById('itemPrice').value.trim();
+            let formattedPrice = rawPrice.includes('د.ع') ? rawPrice : Number(rawPrice.replace(/[^0-9]/g, '')).toLocaleString() + ' د.ع';
+            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80';
+
+            if (!allClinicData[sec]) allClinicData[sec] = [];
+
+            if (editId) {
+                const idx = allClinicData[sec].findIndex(x => String(x.id) === String(editId));
+                if (idx !== -1) {
+                    allClinicData[sec][idx] = { id: editId, category: subCat, name, usage, price: formattedPrice, image: img };
+                }
+            } else {
+                allClinicData[sec].unshift({
+                    id: 'itm_' + Date.now(),
+                    category: subCat,
+                    name,
+                    usage,
+                    price: formattedPrice,
+                    image: img
+                });
+            }
+
+            dataRef.set(allClinicData);
+            closeAdminItemModal();
+            showToast('تم حفظ ونشر البيانات السحابية ☁️');
+        }
+
+        function deleteItemRecord(id, sec) {
+            playUiClick();
+            if (allClinicData[sec]) {
+                allClinicData[sec] = allClinicData[sec].filter(x => String(x.id) !== String(id));
+                dataRef.set(allClinicData);
+                showToast('تم حذف العنصر بنجاح', '🗑️');
+            }
+        }
+
+        initClinicSystem();
+    </script>
+</body>
+</html>
