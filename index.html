@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>عيادة حي الحسين التمريضية والطبية</title>
+    <title>عيادة حي الحسين التمريضية والطبية | 24 ساعة</title>
     
     <meta name="theme-color" content="#030712">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,14 +34,14 @@
         }
 
         .dark-glass {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(14, 165, 233, 0.15);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(3, 7, 18, 0.96) 100%);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(14, 165, 233, 0.2);
         }
 
         .dark-glass-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -68,8 +68,9 @@
             pointer-events: auto;
         }
 
-        .fade-swap {
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        .swipe-card {
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            touch-action: pan-y;
         }
     </style>
 </head>
@@ -140,7 +141,7 @@
     <!-- Side Drawer -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
-        <div class="space-y-4">
+        <div class="space-y-3.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
@@ -152,17 +153,26 @@
                 <button onclick="playUiClick(); closeDrawer()" class="text-slate-400 hover:text-white font-bold text-sm p-1">✕</button>
             </div>
 
-            <div class="space-y-1.5 text-xs">
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-900/80 text-slate-200 text-right">
+            <div class="space-y-1 text-xs">
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right">
                     <span>🩺</span> <span class="font-bold">الخدمات التمريضية والمنزلية</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>🧪</span> <span class="font-bold">المختبر وسحب العينات</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية سريعة</span>
                 </button>
-                <button onclick="installAppDirectly()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
+                <button onclick="playUiClick(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                    <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                    <span>🔒</span> <span class="font-bold">سياسة الخصوصية والشروط</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                    <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
+                </button>
+                <button onclick="installAppDirectly()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
                     <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
@@ -193,30 +203,34 @@
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="subCategoryPills"></div>
     </div>
 
-    <!-- Main Container -->
-    <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
+    <!-- Main Content Container -->
+    <main class="flex-grow w-full px-3 py-3 space-y-3 max-w-xl mx-auto">
         
-        <!-- 1. Interactive Auto-Rotating Vital Guide (Top) -->
-        <div id="topVitalBanner" class="dark-glass rounded-2xl p-3 border border-cyan-500/25 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden">
-            <div id="vitalContentBox" class="fade-swap space-y-1 text-right">
-                <!-- Dynamically swapped via JS -->
-            </div>
-            <div class="flex justify-center gap-1.5 mt-2">
-                <span id="dot-0" class="w-2 h-1 rounded-full bg-cyan-400 transition-all"></span>
-                <span id="dot-1" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
+        <!-- Interactive Swipeable Vital Banner (10s Auto-Cycle & Touch Swipe) -->
+        <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
+            <div id="vitalCardInner" class="swipe-card space-y-1 text-right"></div>
+            
+            <div class="flex items-center justify-between mt-2.5 pt-1.5 border-t border-slate-800/60 text-[9px] text-slate-400">
+                <span class="flex items-center gap-1"><span>👈 اسحب لليمين/اليسار 👉</span></span>
+                <div class="flex gap-1.5">
+                    <span id="vDot0" class="w-2.5 h-1 rounded-full bg-cyan-400 transition-all"></span>
+                    <span id="vDot1" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
+                </div>
             </div>
         </div>
 
-        <!-- 2. Integrated Pharmacy Info Card -->
-        <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-base shrink-0">💊</div>
-                <div class="text-right">
+        <!-- Integrated Pharmacy & Clinic Timings Info Card -->
+        <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-950/90 border border-emerald-500/30 flex items-center justify-center text-sm">💊</div>
                     <h4 class="text-xs font-black text-white">صيدلية العيادة المتكاملة</h4>
-                    <p class="text-[9.5px] text-slate-400 font-semibold">توفير المحاليل الوريدية، الأدوية والمستلزمات المعقمة 24 ساعة</p>
                 </div>
+                <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-md font-bold">2:00 ظهراً - 2:00 ليلاً</span>
             </div>
-            <span class="bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[9px] font-black px-2 py-1 rounded-lg shrink-0">متوفرة دائماً</span>
+            <p class="text-[10px] text-slate-300 leading-relaxed font-semibold">
+                توفير كافة المستلزمات الطبية، المعقمات، المغذيات والعلاجات الوريدية اليومية، مع استمرار خدمات العيادة التمريضية والزيارات على مدار <b>24 ساعة</b>.
+            </p>
         </div>
 
         <!-- Dynamic Section Header -->
@@ -233,12 +247,12 @@
         <!-- Consultation Hub View -->
         <div id="consultationView" class="hidden space-y-3">
             <div class="dark-glass rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 shadow-lg">
-                <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(6,182,212,0.3)]">
+                <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl">
                     👨‍⚕️
                 </div>
                 <div>
                     <h4 class="text-sm font-black text-white">مركز الاستشارات الطبية السريعة</h4>
-                    <p class="text-xs text-slate-300 mt-1">تواصل مع كادر العيادة للحصول على تقييم وتوجيه لحالتك الصحية فوراً</p>
+                    <p class="text-xs text-slate-300 mt-1">تواصل مع كادر العيادة للحصول على توجيه لحالتك الصحية فوراً</p>
                 </div>
                 <button onclick="startClinicCallExperience()" class="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
                     <span>📞</span> <span>طلب استشارة هاتفية فورية (مع نغمة العيادة)</span>
@@ -266,30 +280,37 @@
             <span class="text-lg">📋</span>
             <span>الحجز</span>
         </button>
-        <button onclick="installAppDirectly()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
-            <span class="text-lg">📲</span>
-            <span>تثبيت</span>
+        <button onclick="openDrawer()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">⚙️</span>
+            <span>خيارات</span>
         </button>
     </div>
 
-    <!-- Interactive Call Simulation Modal -->
-    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
-                📞
+    <!-- Product / Service 1080p Detail Modal -->
+    <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <span id="detailBadge" class="bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold px-2 py-0.5 rounded-md">تفاصيل الخدمة</span>
+                <button onclick="playUiClick(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
-            <div>
-                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
-                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">نغمة العيادة الهادئة قيد التشغيل 🎵</p>
-            </div>
-            
-            <button onclick="toggleAudioMute()" id="muteAudioBtn" class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full mx-auto flex items-center gap-1">
-                <span>🔊</span> <span>كتم النغمة</span>
-            </button>
 
-            <div class="flex gap-2 pt-1">
-                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
-                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
+            <div class="w-full h-52 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden relative">
+                <img id="detailImage" src="" class="object-cover w-full h-full" loading="lazy">
+            </div>
+
+            <div class="space-y-1.5 text-right">
+                <h3 id="detailName" class="text-sm font-black text-white"></h3>
+                <p id="detailUsage" class="text-xs text-slate-300 font-semibold leading-relaxed"></p>
+                <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
+                    <span class="text-xs text-slate-400 font-bold">الأجرة / التكلفة:</span>
+                    <span id="detailPrice" class="text-sm font-black text-cyan-400"></span>
+                </div>
+            </div>
+
+            <div class="pt-2 flex gap-2">
+                <button id="detailAddBtn" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg active:scale-95 transition">
+                    طلب الخدمة فوراً ➕
+                </button>
             </div>
         </div>
     </div>
@@ -367,6 +388,76 @@
         </div>
     </div>
 
+    <!-- How to Use Modal -->
+    <div id="howToUseModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white">📖 طريقة الاستخدام والحجز</h3>
+                <button onclick="playUiClick(); closeStaticModal('howToUseModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <div class="space-y-2 text-[10.5px] text-slate-300">
+                <p>1️⃣ اختر الخدمة أو التحليل المطلوب واضغط <b>طلب للحجز</b>.</p>
+                <p>2️⃣ افتح أيقونة <b>الحجز 📋</b> لتأكيد العناصر والمجموع.</p>
+                <p>3️⃣ اكتب اسمك وعنوانك ونوع الكادر المفضل (رجالي/نسائي).</p>
+                <p>4️⃣ اضغط إرسال وسيتم تحويلك فوراً للواتساب لتثبيت الموعد وانطلاق الكادر إليك.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white">🔒 الخصوصية والشروط الطبية</h3>
+                <button onclick="playUiClick(); closeStaticModal('privacyModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <div class="space-y-2 text-[10.5px] text-slate-300">
+                <p>• نلتزم بسرية تامة لجميع بيانات المرضى وسجلات الفحوصات الطبية.</p>
+                <p>• كافة الأدوات المستخدمة (سرنجات، كانيولات، شاش) معقمة وتُفتح أمام المريض لمرة واحدة فقط.</p>
+                <p>• الحالات الطارئة جداً يتم التعامل معها بأقصى سرعة وأولوية قصوى.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white">📍 موقع العيادة وأوقات العمل</h3>
+                <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة 24 ساعة).</p>
+            <p class="text-[11px] text-emerald-400 font-bold">💊 الصيدلية: مفتوحة يومياً من 2:00 ظهراً إلى 2:00 ليلاً.</p>
+            <div class="pt-1">
+                <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
+                    <span>🗺️</span> <span>عرض الموقع على الخريطة</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Call Simulation Modal -->
+    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
+                📞
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
+                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">نغمة العيادة الهادئة قيد التشغيل 🎵</p>
+            </div>
+            
+            <button onclick="toggleAudioMute()" id="muteAudioBtn" class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full mx-auto flex items-center gap-1">
+                <span>🔊</span> <span>كتم النغمة</span>
+            </button>
+
+            <div class="flex gap-2 pt-1">
+                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
+                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Admin PIN Entry Modal -->
     <div id="adminPinModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative text-center space-y-3">
@@ -422,7 +513,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الوصف / شروط العينة / طريقة الاستخدام:</label>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الوصف / شروط الفحص والتجهيز:</label>
                     <input type="text" id="itemUsage" required placeholder="مثال: سحب دم وريدي - النتيجة خلال ساعتين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
@@ -432,7 +523,7 @@
                         <input type="text" id="itemPrice" required placeholder="8,000 د.ع" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (اختياري):</label>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (1080p):</label>
                         <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                     </div>
                 </div>
@@ -479,40 +570,93 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Rotating Vitals Content Data
-        const vitalSteps = [
+        // Swipeable Vital Guide Data
+        const vitalTips = [
             {
-                title: "🫀 دليل القياس الدقيق لضغط الدم:",
-                desc: "الاسترخاء 5 دقائق • الجلوس باستقامة مع إسناد الظهر • لف الكفة فوق الكوع بـ 2 سم • المعدل الطبيعي حوالي 120/80 ملم زئبق."
+                title: "🫀 الدليل الطبي للقياس الدقيق لضغط الدم:",
+                points: [
+                    "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات.",
+                    "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب.",
+                    "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد.",
+                    "• المعدل السريري المثالي الطبيعي: 120/80 ملم زئبق."
+                ]
             },
             {
-                title: "🩸 شروط وفحص السكر بالدم بدقة:",
-                desc: "صيام 8 ساعات لفحص الصائم (70-99 طبيعي) • فحص العشوائي (أقل من 140 طبيعي) • تجنب المجهود الشديد والمنبهات قبل السحب."
+                title: "🩸 إرشادات وشروط فحص السكر بالدم:",
+                points: [
+                    "• فحص السكر الصائم (Fasting): يتطلب صيام 8 إلى 10 ساعات (طبيعي: 70-99 ملغ/دسل).",
+                    "• فحص السكر العشوائي (Random): أقل من 140 ملغ/دسل بعد الأكل بساعتين.",
+                    "• غسل اليدين وتجفيفهما جيداً قبل وخز الإصبع لتفادي قراءات مضللة.",
+                    "• فحص السكر التراكمي (HbA1c): لا يتطلب صياماً ويعكس انتظام السكر لـ 3 أشهر."
+                ]
             }
         ];
-        let vitalIndex = 0;
 
-        function cycleVitalGuide() {
-            const box = document.getElementById('vitalContentBox');
-            if (!box) return;
-            box.style.opacity = '0';
-            box.style.transform = 'translateY(5px)';
+        let currentVitalIdx = 0;
+        let vitalTimer = null;
+
+        function renderVitalCard(idx) {
+            const container = document.getElementById('vitalCardInner');
+            if (!container) return;
+            container.style.opacity = '0';
+            container.style.transform = 'scale(0.97)';
             
             setTimeout(() => {
-                const item = vitalSteps[vitalIndex];
-                box.innerHTML = `
-                    <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${item.title}</h5>
-                    <p class="text-[10px] text-slate-300 leading-relaxed font-semibold">${item.desc}</p>
+                const tip = vitalTips[idx];
+                container.innerHTML = `
+                    <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${tip.title}</h5>
+                    <div class="space-y-0.5 text-[10px] text-slate-300 font-semibold leading-relaxed">
+                        ${tip.points.map(p => `<p>${p}</p>`).join('')}
+                    </div>
                 `;
-                document.getElementById('dot-0').className = vitalIndex === 0 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
-                document.getElementById('dot-1').className = vitalIndex === 1 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
+                document.getElementById('vDot0').className = idx === 0 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
+                document.getElementById('vDot1').className = idx === 1 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
                 
-                box.style.opacity = '1';
-                box.style.transform = 'translateY(0)';
-                vitalIndex = (vitalIndex + 1) % vitalSteps.length;
-            }, 300);
+                container.style.opacity = '1';
+                container.style.transform = 'scale(1)';
+            }, 250);
         }
-        setInterval(cycleVitalGuide, 5000);
+
+        function nextVitalTip() {
+            currentVitalIdx = (currentVitalIdx + 1) % vitalTips.length;
+            renderVitalCard(currentVitalIdx);
+        }
+
+        function prevVitalTip() {
+            currentVitalIdx = (currentVitalIdx - 1 + vitalTips.length) % vitalTips.length;
+            renderVitalCard(currentVitalIdx);
+        }
+
+        function restartVitalTimer() {
+            clearInterval(vitalTimer);
+            vitalTimer = setInterval(nextVitalTip, 10000); // 10 seconds rotation
+        }
+
+        // Swipe Gesture Handling for Touch Devices
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const swipeBox = document.getElementById('vitalSwipeContainer');
+
+        swipeBox.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        swipeBox.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipeGesture();
+        }, { passive: true });
+
+        function handleSwipeGesture() {
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 40) {
+                if (diff < 0) {
+                    nextVitalTip(); // Swiped Left
+                } else {
+                    prevVitalTip(); // Swiped Right
+                }
+                restartVitalTimer();
+            }
+        }
 
         function playUiClick() {
             try {
@@ -531,7 +675,6 @@
             } catch(e) {}
         }
 
-        // Soft Piano-like Call Tone
         function startClinicCallExperience() {
             document.getElementById('callAudioModal').classList.remove('hidden');
             document.getElementById('callAudioModal').classList.add('modal-active');
@@ -606,6 +749,16 @@
             document.getElementById('drawerBackdrop').classList.add('hidden');
         }
 
+        function openStaticModal(id) {
+            closeDrawer();
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('modal-active');
+        }
+        function closeStaticModal(id) {
+            document.getElementById(id).classList.remove('modal-active');
+            document.getElementById(id).classList.add('hidden');
+        }
+
         function installAppDirectly() {
             closeDrawer();
             showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
@@ -619,18 +772,18 @@
                 } else {
                     allClinicData = {
                         services: [
-                            { id: "srv_1", category: "تمريض منزلي", name: "زيارة تمريضية منزلية متكاملة", usage: "متابعة ما بعد العمليات، فحص المؤشرات وإعطاء العلاج (كادر رجالي/نسائي)", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80" },
-                            { id: "srv_2", category: "كانيولا وزرق إبر", name: "تركيب كانيولا وإعطاء مغذي وريدي", usage: "تركيب معقم ومراقبة انسياب المحاليل الوريدية بدقة", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=500&q=80" },
-                            { id: "srv_3", category: "خياطة وتضميد جروح", name: "خياطة وكبس وتضميد الجروح والحروق", usage: "تنظيف وتعقيم بأحدث المواد الطبية ورفع الخيوط", price: "12,000 د.ع", image: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=500&q=80" },
-                            { id: "srv_4", category: "فحوصات وECG", name: "تخطيط القلب السريري ECG", usage: "تخطيط دقيق للنشاط الكهربائي للقلب وقراءة فورية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=500&q=80" },
-                            { id: "srv_5", category: "قسطرة وتجبير", name: "تركيب وتبديل القسطرة البولية", usage: "إجراء تمريضي معقم بالكامل مع كيس جمع البول", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=500&q=80" },
-                            { id: "srv_6", category: "حجامة طبية", name: "حجامة وقائية وعلاجية معقمة", usage: "بإشراف كادر مختص وكؤوس استخدام مفرد لمرة واحدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=500&q=80" }
+                            { id: "srv_1", category: "تمريض منزلي", name: "زيارة تمريضية منزلية متكاملة", usage: "متابعة ما بعد العمليات، فحص المؤشرات وإعطاء العلاج (كادر رجالي/نسائي)", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_2", category: "كانيولا وزرق إبر", name: "تركيب كانيولا وإعطاء مغذي وريدي", usage: "تركيب معقم ومراقبة انسياب المحاليل الوريدية بدقة", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_3", category: "خياطة وتضميد جروح", name: "خياطة وكبس وتضميد الجروح والحروق", usage: "تنظيف وتعقيم بأحدث المواد الطبية ورفع الخيوط", price: "12,000 د.ع", image: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_4", category: "فحوصات وECG", name: "تخطيط القلب السريري ECG", usage: "تخطيط دقيق للنشاط الكهربائي للقلب وقراءة فورية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_5", category: "قسطرة وتجبير", name: "تركيب وتبديل القسطرة البولية", usage: "إجراء تمريضي معقم بالكامل مع كيس جمع البول", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_6", category: "حجامة طبية", name: "حجامة وقائية وعلاجية معقمة", usage: "بإشراف كادر مختص وكؤوس استخدام مفرد لمرة واحدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1080&q=85" }
                         ],
                         lab: [
-                            { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=500&q=80" },
-                            { id: "lab_2", category: "وظائف كبد وكلى", name: "وظائف الكلى (Urea & Creatinine)", usage: "تقييم كفاءة الكلى ونسبة اليوريا والكرياتينين بالدم", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=500&q=80" },
-                            { id: "lab_3", category: "الهرمونات والفيتامينات", name: "فحص فيتامين د (Vitamin D3)", usage: "فحص دقيق لمستوى فيتامين د بجهاز التوهج المناعي", price: "18,000 د.ع", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=500&q=80" },
-                            { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر بدقة عالية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=500&q=80" }
+                            { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "lab_2", category: "وظائف كبد وكلى", name: "وظائف الكلى (Urea & Creatinine)", usage: "تقييم كفاءة الكلى ونسبة اليوريا والكرياتينين بالدم", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "lab_3", category: "الهرمونات والفيتامينات", name: "فحص فيتامين د (Vitamin D3)", usage: "فحص دقيق لمستوى فيتامين د بجهاز التوهج المناعي", price: "18,000 د.ع", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر بدقة عالية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=1080&q=85" }
                         ]
                     };
                     dataRef.set(allClinicData);
@@ -655,7 +808,8 @@
                 cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || [];
             } catch(e) { cart = []; }
 
-            cycleVitalGuide();
+            renderVitalCard(0);
+            restartVitalTimer();
             updateAdminUI();
             updateCartBadge();
         }
@@ -754,10 +908,10 @@
             dataset.forEach(item => {
                 grid.innerHTML += `
                     <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
-                                <img src="${item.image || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80'}" class="object-cover w-full h-full" loading="lazy">
-                                <span class="absolute top-1.5 right-1.5 bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-[8.5px] font-black text-cyan-300 px-2 py-0.5 rounded-md">${item.category}</span>
+                                <img src="${item.image || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85'}" class="object-cover w-full h-full hover:scale-105 transition duration-300" loading="lazy">
+                                <span class="absolute top-1.5 right-1.5 bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-[8.5px] font-black text-cyan-300 px-2 py-0.5 rounded-md">${item.category}</span>
                             </div>
 
                             <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
@@ -785,6 +939,31 @@
             });
         }
 
+        function openItemDetails(id, sec) {
+            const item = (allClinicData[sec] || []).find(x => String(x.id) === String(id));
+            if (!item) return;
+            playUiClick();
+            document.getElementById('detailBadge').innerText = item.category;
+            document.getElementById('detailImage').src = item.image;
+            document.getElementById('detailName').innerText = item.name;
+            document.getElementById('detailUsage').innerText = item.usage;
+            document.getElementById('detailPrice').innerText = item.price;
+            
+            const addBtn = document.getElementById('detailAddBtn');
+            addBtn.onclick = () => {
+                addToCart(item.id, sec);
+                closeDetailModal();
+            };
+
+            document.getElementById('detailViewModal').classList.remove('hidden');
+            document.getElementById('detailViewModal').classList.add('modal-active');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailViewModal').classList.remove('modal-active');
+            document.getElementById('detailViewModal').classList.add('hidden');
+        }
+
         function handleGlobalSearch(q) {
             const query = q.trim().toLowerCase();
             if (!query) { renderActiveTabContent(); return; }
@@ -806,7 +985,7 @@
             filtered.forEach(item => {
                 grid.innerHTML += `
                     <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 overflow-hidden">
                                 <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
                             </div>
@@ -1136,7 +1315,7 @@
             const usage = document.getElementById('itemUsage').value.trim();
             let rawPrice = document.getElementById('itemPrice').value.trim();
             let formattedPrice = rawPrice.includes('د.ع') ? rawPrice : Number(rawPrice.replace(/[^0-9]/g, '')).toLocaleString() + ' د.ع';
-            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=500&q=80';
+            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85';
 
             if (!allClinicData[sec]) allClinicData[sec] = [];
 
