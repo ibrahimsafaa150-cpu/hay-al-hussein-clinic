@@ -32,7 +32,7 @@
         .swipe-card { transition: transform 0.35s ease, opacity 0.35s ease; touch-action: pan-y; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen relative w-full pb-24 select-none">
+<body class="flex flex-col min-h-screen relative w-full pb-28 select-none">
 
     <div id="customToast" class="fixed top-5 left-1/2 bg-slate-900 border border-cyan-400 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 text-xs font-black text-white max-w-[92vw]">
         <span id="toastIcon" class="text-lg">✨</span>
@@ -62,6 +62,25 @@
                 <button onclick="confirmPwaInstall()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-6 py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت</button>
             </div>
         </div>
+    </div>
+
+    <!-- Floating Install Prompt Strip (Bottom Sticky for Non-Installed Users) -->
+    <div id="stickyInstallStrip" class="fixed bottom-16 left-3 right-3 z-40 bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 border border-cyan-500/40 rounded-2xl p-2.5 shadow-2xl flex items-center justify-between max-w-xl mx-auto">
+        <div class="flex items-center gap-2 min-w-0">
+            <button onclick="closeInstallStrip()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
+            <div class="w-8 h-8 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/>
+                </svg>
+            </div>
+            <div class="text-right truncate">
+                <h5 class="text-[11px] font-black text-white truncate">تطبيق عيادة حي الحسين</h5>
+                <p class="text-[9px] text-cyan-300 truncate">تثبيت التطبيق للطلب والحجز المباشر</p>
+            </div>
+        </div>
+        <button onclick="showPwaPromptModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-[10.5px] font-black px-3 py-1.5 rounded-xl shadow active:scale-95 shrink-0">
+            تثبيت 📲
+        </button>
     </div>
 
     <!-- Header Navigation -->
@@ -292,7 +311,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Strict 3 Tabs Only: Nursing, Lab, Cart) -->
+    <!-- Bottom Navigation Bar (Strict 3 Tabs Only) -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-8 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -556,6 +575,13 @@
 
     <!-- Script Logic -->
     <script>
+        // Automatic Service Worker registration for PWA Installation Trigger
+        if ('serviceWorker' in navigator) {
+            const swCode = `self.addEventListener('fetch', function(e){});`;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyCWFCDMuys366TxAn_ubNRSPF6fVDGD6N4",
             authDomain: "hay-al-hussein-clinic.firebaseapp.com",
@@ -583,7 +609,7 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Natural Tips without Units
+        // Identical Grid Format for Blood Pressure and Sugar (No Units)
         const vitalTips = [
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
@@ -595,12 +621,12 @@
                 ]
             },
             {
-                title: "🩸 نصائح وإرشادات فحص السكر بالدم:",
+                title: "🩸 إرشادات القياس الصحيح للسكر بالدم:",
                 points: [
-                    "• تجنب المجهود الشديد: الابتعاد عن التوتر النفسي والتمارين الشاقة والمنبهات (كالقهوة والشاي) قبل السحب، لتجنب ارتفاع نسبة السكر المؤقت في الدم لمدة ساعتين",
-                    "• نظافة اليدين: غسل اليدين جيداً بالماء والصابون وتجفيفهما تماماً قبل وخز الإصبع، لأن بقايا الطعام أو السكريات على الجلد قد تعطي قراءات خاطئة ومرتفعة",
-                    "• فحص السكر الصائم: يُجرى بعد صيام عن الطعام والشراب (باستثناء الماء) لمدة تتراوح بين 8 إلى 10 ساعات (النسبة الطبيعية: 70 إلى 99)",
-                    "• فحص السكر التراكمي (HbA1c): لا يتطلب صياماً بل الهدف ليعكس معدل انتظام السكر في الدم خلال آخر 3 أشهر (النسبة الطبيعية: أقل من 5.7)"
+                    "• تجنب المجهود الشديد والمنبهات والتوتر قبل الفحص بساعتين",
+                    "• غسل اليدين وتجفيفهما تماماً لتفادي أي قراءة غير صحيحة",
+                    "• فحص السكر الصائم بعد صيام 8 إلى 10 ساعات: 70 إلى 99",
+                    "• فحص السكر التراكمي لانتظام السكر لآخر 3 أشهر: أقل من 5.7"
                 ]
             }
         ];
@@ -667,7 +693,7 @@
             }
         }
 
-        // PWA Native Prompt Setup
+        // PWA Native Prompt Handlers
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -676,7 +702,7 @@
                 if (!localStorage.getItem('pwa_prompt_dismissed_h')) {
                     showPwaPromptModal();
                 }
-            }, 2000);
+            }, 1800);
         });
 
         function showPwaPromptModal() {
@@ -700,12 +726,17 @@
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
                         showToast('تم تثبيت التطبيق بنجاح ✅');
+                        closeInstallStrip();
                     }
                     deferredPrompt = null;
                 });
             } else {
                 showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
             }
+        }
+
+        function closeInstallStrip() {
+            document.getElementById('stickyInstallStrip').style.display = 'none';
         }
 
         function playUiClick() {
