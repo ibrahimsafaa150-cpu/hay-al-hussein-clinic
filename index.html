@@ -32,6 +32,8 @@
         #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
         #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
         .swipe-card { transition: transform 0.35s ease, opacity 0.35s ease; touch-action: pan-y; }
+        @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen relative w-full pb-28 select-none">
@@ -40,6 +42,11 @@
         <span id="toastIcon" class="text-lg">✨</span>
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
+
+    <!-- Floating Emergency Call Button -->
+    <a href="tel:07726053522" class="fixed bottom-20 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
+        📞
+    </a>
 
     <!-- PWA Install Popup -->
     <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
@@ -113,6 +120,9 @@
             </div>
 
             <div class="flex items-center gap-1.5 shrink-0">
+                <button onclick="playUiClick(); openTrackerModal()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 active:scale-90 transition text-sm" title="تتبع الطلب">
+                    🔍
+                </button>
                 <button onclick="playUiClick(); openCartModal()" class="relative w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
                     <span class="text-sm">📋</span>
                     <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
@@ -169,6 +179,9 @@
                 <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية سريعة</span>
                 </button>
+                <button onclick="playUiClick(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right">
+                    <span>🚗</span> <span class="font-bold">تتبع حالة طلبي وحجز الكادر</span>
+                </button>
                 <button onclick="playUiClick(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
                 </button>
@@ -210,7 +223,7 @@
     </div>
 
     <!-- Main Content Container -->
-    <main class="flex-grow w-full px-3 py-3 space-y-3 max-w-xl mx-auto">
+    <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
         <!-- Interactive Swipeable Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
@@ -309,6 +322,29 @@
             </div>
         </div>
 
+        <!-- Patients Reviews / Testimonials -->
+        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2">
+            <h4 class="text-xs font-black text-white flex items-center gap-1.5">
+                <span class="text-amber-400">⭐</span> آراء وتقييمات المراجعين
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-right">
+                <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-cyan-300">أبو سيف</span>
+                        <span class="text-[9px] text-amber-400">★★★★★</span>
+                    </div>
+                    <p class="text-[9px] text-slate-400 leading-tight">كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم.</p>
+                </div>
+                <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-cyan-300">أم مريم</span>
+                        <span class="text-[9px] text-amber-400">★★★★★</span>
+                    </div>
+                    <p class="text-[9px] text-slate-400 leading-tight">تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة.</p>
+                </div>
+            </div>
+        </div>
+
         <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
             <div class="text-3xl mb-2">🔍</div>
             <h4 class="text-xs font-bold text-white">لم يتم العثور على أي نتائج</h4>
@@ -329,6 +365,25 @@
             <span class="text-lg">📋</span>
             <span>الحجز</span>
         </button>
+    </div>
+
+    <!-- Live Order Tracker Modal (For Patients) -->
+    <div id="patientTrackerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">🚗</span> تتبع حالة طلبك وموعد الكادر
+                </h3>
+                <button onclick="playUiClick(); closeTrackerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            
+            <div class="flex gap-2">
+                <input type="tel" id="trackPhoneInput" placeholder="أدخل رقم الهاتف المسجل بالحجز..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                <button onclick="searchPatientOrder()" class="bg-cyan-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs active:scale-95">بحث</button>
+            </div>
+
+            <div id="trackerResultContainer" class="space-y-2 pt-2"></div>
+        </div>
     </div>
 
     <!-- Product / Service Detail Modal -->
@@ -384,13 +439,13 @@
 
     <!-- Booking Confirmation Details Modal -->
     <div id="customerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative">
-            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1"><span>🩺</span> بيانات تأكيد الحجز الطبي</h3>
                 <button onclick="playUiClick(); closeCustomerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
-            <form onsubmit="processBookingSubmission(event)" class="space-y-2.5">
+            <form onsubmit="processBookingSubmission(event)" class="space-y-2.5 text-right">
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">اسم المريض الثلاثي:</label>
                     <input type="text" id="custName" required placeholder="مثال: علي محمد حسين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
@@ -411,12 +466,23 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">مكان تقديم الخدمة:</label>
-                    <select id="custType" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                        <option value="حضور في العيادة">🏥 الحضور داخل العيادة</option>
-                        <option value="زيارة تمريضية منزلية">🏡 طلب زيارة منزلية (Home Care)</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">مكان تقديم الخدمة:</label>
+                        <select id="custType" onchange="updateCostBreakdown()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="زيارة تمريضية منزلية">🏡 زيارة منزلية (Home Care)</option>
+                            <option value="حضور في العيادة">🏥 الحضور داخل العيادة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">وقت الزيارة المفضل:</label>
+                        <select id="timeSlotPref" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="فوري وطارئ الآن">⚡ فوري وطارئ الآن</option>
+                            <option value="صباحاً (9:00 ص - 1:00 ظ)">☀️ صباحاً (9 - 1)</option>
+                            <option value="عصراً (4:00 ع - 8:00 م)">⛅ عصراً (4 - 8)</option>
+                            <option value="ليلاً (8:00 م - 12:00 ل)">🌙 ليلاً (8 - 12)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -424,7 +490,31 @@
                     <input type="text" id="custAddress" required placeholder="حي الحسين - قرب..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
-                <div class="pt-2 border-t border-slate-800">
+                <!-- GPS Location Sharing Button -->
+                <div>
+                    <button type="button" onclick="fetchLiveGpsLocation()" id="gpsLocationBtn" class="w-full bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs py-2 rounded-xl flex items-center justify-center gap-1.5 font-bold active:scale-95 transition">
+                        <span>📍</span> <span id="gpsBtnText">إرفاق موقعي الجغرافي الدقيق عبر الخريطة (GPS)</span>
+                    </button>
+                    <input type="hidden" id="custGpsCoords" value="">
+                </div>
+
+                <!-- Detailed Cost Breakdown -->
+                <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
+                    <div class="flex justify-between text-slate-300">
+                        <span>أجور الخدمات والتحاليل:</span>
+                        <span id="breakdownItemsPrice" class="font-bold">0 د.ع</span>
+                    </div>
+                    <div class="flex justify-between text-slate-300">
+                        <span>أجور كشف وزيارة منزلية:</span>
+                        <span id="breakdownVisitPrice" class="font-bold text-teal-300">5,000 د.ع</span>
+                    </div>
+                    <div class="flex justify-between font-black text-cyan-300 pt-1 border-t border-slate-800">
+                        <span>الإجمالي الكلي:</span>
+                        <span id="breakdownFinalPrice">0 د.ع</span>
+                    </div>
+                </div>
+
+                <div class="pt-1">
                     <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition">
                         <span>📲</span> <span>إرسال الحجز فوراً عبر WhatsApp</span>
                     </button>
@@ -826,6 +916,72 @@
             document.getElementById(id).classList.add('hidden');
         }
 
+        // Live GPS Geolocation Fetcher
+        function fetchLiveGpsLocation() {
+            const btnText = document.getElementById('gpsBtnText');
+            if (navigator.geolocation) {
+                btnText.innerText = "جاري تحديد إحداثيات موقعك بدقة 🛰️...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        document.getElementById('custGpsCoords').value = `https://maps.google.com/?q=${lat},${lng}`;
+                        btnText.innerText = "تم حفظ الموقع عبر الخريطة بنجاح ✅";
+                        showToast('تم تحديد الموقع بدقة 📍');
+                    },
+                    (error) => {
+                        btnText.innerText = "تعذر تحديد الموقع، يرجى كتابة العنوان باليد ⚠️";
+                        showToast('يرجى تفعيل الـ GPS بالهاتف', '⚠️');
+                    },
+                    { enableHighAccuracy: true, timeout: 8000 }
+                );
+            } else {
+                showToast('المتصفح لا يدعم تحديد الموقع', '❌');
+            }
+        }
+
+        // Live Order Tracker Logic
+        function openTrackerModal() {
+            closeDrawer();
+            document.getElementById('patientTrackerModal').classList.remove('hidden');
+            document.getElementById('patientTrackerModal').classList.add('modal-active');
+        }
+        function closeTrackerModal() {
+            document.getElementById('patientTrackerModal').classList.remove('modal-active');
+            document.getElementById('patientTrackerModal').classList.add('hidden');
+        }
+
+        function searchPatientOrder() {
+            const phone = document.getElementById('trackPhoneInput').value.trim();
+            const resBox = document.getElementById('trackerResultContainer');
+            if (!phone) { showToast('أدخل رقم الهاتف للبحث', '⚠️'); return; }
+            
+            const matched = ordersList.filter(o => String(o.patientPhone).includes(phone));
+            resBox.innerHTML = '';
+            
+            if (matched.length === 0) {
+                resBox.innerHTML = `<p class="text-xs text-rose-400 text-center py-4">لم يتم العثور على أي حجز مسجل بهذا الرقم</p>`;
+                return;
+            }
+
+            matched.forEach(o => {
+                const isCompleted = o.status === 'completed';
+                resBox.innerHTML += `
+                    <div class="bg-slate-950 p-3 rounded-2xl border ${isCompleted ? 'border-emerald-500/50' : 'border-cyan-500/50'} space-y-2">
+                        <div class="flex justify-between items-center text-xs font-black">
+                            <span class="text-white">${o.patientName}</span>
+                            <span class="${isCompleted ? 'text-emerald-400' : 'text-amber-400'}">${isCompleted ? '✅ تم تقديم الخدمة' : '🚗 الكادر في طريقه إليك'}</span>
+                        </div>
+                        <p class="text-[10.5px] text-slate-300">👥 الكادر: ${o.staffPreference} | ⏰ ${o.timeSlot || 'فوري'}</p>
+                        <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                            <div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-2 ${isCompleted ? 'w-full' : 'w-2/3 animate-pulse'}"></div>
+                        </div>
+                        <p class="text-[9.5px] text-slate-400 text-center font-bold">${isCompleted ? 'تم إنجاز الموعد بنجاح، نتمنى لكم دوام الصحة والعافية' : 'طلبك قيد المتابعة وسيصل الكادر بالموعد المحدد'}</p>
+                    </div>
+                `;
+            });
+        }
+
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
@@ -1155,6 +1311,7 @@
         function openCustomerDetailsModal() {
             if (cart.length === 0) { showToast('يرجى اختيار عناصر أولاً', '⚠️'); return; }
             closeCartModal();
+            updateCostBreakdown();
             document.getElementById('customerModal').classList.remove('hidden');
             document.getElementById('customerModal').classList.add('modal-active');
         }
@@ -1163,15 +1320,32 @@
             document.getElementById('customerModal').classList.add('hidden');
         }
 
+        function updateCostBreakdown() {
+            let itemsSum = 0;
+            cart.forEach(c => {
+                let num = parseFloat(c.price.replace(/[^0-9.]/g, '')) || 0;
+                itemsSum += num * c.qty;
+            });
+            const type = document.getElementById('custType').value;
+            const visitFee = type.includes('منزلية') ? 5000 : 0;
+            const total = itemsSum + visitFee;
+
+            document.getElementById('breakdownItemsPrice').innerText = itemsSum.toLocaleString() + ' د.ع';
+            document.getElementById('breakdownVisitPrice').innerText = visitFee > 0 ? '5,000 د.ع' : 'مجاناً (داخل العيادة)';
+            document.getElementById('breakdownFinalPrice').innerText = total.toLocaleString() + ' د.ع';
+        }
+
         function processBookingSubmission(e) {
             e.preventDefault();
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const staff = document.getElementById('staffPref').value;
             const type = document.getElementById('custType').value;
+            const timeSlot = document.getElementById('timeSlotPref').value;
             const address = document.getElementById('custAddress').value.trim();
+            const gpsLink = document.getElementById('custGpsCoords').value;
 
-            let total = 0;
+            let itemsSum = 0;
             let itemsSummary = [];
             let msg = `🩺 *طلب موعد وحجز - عيادة حي الحسين التمريضية*\n`;
             msg += `━━━━━━━━━━━━━━━━━━━━\n`;
@@ -1179,17 +1353,23 @@
             msg += `📞 *الهاتف:* ${phone}\n`;
             msg += `👥 *الكادر المطلوب:* ${staff}\n`;
             msg += `📍 *المكان:* ${type}\n`;
+            msg += `⏰ *الوقت المفضل:* ${timeSlot}\n`;
             msg += `🏠 *العنوان:* ${address}\n`;
+            if (gpsLink) msg += `🗺️ *الموقع GPS:* ${gpsLink}\n`;
             msg += `━━━━━━━━━━━━━━━━━━━━\n📦 *الخدمات والتحاليل المطلوبة:*\n`;
 
             cart.forEach((c, i) => {
                 let num = parseFloat(c.price.replace(/[^0-9.]/g, '')) || 0;
-                total += num * c.qty;
+                itemsSum += num * c.qty;
                 itemsSummary.push({ name: c.name, price: c.price, qty: c.qty, section: c.section });
                 msg += `${i + 1}. ${c.name} (${c.qty}x) - ${c.price}\n`;
             });
 
-            msg += `\n💰 *المجموع التقديري:* ${total.toLocaleString()} د.ع\n`;
+            const visitFee = type.includes('منزلية') ? 5000 : 0;
+            const finalTotal = itemsSum + visitFee;
+
+            if (visitFee > 0) msg += `🚗 *أجور الزيارة المنزلية:* 5,000 د.ع\n`;
+            msg += `\n💰 *الإجمالي الكلي:* ${finalTotal.toLocaleString()} د.ع\n`;
             msg += `⏰ *وقت التسجيل:* ${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`;
 
             ordersRef.push({
@@ -1197,9 +1377,11 @@
                 patientPhone: phone,
                 staffPreference: staff,
                 locationType: type,
+                timeSlot: timeSlot,
                 address: address,
+                gpsLocation: gpsLink || 'غير مرفق',
                 items: itemsSummary,
-                totalPrice: total.toLocaleString() + ' د.ع',
+                totalPrice: finalTotal.toLocaleString() + ' د.ع',
                 sampleDrawnTime: new Date().toLocaleTimeString('ar-IQ'),
                 dateCreated: `${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`,
                 status: 'pending'
@@ -1309,7 +1491,8 @@
                             <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
                         </div>
                         <p class="text-[10px] text-cyan-400">📞 ${o.patientPhone} | 📍 ${o.address} | 👥 ${o.staffPreference}</p>
-                        <p class="text-[9.5px] text-slate-300">🩸 وقت أول عينة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
+                        <p class="text-[9.5px] text-slate-300">⏰ الموعد: ${o.timeSlot || 'فوري'} | 🩸 وقت أول عينة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
+                        ${o.gpsLocation && o.gpsLocation !== 'غير مرفق' ? `<p class="text-[9.5px] text-cyan-300"><a href="${o.gpsLocation}" target="_blank" class="underline">🗺️ فتح الموقع على خرائط Google</a></p>` : ''}
                         <div class="text-[9.5px] text-slate-400">
                             ${(o.items || []).map(i => `<span>• ${i.name} (${i.qty}x)</span>`).join(' ')}
                         </div>
