@@ -39,22 +39,26 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Install Dialog (Auto-Popup on Entry) -->
+    <!-- PWA Install Popup (Like Pharmacy Style) -->
     <div id="pwaPromptModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#111827] border border-cyan-500/30 rounded-3xl p-5 w-full max-w-xs shadow-2xl text-center space-y-4">
-            <h3 class="text-sm font-black text-white">تثبيت التطبيق</h3>
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-950/80 border border-cyan-400 flex items-center justify-center text-cyan-400 shadow">
-                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
-                </svg>
+        <div class="bg-[#181d2a] border border-slate-700/60 rounded-[28px] p-6 w-full max-w-[320px] shadow-2xl relative text-right space-y-4">
+            <h3 class="text-base font-black text-white text-center">تثبيت التطبيق</h3>
+            
+            <div class="flex items-center justify-between gap-3 pt-2">
+                <div class="space-y-1 min-w-0 flex-1">
+                    <h4 class="text-xs font-black text-white truncate">عيادة حي الحسين التمريضية</h4>
+                    <p class="text-[9.5px] text-slate-400 break-all leading-tight">hay-al-hussein-clinic.github.io</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/>
+                    </svg>
+                </div>
             </div>
-            <div>
-                <h4 class="text-xs font-bold text-white">عيادة حي الحسين التمريضية</h4>
-                <p class="text-[10px] text-slate-400 mt-1">تثبيت التطبيق على الشاشة للوصول السريع وحجز المواعيد</p>
-            </div>
-            <div class="flex gap-2 pt-1">
-                <button onclick="dismissPwaPrompt()" class="flex-1 bg-slate-800 text-slate-300 py-2 rounded-xl text-xs font-semibold">إلغاء</button>
-                <button onclick="confirmPwaInstall()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-2 rounded-xl text-xs font-bold shadow">تثبيت</button>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-800 text-xs font-bold">
+                <button onclick="dismissPwaPrompt()" class="text-slate-400 hover:text-white px-3 py-1.5 transition">إلغاء</button>
+                <button onclick="confirmPwaInstall()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-5 py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت</button>
             </div>
         </div>
     </div>
@@ -287,7 +291,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Main 3 Tabs + Install Button with Prompt Style) -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -300,6 +304,10 @@
         <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
+        </button>
+        <button onclick="showPwaPromptModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">📲</span>
+            <span>تثبيت</span>
         </button>
     </div>
 
@@ -413,10 +421,10 @@
                 <button onclick="playUiClick(); closeStaticModal('howToUseModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
             <div class="space-y-2 text-[10.5px] text-slate-300">
-                <p>1️⃣ اختر الخدمة أو التحليل المطلوب واضغط <b>طلب للحجز</b>.</p>
-                <p>2️⃣ افتح أيقونة <b>الحجز 📋</b> لتأكيد العناصر والمجموع.</p>
-                <p>3️⃣ اكتب اسمك وعنوانك ونوع الكادر المفضل (رجالي/نسائي).</p>
-                <p>4️⃣ اضغط إرسال وسيتم تحويلك فوراً للواتساب لتثبيت الموعد وانطلاق الكادر إليك.</p>
+                <p>1️⃣ اختر الخدمة أو التحليل المطلوب واضغط <b>طلب للحجز</b></p>
+                <p>2️⃣ افتح أيقونة <b>الحجز 📋</b> لتأكيد العناصر والمجموع</p>
+                <p>3️⃣ اكتب اسمك وعنوانك ونوع الكادر المفضل (رجالي/نسائي)</p>
+                <p>4️⃣ اضغط إرسال وسيتم تحويلك فوراً للواتساب لتثبيت الموعد وانطلاق الكادر إليك</p>
             </div>
         </div>
     </div>
@@ -429,9 +437,9 @@
                 <button onclick="playUiClick(); closeStaticModal('privacyModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
             <div class="space-y-2 text-[10.5px] text-slate-300">
-                <p>• نلتزم بسرية تامة لجميع بيانات المرضى وسجلات الفحوصات الطبية.</p>
-                <p>• كافة الأدوات المستخدمة (سرنجات، كانيولات، شاش) معقمة وتُفتح أمام المريض لمرة واحدة فقط.</p>
-                <p>• الحالات الطارئة جداً يتم التعامل معها بأقصى سرعة وأولوية قصوى.</p>
+                <p>• نلتزم بسرية تامة لجميع بيانات المرضى وسجلات الفحوصات الطبية</p>
+                <p>• كافة الأدوات المستخدمة معقمة وتُفتح أمام المريض لمرة واحدة فقط</p>
+                <p>• الحالات الطارئة جداً يتم التعامل معها بأقصى سرعة وأولوية قصوى</p>
             </div>
         </div>
     </div>
@@ -443,8 +451,8 @@
                 <h3 class="text-xs font-black text-white">📍 موقع العيادة وأوقات العمل</h3>
                 <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
-            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة 24 ساعة).</p>
-            <p class="text-[11px] text-emerald-400 font-bold">💊 الصيدلية: مفتوحة يومياً من 2:00 ظهراً إلى 2:00 ليلاً.</p>
+            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة 24 ساعة)</p>
+            <p class="text-[11px] text-emerald-400 font-bold">💊 الصيدلية: مفتوحة يومياً من 2:00 ظهراً إلى 2:00 ليلاً</p>
             <div class="pt-1">
                 <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
                     <span>🗺️</span> <span>عرض الموقع على الخريطة</span>
@@ -463,10 +471,6 @@
                 <h4 class="text-xs font-black text-white">الاتصال المباشر بالعيادة</h4>
                 <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">كادر عيادة حي الحسين متاح على مدار 24 ساعة</p>
             </div>
-            
-            <button onclick="toggleAudioMute()" id="muteAudioBtn" class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full mx-auto flex items-center gap-1">
-                <span>🔊</span> <span>كتم النغمة</span>
-            </button>
 
             <div class="flex gap-2 pt-1">
                 <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
@@ -577,33 +581,29 @@
         let ordersList = [];
         let cart = [];
 
-        let audioCtx = null;
-        let melodyInterval = null;
-        let isMuted = false;
-
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي", "كانيولا وزرق إبر", "خياطة وتضميد جروح", "فحوصات وECG", "قسطرة وتجبير", "حجامة طبية"],
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Vital Tips with Clinical Guidelines
+        // Vital Tips with Formatted Non-AI Natural Text
         const vitalTips = [
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
                 points: [
-                    "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات.",
-                    "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب.",
-                    "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد.",
-                    "• المعدل الطبيعي المعتمد: 120/80 ملم زئبق."
+                    "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات",
+                    "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب",
+                    "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد",
+                    "• المعدل الطبيعي المعتمد: 120/80"
                 ]
             },
             {
                 title: "🩸 نصائح وإرشادات فحص السكر بالدم:",
                 points: [
-                    "• فحص السكر الصائم الطبيعي: من 70 إلى 99 ملغ/دسل (بعد صيام 8 ساعات).",
-                    "• فحص السكر العشوائي الطبيعي: أقل من 140 ملغ/دسل.",
-                    "• غسل اليدين بالماء وتجفيفهما جيداً قبل وخز الإصبع لتفادي أي قراءة غير دقيقة.",
-                    "• فحص التراكمي HbA1c الطبيعي: أقل من 5.7% (يعكس معدل السكر لآخر 3 أشهر)."
+                    "• فحص السكر الصائم: يُجرى بعد صيام عن الطعام والشراب (باستثناء الماء) لمدة 8 إلى 10 ساعات (النسبة الطبيعية: 70 إلى 99)",
+                    "• نظافة اليدين: غسل اليدين جيداً بالماء والصابون وتجفيفهما تماماً قبل وخز الإصبع، لتفادي القراءات الخاطئة",
+                    "• تجنب المجهود الشديد: الابتعاد عن التوتر النفسي والتمارين الشاقة والمنبهات (كالقهوة والشاي) قبل السحب، لتجنب ارتفاع نسبة السكر المؤقت في الدم لمدة ساعتين",
+                    "• فحص السكر التراكمي (HbA1c): لا يتطلب صياماً بل الهدف ليعكس معدل انتظام السكر في الدم خلال آخر 3 أشهر (النسبة الطبيعية: أقل من 5.7)"
                 ]
             }
         ];
@@ -648,7 +648,7 @@
             vitalTimer = setInterval(nextVitalTip, 10000);
         }
 
-        // Touch Swipe
+        // Touch Swipe Handling
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeBox = document.getElementById('vitalSwipeContainer');
@@ -670,7 +670,7 @@
             }
         }
 
-        // PWA Auto Prompt
+        // PWA Automatic Prompt Logic
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -707,7 +707,7 @@
                     deferredPrompt = null;
                 });
             } else {
-                showToast('اضغط قائمة المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
+                showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
             }
         }
 
@@ -731,54 +731,9 @@
         function startClinicCallExperience() {
             document.getElementById('callAudioModal').classList.remove('hidden');
             document.getElementById('callAudioModal').classList.add('modal-active');
-            isMuted = false;
-            updateMuteBtnUI();
-            playMelody();
-        }
-
-        function playMelody() {
-            clearInterval(melodyInterval);
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const melodyNotes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25];
-                let idx = 0;
-                melodyInterval = setInterval(() => {
-                    if (isMuted || !audioCtx) return;
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(melodyNotes[idx % melodyNotes.length], audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.45);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.45);
-                    idx++;
-                }, 500);
-            } catch(e) {}
-        }
-
-        function toggleAudioMute() {
-            isMuted = !isMuted;
-            updateMuteBtnUI();
-        }
-
-        function updateMuteBtnUI() {
-            const btn = document.getElementById('muteAudioBtn');
-            const status = document.getElementById('callAudioStatus');
-            if (isMuted) {
-                btn.innerHTML = '<span>🔇</span> <span>تشغيل الصوت</span>';
-                status.innerText = 'تم كتم نغمة العيادة 🔇';
-            } else {
-                btn.innerHTML = '<span>🔊</span> <span>كتم النغمة</span>';
-                status.innerText = 'نغمة العيادة الهادئة قيد التشغيل 🎵';
-            }
         }
 
         function stopClinicCallExperience() {
-            clearInterval(melodyInterval);
-            if (audioCtx) { try { audioCtx.close(); } catch(e){} }
             document.getElementById('callAudioModal').classList.remove('modal-active');
             document.getElementById('callAudioModal').classList.add('hidden');
         }
