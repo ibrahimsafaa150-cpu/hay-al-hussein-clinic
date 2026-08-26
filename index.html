@@ -39,7 +39,7 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Install Popup (Exact Native App Modal Style) -->
+    <!-- PWA Install Popup (Same Layout as Pharmacy) -->
     <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
         <div class="bg-[#242938] border border-slate-600/40 rounded-[28px] p-6 w-full max-w-[325px] shadow-2xl relative text-right space-y-4">
             <h3 class="text-base font-black text-white text-center">تثبيت التطبيق</h3>
@@ -119,7 +119,7 @@
         </div>
     </header>
 
-    <!-- Side Drawer -->
+    <!-- Side Drawer (Options & Settings) -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-3.5">
@@ -292,8 +292,8 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Main 3 Tabs + Install Button Trigger) -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
+    <!-- Bottom Navigation Bar (Strict 3 Tabs Only: Nursing, Lab, Cart) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-8 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
             <span>التمريض</span>
@@ -305,10 +305,6 @@
         <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
-        </button>
-        <button onclick="showPwaPromptModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
-            <span class="text-lg">📲</span>
-            <span>تثبيت</span>
         </button>
     </div>
 
@@ -587,7 +583,7 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Natural Text Tips without units
+        // Natural Tips without Units
         const vitalTips = [
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
@@ -649,7 +645,7 @@
             vitalTimer = setInterval(nextVitalTip, 10000);
         }
 
-        // Swipe Touch Handlers
+        // Touch Swipe
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeBox = document.getElementById('vitalSwipeContainer');
@@ -671,7 +667,7 @@
             }
         }
 
-        // PWA Native Popup Handlers
+        // PWA Native Prompt Setup
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
