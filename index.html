@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>عيادة حي الحسين التمريضية والطبية | 24 ساعة</title>
+    <title>عيادة حي الحسين التمريضية والطبية</title>
     
     <meta name="theme-color" content="#030712">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -44,11 +44,6 @@
             border: 1px solid rgba(255, 255, 255, 0.07);
         }
 
-        .glow-border-cyan {
-            border: 1px solid rgba(6, 182, 212, 0.4);
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
-        }
-
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .modal-active { display: flex !important; }
@@ -73,23 +68,8 @@
             pointer-events: auto;
         }
 
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.03); }
-        }
-        .pulse-soft {
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes marqueeSmooth {
-            0% { transform: translateX(25px); }
-            50% { transform: translateX(-25px); }
-            100% { transform: translateX(25px); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marqueeSmooth 6s ease-in-out infinite;
+        .fade-swap {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -101,14 +81,6 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- Top Running Emergency Bar -->
-    <div class="w-full bg-gradient-to-r from-cyan-950 via-slate-900 to-cyan-950 border-b border-cyan-500/20 text-[10px] py-1.5 px-2 text-center text-cyan-300 flex justify-center items-center overflow-hidden">
-        <div class="animate-marquee flex items-center gap-2">
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span class="font-bold">عيادة حي الحسين التمريضية المركزية الخافرة • كادر متمرس (رجالي - نسائي) • خدمة طبية ومنزلية 24 ساعة</span>
-        </div>
-    </div>
-
     <!-- Header Navigation -->
     <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2.5 w-full">
         <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
@@ -118,9 +90,8 @@
                     <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                <!-- Custom Luxury Medical Eagle Emblem -->
-                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-900/60 to-slate-950 border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.25)] flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-cyan-400/10 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                <!-- Medical Emblem (5 Taps for Admin) -->
+                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-950 to-slate-950 border border-cyan-500/40 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition">
                     <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
@@ -143,10 +114,9 @@
                     <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
 
-                <!-- Admin Action Suite -->
                 <div id="adminActionHeader" class="hidden items-center gap-1.5">
                     <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950/80 border border-teal-500/60 text-teal-300 font-bold text-[10px] px-2 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                        <span>🔔</span> <span class="hidden sm:inline">الحجوزات</span>
+                        <span>🔔</span>
                         <span id="pendingOrdersBadge" class="hidden absolute -top-1.5 -left-1.5 bg-rose-600 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-pulse">0</span>
                     </button>
                     <button onclick="playUiClick(); openAddModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold text-[10px] px-2.5 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
@@ -162,18 +132,18 @@
         <!-- Search Bar -->
         <div class="mt-2.5 relative w-full max-w-xl mx-auto flex items-center">
             <span class="absolute right-3 top-2.5 text-slate-500 text-xs pointer-events-none">🔍</span>
-            <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة، تحليل، دواء، أو كادر طبي..." 
-                   class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-2 border border-slate-800 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition shadow-inner">
+            <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة تمريضية أو تحليل مختبري..." 
+                   class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-2 border border-slate-800 focus:outline-none focus:border-cyan-400">
         </div>
     </header>
 
-    <!-- Side Drawer Menu -->
+    <!-- Side Drawer -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
                     <div>
                         <h3 class="text-xs font-black text-white">عيادة حي الحسين</h3>
                         <span class="text-[9px] text-cyan-400">المركزية الخافرة 24 ساعة</span>
@@ -183,34 +153,28 @@
             </div>
 
             <div class="space-y-1.5 text-xs">
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 transition text-right">
-                    <span>🩺</span> <span class="font-bold">الخدمات التمريضية والجراحية</span>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-900/80 text-slate-200 text-right">
+                    <span>🩺</span> <span class="font-bold">الخدمات التمريضية والمنزلية</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
-                    <span>🧪</span> <span class="font-bold">قسم المختبر وسحب العينات</span>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                    <span>🧪</span> <span class="font-bold">المختبر وسحب العينات</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('pharmacy')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
-                    <span>💊</span> <span class="font-bold">الصيدلية والمستلزمات الطبية</span>
+                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                    <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية سريعة</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
-                    <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية / أطباء</span>
-                </button>
-                <button onclick="playUiClick(); closeDrawer(); openStaticModal('vitalEducationModal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-cyan-300 transition text-right">
-                    <span>📊</span> <span class="font-bold">دليل قياس الضغط والسكر</span>
-                </button>
-                <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-900/60 text-slate-200 transition text-right">
-                    <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
+                <button onclick="installAppDirectly()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
+                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
         </div>
 
         <div class="pt-3 border-t border-slate-800 text-center">
-            <p class="text-[9px] text-slate-500 font-bold">العيادة المركزية الخافرة - حي الحسين © 2026</p>
+            <p class="text-[9px] text-slate-500 font-bold">عيادة حي الحسين المركزية © 2026</p>
         </div>
     </div>
 
     <!-- Main Navigation Top Pills -->
-    <nav class="bg-slate-950 border-b border-slate-800/80 py-2.5 px-3">
+    <nav class="bg-slate-950 border-b border-slate-800/80 py-2 px-3">
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="mainSectionPills">
             <button onclick="playUiClick(); switchMainTab('services')" id="pill-services" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow">
                 <span>🩺</span> <span>الخدمات التمريضية</span>
@@ -218,47 +182,41 @@
             <button onclick="playUiClick(); switchMainTab('lab')" id="pill-lab" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
                 <span>🧪</span> <span>المختبر والتحاليل</span>
             </button>
-            <button onclick="playUiClick(); switchMainTab('pharmacy')" id="pill-pharmacy" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
-                <span>💊</span> <span>الصيدلية والعلاجات</span>
-            </button>
             <button onclick="playUiClick(); switchMainTab('consult')" id="pill-consult" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
-                <span>👨‍⚕️</span> <span>الاستشارات والتحويل</span>
+                <span>👨‍⚕️</span> <span>الاستشارة الطبية</span>
             </button>
         </div>
     </nav>
 
-    <!-- Subcategories Scroll Bar (Dynamic for Services/Lab/Pharmacy) -->
-    <div id="subFilterBar" class="bg-[#050b14] border-b border-slate-800/40 py-2 px-3">
+    <!-- Subcategories Scroll Bar -->
+    <div id="subFilterBar" class="bg-[#050b14] border-b border-slate-800/40 py-1.5 px-3">
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="subCategoryPills"></div>
     </div>
 
-    <!-- Main Dynamic Content Container -->
-    <main class="flex-grow w-full px-3 py-3 space-y-4 max-w-xl mx-auto">
+    <!-- Main Container -->
+    <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
-        <!-- Emergency & Clinical Trust Hero Card -->
-        <div class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-[#041b2d] shadow-lg relative overflow-hidden">
-            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span class="text-[11px] font-black text-cyan-300">عيادة خافرة 24 ساعة</span>
-                </div>
-                <span class="text-[10px] text-slate-400 font-semibold">كوادر رجالية ونسائية معتمدة</span>
+        <!-- 1. Interactive Auto-Rotating Vital Guide (Top) -->
+        <div id="topVitalBanner" class="dark-glass rounded-2xl p-3 border border-cyan-500/25 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden">
+            <div id="vitalContentBox" class="fade-swap space-y-1 text-right">
+                <!-- Dynamically swapped via JS -->
             </div>
-            
-            <div class="mt-2.5 grid grid-cols-3 gap-2 text-center text-[10px] font-bold">
-                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
-                    <span class="block text-cyan-400 text-xs">🏡 100%</span>
-                    <span class="text-slate-300">زيارات منزلية</span>
-                </div>
-                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
-                    <span class="block text-teal-400 text-xs">🧪 فوري</span>
-                    <span class="text-slate-300">سحب وسرعة تحاليل</span>
-                </div>
-                <div class="bg-slate-900/70 p-2 rounded-xl border border-slate-800">
-                    <span class="block text-amber-400 text-xs">🩺 تعقيم دقيق</span>
-                    <span class="text-slate-300">جراحة وتمريض</span>
+            <div class="flex justify-center gap-1.5 mt-2">
+                <span id="dot-0" class="w-2 h-1 rounded-full bg-cyan-400 transition-all"></span>
+                <span id="dot-1" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
+            </div>
+        </div>
+
+        <!-- 2. Integrated Pharmacy Info Card -->
+        <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-base shrink-0">💊</div>
+                <div class="text-right">
+                    <h4 class="text-xs font-black text-white">صيدلية العيادة المتكاملة</h4>
+                    <p class="text-[9.5px] text-slate-400 font-semibold">توفير المحاليل الوريدية، الأدوية والمستلزمات المعقمة 24 ساعة</p>
                 </div>
             </div>
+            <span class="bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-[9px] font-black px-2 py-1 rounded-lg shrink-0">متوفرة دائماً</span>
         </div>
 
         <!-- Dynamic Section Header -->
@@ -269,60 +227,22 @@
             <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
         </div>
 
-        <!-- Dynamic Grid View -->
+        <!-- Items Grid -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
-        <!-- Consultation Hub View (Special Tab) -->
+        <!-- Consultation Hub View -->
         <div id="consultationView" class="hidden space-y-3">
-            <div class="dark-glass rounded-2xl p-4 border border-cyan-500/30 text-center space-y-3">
-                <div class="w-14 h-14 mx-auto rounded-full bg-cyan-950/80 border border-cyan-400 flex items-center justify-center text-2xl pulse-soft">
+            <div class="dark-glass rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 shadow-lg">
+                <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                     👨‍⚕️
                 </div>
                 <div>
                     <h4 class="text-sm font-black text-white">مركز الاستشارات الطبية السريعة</h4>
-                    <p class="text-xs text-slate-300 mt-1">تواصل مع أطباء واستشاريين أو احصل على توجيه لحالتك الصحية فوراً</p>
+                    <p class="text-xs text-slate-300 mt-1">تواصل مع كادر العيادة للحصول على تقييم وتوجيه لحالتك الصحية فوراً</p>
                 </div>
                 <button onclick="startClinicCallExperience()" class="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
                     <span>📞</span> <span>طلب استشارة هاتفية فورية (مع نغمة العيادة)</span>
                 </button>
-            </div>
-
-            <div class="space-y-2">
-                <h5 class="text-xs font-black text-slate-300 px-1">نخبة التخصصات والأطباء المعتمدين:</h5>
-                <div class="grid grid-cols-1 gap-2" id="doctorsListContainer">
-                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-lg">🫀</div>
-                            <div class="text-right">
-                                <h6 class="text-xs font-black text-white">استشارة باطنية وقلبية</h6>
-                                <p class="text-[10px] text-slate-400">تقييم الضغط، السكر، وتخطيط القلب ECG</p>
-                            </div>
-                        </div>
-                        <button onclick="directConsultWhatsApp('باطنية وقلبية')" class="bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
-                    </div>
-
-                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-emerald-500/30 flex items-center justify-center text-lg">🩹</div>
-                            <div class="text-right">
-                                <h6 class="text-xs font-black text-white">استشارة جراحة صغرى وعناية بالجروح</h6>
-                                <p class="text-[10px] text-slate-400">خياطة، حروق، وقروح السكري والعمليات</p>
-                            </div>
-                        </div>
-                        <button onclick="directConsultWhatsApp('جراحة صغرى وجروح')" class="bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
-                    </div>
-
-                    <div class="dark-glass-card rounded-2xl p-3 flex items-center justify-between border border-slate-800">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-amber-500/30 flex items-center justify-center text-lg">🦴</div>
-                            <div class="text-right">
-                                <h6 class="text-xs font-black text-white">علاج طبيعي وتأهيل منزلي</h6>
-                                <p class="text-[10px] text-slate-400">جلسات بالأجهزة بعد الجلطات والكسور</p>
-                            </div>
-                        </div>
-                        <button onclick="directConsultWhatsApp('علاج طبيعي وتأهيل')" class="bg-amber-950 border border-amber-500/40 text-amber-300 text-[10px] font-bold px-2.5 py-1.5 rounded-xl">حجز</button>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -342,21 +262,43 @@
             <span class="text-lg">🧪</span>
             <span>المختبر</span>
         </button>
-        <button onclick="playUiClick(); switchMainTab('pharmacy')" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
-            <span class="text-lg">💊</span>
-            <span>الصيدلية</span>
-        </button>
         <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
         </button>
+        <button onclick="installAppDirectly()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">📲</span>
+            <span>تثبيت</span>
+        </button>
+    </div>
+
+    <!-- Interactive Call Simulation Modal -->
+    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
+                📞
+            </div>
+            <div>
+                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
+                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">نغمة العيادة الهادئة قيد التشغيل 🎵</p>
+            </div>
+            
+            <button onclick="toggleAudioMute()" id="muteAudioBtn" class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-full mx-auto flex items-center gap-1">
+                <span>🔊</span> <span>كتم النغمة</span>
+            </button>
+
+            <div class="flex gap-2 pt-1">
+                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
+                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
+            </div>
+        </div>
     </div>
 
     <!-- Booking / Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-1"><span>📋</span> سلة الخدمات والتحاليل المطلوبة</h3>
+                <h3 class="text-xs font-black text-white flex items-center gap-1"><span>📋</span> قائمة الخدمات والتحاليل المطلوبة</h3>
                 <button onclick="playUiClick(); closeCartModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
@@ -425,72 +367,6 @@
         </div>
     </div>
 
-    <!-- Vital Education (Blood Pressure & Sugar Infographic Modal) -->
-    <div id="vitalEducationModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-cyan-300 flex items-center gap-1.5">
-                    <span>📊</span> دليل القياس السريري المعتمد
-                </h3>
-                <button onclick="playUiClick(); closeStaticModal('vitalEducationModal')" class="text-slate-400 font-bold p-1">✕</button>
-            </div>
-
-            <!-- Blood Pressure Card -->
-            <div class="dark-glass-card p-3 rounded-xl border border-cyan-500/30 space-y-2 text-right">
-                <h4 class="text-xs font-black text-white flex items-center gap-1"><span>🫀</span> خطوات القياس الدقيق لضغط الدم:</h4>
-                <div class="space-y-1 text-[10.5px] text-slate-300">
-                    <p>✔️ <b>الراحة قبل القياس:</b> الاسترخاء لمدة 5 دقائق وتجنب التدخين أو المنبهات.</p>
-                    <p>✔️ <b>وضعية صحيحة:</b> الجلوس باستقامة مع إسناد الظهر ووضع الذراع بمستوى القلب.</p>
-                    <p>✔️ <b>كفة مناسبة:</b> لف الكفة فوق الكوع بـ 2 سم بدون شد مفرط.</p>
-                    <p>✔️ <b>المعدل الطبيعي:</b> حوالي 120/80 ملم زئبق.</p>
-                </div>
-            </div>
-
-            <!-- Blood Sugar Card -->
-            <div class="dark-glass-card p-3 rounded-xl border border-teal-500/30 space-y-2 text-right">
-                <h4 class="text-xs font-black text-white flex items-center gap-1"><span>🩸</span> مستويات فحص السكر بالدم:</h4>
-                <div class="space-y-1 text-[10.5px] text-slate-300">
-                    <p>🟢 <b>السكر الصائم (Fasting):</b> من 70 إلى 99 ملغ/دسل (طبيعي).</p>
-                    <p>🟡 <b>السكر العشوائي / بعد الأكل:</b> أقل من 140 ملغ/دسل.</p>
-                    <p>🔴 <b>مرحلة الخطر/الارتفاع:</b> أعلى من 180 ملغ/دسل يستوجب استشارة طبية عاجلة.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Clinic Location Modal -->
-    <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white">📍 موقع العيادة المركزية</h3>
-                <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
-            </div>
-            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة مستمرة 24 ساعة).</p>
-            <div class="pt-2">
-                <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
-                    <span>🗺️</span> <span>فتح الموقع على خرائط Google</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Interactive Call Simulation Modal -->
-    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto pulse-soft">
-                📞
-            </div>
-            <div>
-                <h4 class="text-xs font-black text-white">جاري الاتصال بكادر عيادة حي الحسين...</h4>
-                <p class="text-[10px] text-cyan-300 mt-1">نغمة الانتظار الطبية قيد التشغيل 🎵</p>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold">إنهاء</button>
-                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1">اتصال هاتفي</a>
-            </div>
-        </div>
-    </div>
-
     <!-- Admin PIN Entry Modal -->
     <div id="adminPinModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative text-center space-y-3">
@@ -504,12 +380,12 @@
         </div>
     </div>
 
-    <!-- Admin Orders & Lab Queue Modal -->
+    <!-- Admin Orders Queue Modal -->
     <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5">
-                    <span class="text-cyan-400">🔔</span> سجل الحجوزات والعينات المسحوبة
+                    <span class="text-cyan-400">🔔</span> سجل الحجوزات والعينات
                 </h3>
                 <button onclick="playUiClick(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
@@ -521,7 +397,7 @@
     <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
-                <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر جديد</h3>
+                <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر طبي جديد</h3>
                 <button onclick="playUiClick(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
             
@@ -532,7 +408,6 @@
                     <select id="itemSectionType" onchange="updateCategoryDropdownOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                         <option value="services">🩺 خدمات تمريضية</option>
                         <option value="lab">🧪 تحاليل مختبرية</option>
-                        <option value="pharmacy">💊 صيدلية وعلاجات</option>
                     </select>
                 </div>
 
@@ -572,7 +447,6 @@
 
     <!-- Script Logic -->
     <script>
-        // Firebase Configuration Connected to your Project
         const firebaseConfig = {
             apiKey: "AIzaSyCWFCDMuys366TxAn_ubNRSPF6fVDGD6N4",
             authDomain: "hay-al-hussein-clinic.firebaseapp.com",
@@ -589,20 +463,57 @@
         const ordersRef = db.ref('clinic_bookings_queue');
 
         let isAdmin = localStorage.getItem('clinic_admin_auth') === 'true';
-        let currentMainTab = 'services'; // services | lab | pharmacy | consult
+        let currentMainTab = 'services';
         let currentSubFilter = 'الكل';
-        let allClinicData = { services: [], lab: [], pharmacy: [] };
+        let allClinicData = { services: [], lab: [] };
         let ordersList = [];
         let cart = [];
-        let callAudioInterval = null;
+
+        // Audio synthesizer variables
+        let audioCtx = null;
+        let melodyInterval = null;
+        let isMuted = false;
 
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي", "كانيولا وزرق إبر", "خياطة وتضميد جروح", "فحوصات وECG", "قسطرة وتجبير", "حجامة طبية"],
-            lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"],
-            pharmacy: ["الكل", "علاجات ومغذيات وريدية", "مستلزمات وتضميد معقم", "أجهزة قياس وفحص", "إسعافات أولية"]
+            lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // UI Audio Synthesis
+        // Rotating Vitals Content Data
+        const vitalSteps = [
+            {
+                title: "🫀 دليل القياس الدقيق لضغط الدم:",
+                desc: "الاسترخاء 5 دقائق • الجلوس باستقامة مع إسناد الظهر • لف الكفة فوق الكوع بـ 2 سم • المعدل الطبيعي حوالي 120/80 ملم زئبق."
+            },
+            {
+                title: "🩸 شروط وفحص السكر بالدم بدقة:",
+                desc: "صيام 8 ساعات لفحص الصائم (70-99 طبيعي) • فحص العشوائي (أقل من 140 طبيعي) • تجنب المجهود الشديد والمنبهات قبل السحب."
+            }
+        ];
+        let vitalIndex = 0;
+
+        function cycleVitalGuide() {
+            const box = document.getElementById('vitalContentBox');
+            if (!box) return;
+            box.style.opacity = '0';
+            box.style.transform = 'translateY(5px)';
+            
+            setTimeout(() => {
+                const item = vitalSteps[vitalIndex];
+                box.innerHTML = `
+                    <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${item.title}</h5>
+                    <p class="text-[10px] text-slate-300 leading-relaxed font-semibold">${item.desc}</p>
+                `;
+                document.getElementById('dot-0').className = vitalIndex === 0 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
+                document.getElementById('dot-1').className = vitalIndex === 1 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
+                
+                box.style.opacity = '1';
+                box.style.transform = 'translateY(0)';
+                vitalIndex = (vitalIndex + 1) % vitalSteps.length;
+            }, 300);
+        }
+        setInterval(cycleVitalGuide, 5000);
+
         function playUiClick() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -620,32 +531,58 @@
             } catch(e) {}
         }
 
-        // Clinic Soft Melody Ringtone for Waiting
+        // Soft Piano-like Call Tone
         function startClinicCallExperience() {
             document.getElementById('callAudioModal').classList.remove('hidden');
             document.getElementById('callAudioModal').classList.add('modal-active');
+            isMuted = false;
+            updateMuteBtnUI();
+            playMelody();
+        }
+
+        function playMelody() {
+            clearInterval(melodyInterval);
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [440, 493.88, 554.37, 587.33, 659.25];
-                let noteIdx = 0;
-                callAudioInterval = setInterval(() => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(notes[noteIdx % notes.length], ctx.currentTime);
-                    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const melodyNotes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25];
+                let idx = 0;
+                melodyInterval = setInterval(() => {
+                    if (isMuted || !audioCtx) return;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(melodyNotes[idx % melodyNotes.length], audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.45);
                     osc.connect(gain);
-                    gain.connect(ctx.destination);
+                    gain.connect(audioCtx.destination);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.35);
-                    noteIdx++;
-                }, 400);
+                    osc.stop(audioCtx.currentTime + 0.45);
+                    idx++;
+                }, 500);
             } catch(e) {}
         }
 
+        function toggleAudioMute() {
+            isMuted = !isMuted;
+            updateMuteBtnUI();
+        }
+
+        function updateMuteBtnUI() {
+            const btn = document.getElementById('muteAudioBtn');
+            const status = document.getElementById('callAudioStatus');
+            if (isMuted) {
+                btn.innerHTML = '<span>🔇</span> <span>تشغيل الصوت</span>';
+                status.innerText = 'تم كتم نغمة العيادة 🔇';
+            } else {
+                btn.innerHTML = '<span>🔊</span> <span>كتم النغمة</span>';
+                status.innerText = 'نغمة العيادة الهادئة قيد التشغيل 🎵';
+            }
+        }
+
         function stopClinicCallExperience() {
-            clearInterval(callAudioInterval);
+            clearInterval(melodyInterval);
+            if (audioCtx) { try { audioCtx.close(); } catch(e){} }
             document.getElementById('callAudioModal').classList.remove('modal-active');
             document.getElementById('callAudioModal').classList.add('hidden');
         }
@@ -669,17 +606,11 @@
             document.getElementById('drawerBackdrop').classList.add('hidden');
         }
 
-        function openStaticModal(id) {
+        function installAppDirectly() {
             closeDrawer();
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById(id).classList.add('modal-active');
-        }
-        function closeStaticModal(id) {
-            document.getElementById(id).classList.remove('modal-active');
-            document.getElementById(id).classList.add('hidden');
+            showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
         }
 
-        // Initialize and Seed Default Clinical Data
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
@@ -696,14 +627,10 @@
                             { id: "srv_6", category: "حجامة طبية", name: "حجامة وقائية وعلاجية معقمة", usage: "بإشراف كادر مختص وكؤوس استخدام مفرد لمرة واحدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=500&q=80" }
                         ],
                         lab: [
-                            { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=500&q=80" },
+                            { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=500&q=80" },
                             { id: "lab_2", category: "وظائف كبد وكلى", name: "وظائف الكلى (Urea & Creatinine)", usage: "تقييم كفاءة الكلى ونسبة اليوريا والكرياتينين بالدم", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=500&q=80" },
                             { id: "lab_3", category: "الهرمونات والفيتامينات", name: "فحص فيتامين د (Vitamin D3)", usage: "فحص دقيق لمستوى فيتامين د بجهاز التوهج المناعي", price: "18,000 د.ع", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=500&q=80" },
-                            { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=500&q=80" }
-                        ],
-                        pharmacy: [
-                            { id: "ph_1", category: "علاجات ومغذيات وريدية", name: "مغذي وريدي Normal Saline / Glucose", usage: "محلول وريدي معقم 500 مل للترطيب والتعويض", price: "3,000 د.ع", image: "https://images.unsplash.com/photo-1583912267670-6575ad472688?auto=format&fit=crop&w=500&q=80" },
-                            { id: "ph_2", category: "مستلزمات وتضميد معقم", name: "بكج غيار وتضميد جروح معقم متكامل", usage: "شاش، بلاستر طبي، بيتادين، وضماد حروق جلدي", price: "5,000 د.ع", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=500&q=80" }
+                            { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر بدقة عالية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=500&q=80" }
                         ]
                     };
                     dataRef.set(allClinicData);
@@ -711,7 +638,6 @@
                 renderActiveTabContent();
             });
 
-            // Realtime Sync for Orders Queue
             ordersRef.on('value', (snapshot) => {
                 const val = snapshot.val();
                 if (val) {
@@ -729,6 +655,7 @@
                 cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || [];
             } catch(e) { cart = []; }
 
+            cycleVitalGuide();
             updateAdminUI();
             updateCartBadge();
         }
@@ -737,7 +664,7 @@
             currentMainTab = tab;
             currentSubFilter = 'الكل';
             
-            ['services', 'lab', 'pharmacy', 'consult'].forEach(t => {
+            ['services', 'lab', 'consult'].forEach(t => {
                 const el = document.getElementById(`pill-${t}`);
                 if (el) {
                     if (t === tab) {
@@ -796,7 +723,7 @@
                 grid.classList.add('hidden');
                 consultView.classList.remove('hidden');
                 noResults.classList.add('hidden');
-                sectionTitle.innerHTML = '<span class="text-cyan-400">●</span> الاستشارات والتحويل الطبي';
+                sectionTitle.innerHTML = '<span class="text-cyan-400">●</span> الاستشارة والتوجيه الطبي';
                 counterText.innerText = '';
                 return;
             }
@@ -811,8 +738,7 @@
 
             const titlesMap = {
                 services: "الخدمات التمريضية والسريرية",
-                lab: "قسم المختبر والتحاليل وسحب العينات",
-                pharmacy: "صيدلية العيادة والعلاجات الوريدية"
+                lab: "قسم المختبر والتحاليل وسحب العينات"
             };
             sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${titlesMap[currentMainTab]} ${currentSubFilter !== 'الكل' ? `(${currentSubFilter})` : ''}`;
             counterText.innerText = `${dataset.length} عنصر`;
@@ -945,7 +871,7 @@
                     <div class="flex items-center justify-between bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800">
                         <div class="min-w-0 text-right">
                             <h5 class="text-xs font-black text-white truncate">${item.name}</h5>
-                            <span class="text-[10px] text-cyan-400 font-bold">${item.price} (${item.section})</span>
+                            <span class="text-[10px] text-cyan-400 font-bold">${item.price}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <button onclick="changeCartQty(${idx}, -1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">-</button>
@@ -1014,7 +940,6 @@
             msg += `\n💰 *المجموع التقديري:* ${total.toLocaleString()} د.ع\n`;
             msg += `⏰ *وقت التسجيل:* ${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`;
 
-            // Save to Firebase Queue with Lab Sample Tracking
             ordersRef.push({
                 patientName: name,
                 patientPhone: phone,
@@ -1033,17 +958,11 @@
             updateCartBadge();
             closeCustomerModal();
 
-            // Direct WhatsApp Trigger
             const targetPhone = "9647726053522";
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
-        function directConsultWhatsApp(type) {
-            const msg = `👨‍⚕️ مرحباً، أود حجز استشارة طبية بخصوص (${type}) من خلال تطبيق عيادة حي الحسين.`;
-            window.location.href = `https://api.whatsapp.com/send?phone=9647726053522&text=${encodeURIComponent(msg)}`;
-        }
-
-        // Secret Admin Trigger (5 Clicks on Emblem)
+        // Secret Admin Trigger
         let emblemClicks = 0;
         let emblemTimer = null;
         document.getElementById('secretLogoTrigger').addEventListener('click', () => {
@@ -1138,7 +1057,7 @@
                             <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
                         </div>
                         <p class="text-[10px] text-cyan-400">📞 ${o.patientPhone} | 📍 ${o.address} | 👥 ${o.staffPreference}</p>
-                        <p class="text-[9.5px] text-slate-300">🩸 أول عينة مسحوبة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
+                        <p class="text-[9.5px] text-slate-300">🩸 وقت أول عينة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
                         <div class="text-[9.5px] text-slate-400">
                             ${(o.items || []).map(i => `<span>• ${i.name} (${i.qty}x)</span>`).join(' ')}
                         </div>
