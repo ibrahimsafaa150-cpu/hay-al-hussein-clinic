@@ -39,26 +39,27 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Install Popup (Like Pharmacy Style) -->
-    <div id="pwaPromptModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#181d2a] border border-slate-700/60 rounded-[28px] p-6 w-full max-w-[320px] shadow-2xl relative text-right space-y-4">
+    <!-- PWA Install Popup (Exact Native App Modal Style) -->
+    <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#242938] border border-slate-600/40 rounded-[28px] p-6 w-full max-w-[325px] shadow-2xl relative text-right space-y-4">
             <h3 class="text-base font-black text-white text-center">تثبيت التطبيق</h3>
             
-            <div class="flex items-center justify-between gap-3 pt-2">
+            <div class="flex items-center justify-between gap-3 pt-1">
                 <div class="space-y-1 min-w-0 flex-1">
-                    <h4 class="text-xs font-black text-white truncate">عيادة حي الحسين التمريضية</h4>
-                    <p class="text-[9.5px] text-slate-400 break-all leading-tight">hay-al-hussein-clinic.github.io</p>
+                    <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
+                    <p class="text-[10px] text-slate-300 break-all leading-tight">hay-al-hussein-clinic.github.io</p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
-                    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/>
+                <div class="w-14 h-14 rounded-2xl bg-[#1a2030] border border-slate-600/60 flex items-center justify-center text-slate-300 shrink-0 shadow-inner">
+                    <svg class="w-8 h-8 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        <path d="M12 7v6M9 10h6" stroke-linecap="round"/>
                     </svg>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between pt-4 border-t border-slate-800 text-xs font-bold">
-                <button onclick="dismissPwaPrompt()" class="text-slate-400 hover:text-white px-3 py-1.5 transition">إلغاء</button>
-                <button onclick="confirmPwaInstall()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-5 py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت</button>
+            <div class="flex items-center justify-between pt-4 border-t border-slate-700/60 text-xs font-bold">
+                <button onclick="dismissPwaPrompt()" class="text-slate-300 hover:text-white px-4 py-2 transition">إلغاء</button>
+                <button onclick="confirmPwaInstall()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-6 py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت</button>
             </div>
         </div>
     </div>
@@ -72,7 +73,7 @@
                     <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                <!-- Medical Eagle Emblem Logo (Falcon Style) -->
+                <!-- Medical Falcon Logo Emblem -->
                 <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-1">
                     <svg class="w-7 h-7 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C9.5 5 4 6.5 2 7c2 2 4.5 3 7 3-1 2-2 4.5-2 7 2.5-1 4.5-3 5-5 .5 2 2.5 4 5 5 0-2.5-1-5-2-7 2.5 0 5-1 7-3-2-.5-7.5-2-10-5zm-1 7V6h2v3h3v2h-3v3h-2v-3H8V9h3z"/>
@@ -291,7 +292,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Main 3 Tabs + Install Button with Prompt Style) -->
+    <!-- Bottom Navigation Bar (Main 3 Tabs + Install Button Trigger) -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -586,7 +587,7 @@
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
-        // Vital Tips with Formatted Non-AI Natural Text
+        // Natural Text Tips without units
         const vitalTips = [
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
@@ -600,9 +601,9 @@
             {
                 title: "🩸 نصائح وإرشادات فحص السكر بالدم:",
                 points: [
-                    "• فحص السكر الصائم: يُجرى بعد صيام عن الطعام والشراب (باستثناء الماء) لمدة 8 إلى 10 ساعات (النسبة الطبيعية: 70 إلى 99)",
-                    "• نظافة اليدين: غسل اليدين جيداً بالماء والصابون وتجفيفهما تماماً قبل وخز الإصبع، لتفادي القراءات الخاطئة",
                     "• تجنب المجهود الشديد: الابتعاد عن التوتر النفسي والتمارين الشاقة والمنبهات (كالقهوة والشاي) قبل السحب، لتجنب ارتفاع نسبة السكر المؤقت في الدم لمدة ساعتين",
+                    "• نظافة اليدين: غسل اليدين جيداً بالماء والصابون وتجفيفهما تماماً قبل وخز الإصبع، لأن بقايا الطعام أو السكريات على الجلد قد تعطي قراءات خاطئة ومرتفعة",
+                    "• فحص السكر الصائم: يُجرى بعد صيام عن الطعام والشراب (باستثناء الماء) لمدة تتراوح بين 8 إلى 10 ساعات (النسبة الطبيعية: 70 إلى 99)",
                     "• فحص السكر التراكمي (HbA1c): لا يتطلب صياماً بل الهدف ليعكس معدل انتظام السكر في الدم خلال آخر 3 أشهر (النسبة الطبيعية: أقل من 5.7)"
                 ]
             }
@@ -648,7 +649,7 @@
             vitalTimer = setInterval(nextVitalTip, 10000);
         }
 
-        // Touch Swipe Handling
+        // Swipe Touch Handlers
         let touchStartX = 0;
         let touchEndX = 0;
         const swipeBox = document.getElementById('vitalSwipeContainer');
@@ -670,13 +671,13 @@
             }
         }
 
-        // PWA Automatic Prompt Logic
+        // PWA Native Popup Handlers
         let deferredPrompt = null;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             setTimeout(() => {
-                if (!localStorage.getItem('pwa_prompt_dismissed')) {
+                if (!localStorage.getItem('pwa_prompt_dismissed_h')) {
                     showPwaPromptModal();
                 }
             }, 2000);
@@ -690,7 +691,7 @@
         }
 
         function dismissPwaPrompt() {
-            localStorage.setItem('pwa_prompt_dismissed', 'true');
+            localStorage.setItem('pwa_prompt_dismissed_h', 'true');
             const m = document.getElementById('pwaPromptModal');
             m.classList.remove('modal-active');
             m.classList.add('hidden');
