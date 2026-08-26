@@ -67,6 +67,11 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        .swipe-card {
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            touch-action: pan-y;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen relative w-full pb-24 select-none">
@@ -167,9 +172,6 @@
                 <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
                 </button>
-                <button onclick="triggerPwaInstall()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
-                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
-                </button>
             </div>
         </div>
 
@@ -263,7 +265,6 @@
                 <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
                     <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300">أ.م</div>
                     <div class="text-right">
-                        زميل الكادر التمريضي الأول
                         <h5 class="text-xs font-black text-white">الممرض الماجستير / أحمد محمد</h5>
                         <p class="text-[9px] text-slate-400">اختصاص طوارئ وعناية مركزة منزلية</p>
                     </div>
@@ -305,7 +306,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation Bar (Clean 3-Tab Layout) -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
         <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -318,10 +319,6 @@
         <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
-        </button>
-        <button onclick="triggerPwaInstall()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
-            <span class="text-lg">📲</span>
-            <span>تثبيت</span>
         </button>
     </div>
 
@@ -694,28 +691,6 @@
                     prevVitalTip();
                 }
                 restartVitalTimer();
-            }
-        }
-
-        // PWA Install Prompt Trigger
-        let deferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-
-        function triggerPwaInstall() {
-            closeDrawer();
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                      showToast('تم تثبيت التطبيق بنجاح ✅');
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                showToast('اضغط قائمة المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
             }
         }
 
