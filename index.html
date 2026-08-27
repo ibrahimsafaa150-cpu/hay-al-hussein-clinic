@@ -92,11 +92,11 @@
         </button>
     </div>
 
-    <!-- Header Navigation (Optimized Spacing for Full Title Visibility) -->
+    <!-- Header Navigation (Full Title Visibility Guarantee) -->
     <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-2.5 py-2 w-full">
         <div class="flex items-center justify-between gap-1.5 w-full max-w-xl mx-auto">
             
-            <div class="flex items-center gap-1.5 min-w-0 flex-1">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
                 <button onclick="playUiClick(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
@@ -109,8 +109,8 @@
                 </div>
 
                 <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiClick(); switchMainTab('services')">
-                    <div class="flex items-center gap-1">
-                        <h1 class="text-[12.5px] sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="text-[13px] sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
                             عيادة حي الحسين التمريضية
                         </h1>
                         <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[7.5px] font-black px-1 py-0.2 rounded-full shrink-0">24H</span>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-1 shrink-0">
+            <div class="flex items-center gap-1.5 shrink-0">
                 <button onclick="playUiClick(); openTrackerModal()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 active:scale-90 transition text-xs" title="تتبع الطلب">
                     🚗
                 </button>
@@ -127,19 +127,28 @@
                     <span class="text-xs">📋</span>
                     <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[8.5px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
+            </div>
+        </div>
 
-                <div id="adminActionHeader" class="hidden items-center gap-1">
-                    <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950/80 border border-teal-500/60 text-teal-300 font-bold text-[9px] px-2 py-1.5 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                        <span>🔔</span>
-                        <span id="pendingOrdersBadge" class="hidden absolute -top-1.5 -left-1.5 bg-rose-600 text-white text-[7.5px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center animate-pulse">0</span>
-                    </button>
-                    <button onclick="playUiClick(); openAddModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold text-[9px] px-2 py-1.5 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
-                        <span>➕</span>
-                    </button>
-                    <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950/80 border border-rose-800 text-rose-300 font-bold text-[9px] px-2 py-1.5 rounded-xl active:scale-95">
-                        <span>🔒</span>
-                    </button>
-                </div>
+        <!-- Separate Admin Top Bar (Clean & Doesn't Mess Up the Header) -->
+        <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+                <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-1 rounded-lg font-black">وضع المشرف الطبي 🚀</span>
+                <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
+                    <span>🔔 الحجوزات</span>
+                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1.5 rounded-full animate-pulse">0</span>
+                </button>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <button onclick="playUiClick(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[10px] font-bold px-2.5 py-1 rounded-lg">
+                    <span>➕ كادر</span>
+                </button>
+                <button onclick="playUiClick(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">
+                    <span>➕ خدمة</span>
+                </button>
+                <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[10px] font-bold px-2 py-1 rounded-lg">
+                    <span>خروج 🔒</span>
+                </button>
             </div>
         </div>
 
@@ -181,6 +190,9 @@
                 </button>
                 <button onclick="playUiClick(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right">
                     <span>🚗</span> <span class="font-bold">تتبع حالة طلبي وحجز الكادر</span>
+                </button>
+                <button onclick="playUiClick(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-amber-300 text-right">
+                    <span>⭐</span> <span class="font-bold">إضافة تقييم ورأي المراجع</span>
                 </button>
                 <button onclick="playUiClick(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
@@ -275,7 +287,7 @@
             </div>
         </div>
 
-        <!-- Nursing Team Section (5 Staff Members) -->
+        <!-- Dynamic Nursing Team Section (Fully Manageable by Admin) -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -283,66 +295,20 @@
                 </h4>
                 <span class="text-[9px] text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded-md font-bold">رجالي - نسائي</span>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300">أ.م</div>
-                    <div class="text-right">
-                        <h5 class="text-xs font-black text-white">الممرض الماجستير / أحمد محمد</h5>
-                        <p class="text-[9px] text-slate-400">اختصاص طوارئ وعناية مركزة منزلية</p>
-                    </div>
-                </div>
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-full bg-teal-950 border border-teal-500/40 flex items-center justify-center text-xs font-black text-teal-300">هـ.ط</div>
-                    <div class="text-right">
-                        <h5 class="text-xs font-black text-white">الممرضة الجامعية / هند طارق</h5>
-                        <p class="text-[9px] text-slate-400">اختصاص زيارات نسائية، كانيولا وغيار جروح</p>
-                    </div>
-                </div>
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300">م.خ</div>
-                    <div class="text-right">
-                        <h5 class="text-xs font-black text-white">الممرض الفني / محمد خالد</h5>
-                        <p class="text-[9px] text-slate-400">سحب دم فوري وتخطيط قلب ECG منزلي</p>
-                    </div>
-                </div>
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-full bg-teal-950 border border-teal-500/40 flex items-center justify-center text-xs font-black text-teal-300">ف.ع</div>
-                    <div class="text-right">
-                        <h5 class="text-xs font-black text-white">الممرضة المعاونة / فاطمة علي</h5>
-                        <p class="text-[9px] text-slate-400">إعطاء العلاجات ومتابعة مرضى السكري</p>
-                    </div>
-                </div>
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center gap-2.5 sm:col-span-2">
-                    <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300">ع.س</div>
-                    <div class="text-right">
-                        <h5 class="text-xs font-black text-white">الممرض الاختصاص / علي سالم</h5>
-                        <p class="text-[9px] text-slate-400">تجهيز مغذيات، كبس جروح، وإسعافات أولية متقدمة</p>
-                    </div>
-                </div>
-            </div>
+            <div id="staffMembersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
         </div>
 
-        <!-- Patients Reviews / Testimonials -->
-        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2">
-            <h4 class="text-xs font-black text-white flex items-center gap-1.5">
-                <span class="text-amber-400">⭐</span> آراء وتقييمات المراجعين
-            </h4>
-            <div class="grid grid-cols-2 gap-2 text-right">
-                <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-bold text-cyan-300">أبو سيف</span>
-                        <span class="text-[9px] text-amber-400">★★★★★</span>
-                    </div>
-                    <p class="text-[9px] text-slate-400 leading-tight">كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم.</p>
-                </div>
-                <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-bold text-cyan-300">أم مريم</span>
-                        <span class="text-[9px] text-amber-400">★★★★★</span>
-                    </div>
-                    <p class="text-[9px] text-slate-400 leading-tight">تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة.</p>
-                </div>
+        <!-- Interactive Patients Reviews Section -->
+        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                <h4 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-amber-400">⭐</span> آراء وتقييمات المراجعين
+                </h4>
+                <button onclick="openAddReviewModal()" class="bg-amber-950/80 border border-amber-500/50 text-amber-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg active:scale-95">
+                    + أضف تقييمك
+                </button>
             </div>
+            <div id="reviewsContainerGrid" class="grid grid-cols-2 gap-2 text-right"></div>
         </div>
 
         <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
@@ -367,7 +333,7 @@
         </button>
     </div>
 
-    <!-- Live Order Tracker Modal (For Patients with Cancel Booking Feature) -->
+    <!-- Live Order Tracker Modal -->
     <div id="patientTrackerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -383,6 +349,66 @@
             </div>
 
             <div id="trackerResultContainer" class="space-y-2 pt-2"></div>
+        </div>
+    </div>
+
+    <!-- Add Review Modal -->
+    <div id="addReviewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative space-y-3 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>⭐</span> تقييم خدمة العيادة</h3>
+                <button onclick="playUiClick(); closeAddReviewModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            <form onsubmit="savePatientReview(event)" class="space-y-2">
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">اسمك الكريم:</label>
+                    <input type="text" id="reviewAuthor" required placeholder="مثال: أحمد العراقي" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">التقييم:</label>
+                    <select id="reviewStars" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 focus:outline-none">
+                        <option value="★★★★★">★★★★★ ممتاز جداً</option>
+                        <option value="★★★★☆">★★★★☆ جيد جداً</option>
+                        <option value="★★★☆☆">★★★☆☆ جيد</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">رأيك وتجربتك مع الكادر:</label>
+                    <textarea id="reviewText" rows="2" required placeholder="اكتب تجربتك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+                </div>
+                <div class="pt-1">
+                    <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-black py-2 rounded-xl text-xs active:scale-95 shadow">نشر التقييم ⭐</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Staff Modal (Admin Only) -->
+    <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 id="staffModalTitle" class="text-xs font-black text-white">إضافة عضو كادر تمريضي</h3>
+                <button onclick="playUiClick(); closeStaffModal()" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <form onsubmit="saveStaffMember(event)" class="space-y-2 text-right">
+                <input type="hidden" id="staffEditId">
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">اسم الممرض / اللقب:</label>
+                    <input type="text" id="staffName" required placeholder="مثال: الممرض الجامعي / علي سالم" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">التخصص والمهام:</label>
+                    <input type="text" id="staffRole" required placeholder="مثال: اختصاص زيارات منزلية، كانيولا وتخطيط قلب" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">رمز الحروف أو رابط الصورة:</label>
+                    <input type="text" id="staffAvatar" placeholder="مثال: ع.س أو رابط صورة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div class="pt-1 flex gap-2">
+                    <button type="button" onclick="closeStaffModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-cyan-600 text-white font-bold py-1.5 rounded-xl text-xs">حفظ</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -689,11 +715,15 @@
         const db = firebase.database();
         const dataRef = db.ref('clinic_master_data');
         const ordersRef = db.ref('clinic_bookings_queue');
+        const staffRef = db.ref('clinic_staff_members');
+        const reviewsRef = db.ref('clinic_reviews_data');
 
         let isAdmin = localStorage.getItem('clinic_admin_auth') === 'true';
         let currentMainTab = 'services';
         let currentSubFilter = 'الكل';
         let allClinicData = { services: [], lab: [] };
+        let staffList = [];
+        let reviewsList = [];
         let ordersList = [];
         let cart = [];
 
@@ -940,7 +970,7 @@
             }
         }
 
-        // Live Order Tracker Logic with Patient Cancellation Feature
+        // Live Order Tracker Logic
         function openTrackerModal() {
             closeDrawer();
             document.getElementById('patientTrackerModal').classList.remove('hidden');
@@ -997,6 +1027,129 @@
             }
         }
 
+        // Reviews System
+        function openAddReviewModal() {
+            closeDrawer();
+            document.getElementById('addReviewModal').classList.remove('hidden');
+            document.getElementById('addReviewModal').classList.add('modal-active');
+        }
+        function closeAddReviewModal() {
+            document.getElementById('addReviewModal').classList.remove('modal-active');
+            document.getElementById('addReviewModal').classList.add('hidden');
+        }
+
+        function savePatientReview(e) {
+            e.preventDefault();
+            const author = document.getElementById('reviewAuthor').value.trim();
+            const stars = document.getElementById('reviewStars').value;
+            const text = document.getElementById('reviewText').value.trim();
+            reviewsRef.push({ author, stars, text, date: Date.now() });
+            closeAddReviewModal();
+            showToast('شكراً لمشاركتك رأيك وتقييمك ⭐');
+            document.getElementById('reviewAuthor').value = '';
+            document.getElementById('reviewText').value = '';
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainerGrid');
+            container.innerHTML = '';
+            const listToRender = reviewsList.length > 0 ? reviewsList : [
+                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." },
+                { author: "أم مريم", stars: "★★★★★", text: "تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة." }
+            ];
+            listToRender.slice(0, 4).forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-cyan-300">${r.author}</span>
+                            <span class="text-[9px] text-amber-400">${r.stars}</span>
+                        </div>
+                        <p class="text-[9px] text-slate-400 leading-tight">${r.text}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Staff Management
+        function openAddStaffModal() {
+            document.getElementById('staffModalTitle').innerText = 'إضافة عضو كادر تمريضي';
+            document.getElementById('staffEditId').value = '';
+            document.getElementById('staffName').value = '';
+            document.getElementById('staffRole').value = '';
+            document.getElementById('staffAvatar').value = '';
+            document.getElementById('staffEditModal').classList.remove('hidden');
+            document.getElementById('staffEditModal').classList.add('modal-active');
+        }
+
+        function openEditStaffModal(id) {
+            const s = staffList.find(x => String(x.id) === String(id));
+            if (!s) return;
+            document.getElementById('staffModalTitle').innerText = 'تعديل بيانات الممرض';
+            document.getElementById('staffEditId').value = s.id;
+            document.getElementById('staffName').value = s.name;
+            document.getElementById('staffRole').value = s.role;
+            document.getElementById('staffAvatar').value = s.avatar || '';
+            document.getElementById('staffEditModal').classList.remove('hidden');
+            document.getElementById('staffEditModal').classList.add('modal-active');
+        }
+
+        function closeStaffModal() {
+            document.getElementById('staffEditModal').classList.remove('modal-active');
+            document.getElementById('staffEditModal').classList.add('hidden');
+        }
+
+        function saveStaffMember(e) {
+            e.preventDefault();
+            const editId = document.getElementById('staffEditId').value;
+            const name = document.getElementById('staffName').value.trim();
+            const role = document.getElementById('staffRole').value.trim();
+            const avatar = document.getElementById('staffAvatar').value.trim() || name.substring(0, 2);
+
+            if (editId) {
+                const idx = staffList.findIndex(x => String(x.id) === String(editId));
+                if (idx !== -1) staffList[idx] = { id: editId, name, role, avatar };
+            } else {
+                staffList.push({ id: 'stf_' + Date.now(), name, role, avatar });
+            }
+            staffRef.set(staffList);
+            closeStaffModal();
+            showToast('تم حفظ بيانات الكادر بنجاح');
+        }
+
+        function deleteStaffMember(id) {
+            if (confirm('هل تريد حذف هذا الممرض من الكادر؟')) {
+                staffList = staffList.filter(x => String(x.id) !== String(id));
+                staffRef.set(staffList);
+                showToast('تم حذف الممرض');
+            }
+        }
+
+        function renderStaff() {
+            const grid = document.getElementById('staffMembersGrid');
+            grid.innerHTML = '';
+            staffList.forEach(s => {
+                grid.innerHTML += `
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0">
+                                ${s.avatar ? (s.avatar.startsWith('http') ? `<img src="${s.avatar}" class="w-full h-full rounded-full object-cover">` : s.avatar) : s.name.substring(0, 2)}
+                            </div>
+                            <div class="text-right min-w-0">
+                                <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
+                                <p class="text-[9px] text-slate-400 truncate">${s.role}</p>
+                            </div>
+                        </div>
+                        ${isAdmin ? `
+                        <div class="flex items-center gap-1 shrink-0">
+                            <button onclick="openEditStaffModal('${s.id}')" class="text-xs text-slate-300 bg-slate-800 p-1 rounded-lg">✏️</button>
+                            <button onclick="deleteStaffMember('${s.id}')" class="text-xs text-rose-400 bg-rose-950/80 p-1 rounded-lg">🗑️</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+        }
+
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
@@ -1032,6 +1185,33 @@
                     dataRef.set(allClinicData);
                 }
                 renderActiveTabContent();
+            });
+
+            staffRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val && Array.isArray(val) && val.length > 0) {
+                    staffList = val;
+                } else {
+                    staffList = [
+                        { id: "stf_1", name: "الممرض الماجستير / أحمد محمد", role: "اختصاص طوارئ وعناية مركزة منزلية", avatar: "أ.م" },
+                        { id: "stf_2", name: "الممرضة الجامعية / هند طارق", role: "اختصاص زيارات نسائية، كانيولا وغيار جروح", avatar: "هـ.ط" },
+                        { id: "stf_3", name: "الممرض الفني / محمد خالد", role: "سحب دم فوري وتخطيط قلب ECG منزلي", avatar: "م.خ" },
+                        { id: "stf_4", name: "الممرضة المعاونة / فاطمة علي", role: "إعطاء العلاجات ومتابعة مرضى السكري", avatar: "ف.ع" },
+                        { id: "stf_5", name: "الممرض الاختصاص / علي سالم", role: "تجهيز مغذيات، كبس جروح، وإسعافات أولية متقدمة", avatar: "ع.س" }
+                    ];
+                    staffRef.set(staffList);
+                }
+                renderStaff();
+            });
+
+            reviewsRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    reviewsList = Object.keys(val).map(k => ({ key: k, ...val[k] })).reverse();
+                } else {
+                    reviewsList = [];
+                }
+                renderReviews();
             });
 
             ordersRef.on('value', (snapshot) => {
@@ -1159,8 +1339,8 @@
                             </div>
 
                             <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
-                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2">${item.name}</h4>
-                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2">${item.usage}</p>
+                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[32px]">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2 min-h-[26px]">${item.usage}</p>
                                 <div class="pt-1 border-t border-slate-800/60 flex items-center justify-between">
                                     <span class="text-xs font-black text-cyan-400">${item.price}</span>
                                 </div>
@@ -1411,7 +1591,7 @@
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
-        // Secret Admin Trigger
+        // Secret Admin Trigger (5 Clicks on Logo)
         let emblemClicks = 0;
         let emblemTimer = null;
         document.getElementById('secretLogoTrigger').addEventListener('click', () => {
@@ -1467,6 +1647,7 @@
             }
             updateAdminBadge();
             renderActiveTabContent();
+            renderStaff();
         }
 
         function updateAdminBadge() {
