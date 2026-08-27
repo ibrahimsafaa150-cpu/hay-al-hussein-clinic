@@ -56,6 +56,49 @@
         📞
     </a>
 
+    <!-- PWA Install Popup Modal -->
+    <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-[#1e2538] border border-cyan-500/40 rounded-[28px] p-6 w-full max-w-[325px] shadow-2xl relative text-right space-y-4">
+            <h3 class="text-base font-black text-white text-center">تثبيت التطبيق على الهاتف</h3>
+            
+            <div class="flex items-center justify-between gap-3 pt-1">
+                <div class="space-y-1 min-w-0 flex-1 text-right">
+                    <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
+                    <p class="text-[10px] text-cyan-300 break-all leading-tight">hay-al-hussein-clinic.netlify.app</p>
+                </div>
+                <div class="w-13 h-13 rounded-2xl bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-300 shrink-0 shadow-inner text-2xl p-2">
+                    🩺
+                </div>
+            </div>
+
+            <p class="text-[10.5px] text-slate-300 leading-relaxed text-right">
+                ثبّت التطبيق لتصفح سريع وحجز الزيارات المنزلية والفحوصات بضغطة زر واحدة.
+            </p>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 text-xs font-bold gap-2">
+                <button onclick="dismissPwaPrompt()" class="flex-1 text-slate-400 hover:text-white py-2 rounded-xl border border-slate-700">إلغاء</button>
+                <button onclick="confirmPwaInstall()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت 📲</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Install Strip -->
+    <div id="stickyInstallStrip" class="fixed bottom-16 left-3 right-3 z-40 bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 border border-cyan-500/40 rounded-2xl p-2.5 shadow-2xl hidden items-center justify-between max-w-xl mx-auto">
+        <div class="flex items-center gap-2 min-w-0">
+            <button onclick="closeInstallStrip()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
+            <div class="w-8 h-8 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+                🩺
+            </div>
+            <div class="text-right truncate">
+                <h5 class="text-[11px] font-black text-white truncate">تطبيق عيادة حي الحسين</h5>
+                <p class="text-[9px] text-cyan-300 truncate">تثبيت التطبيق للطلب والحجز المباشر</p>
+            </div>
+        </div>
+        <button onclick="showPwaPromptModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-[10.5px] font-black px-3 py-1.5 rounded-xl shadow active:scale-95 shrink-0">
+            تثبيت 📲
+        </button>
+    </div>
+
     <!-- Header Navigation -->
     <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2.5 w-full">
         <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
@@ -174,6 +217,9 @@
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
+                </button>
+                <button id="drawerInstallBtn" onclick="showPwaPromptModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right transition">
+                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
         </div>
@@ -749,6 +795,22 @@
 
     <!-- Script Logic -->
     <script>
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'hay-alhussein-cache-v2';
+                self.addEventListener('install', e => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        fetch(e.request).catch(() => caches.match(e.request))
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyCWFCDMuys366TxAn_ubNRSPF6fVDGD6N4",
             authDomain: "hay-al-hussein-clinic.firebaseapp.com",
@@ -944,6 +1006,84 @@
                 restartReviewTimer();
             }
         }, { passive: true });
+
+        // PWA Install System
+        let deferredPrompt = null;
+        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('clinic_pwa_installed') === 'true';
+
+        function checkInstallVisibility() {
+            const strip = document.getElementById('stickyInstallStrip');
+            const drawerBtn = document.getElementById('drawerInstallBtn');
+            if (isAppInstalled) {
+                if (strip) strip.classList.add('hidden');
+                if (drawerBtn) drawerBtn.classList.add('hidden');
+            } else {
+                if (strip && !localStorage.getItem('clinic_install_strip_dismissed')) {
+                    strip.classList.remove('hidden');
+                    strip.classList.add('flex');
+                }
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!isAppInstalled && !localStorage.getItem('pwa_prompt_dismissed_h')) {
+                setTimeout(() => {
+                    showPwaPromptModal();
+                }, 2000);
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('clinic_pwa_installed', 'true');
+            closeInstallStrip();
+            const drawerBtn = document.getElementById('drawerInstallBtn');
+            if (drawerBtn) drawerBtn.classList.add('hidden');
+            showToast('تم تثبيت التطبيق بنجاح ✅');
+        });
+
+        function showPwaPromptModal() {
+            closeDrawer();
+            if (isAppInstalled) {
+                showToast('التطبيق مثبت على هاتفك مسبقاً ✅');
+                return;
+            }
+            const m = document.getElementById('pwaPromptModal');
+            m.classList.remove('hidden');
+            m.classList.add('modal-active');
+        }
+
+        function dismissPwaPrompt() {
+            localStorage.setItem('pwa_prompt_dismissed_h', 'true');
+            const m = document.getElementById('pwaPromptModal');
+            m.classList.remove('modal-active');
+            m.classList.add('hidden');
+        }
+
+        function confirmPwaInstall() {
+            dismissPwaPrompt();
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        localStorage.setItem('clinic_pwa_installed', 'true');
+                        showToast('تم تثبيت التطبيق بنجاح ✅');
+                        closeInstallStrip();
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
+            }
+        }
+
+        function closeInstallStrip() {
+            localStorage.setItem('clinic_install_strip_dismissed', 'true');
+            const strip = document.getElementById('stickyInstallStrip');
+            strip.classList.remove('flex');
+            strip.classList.add('hidden');
+        }
 
         function openAddReviewModal() {
             document.getElementById('addReviewModal').classList.remove('hidden');
@@ -1247,6 +1387,7 @@
 
             renderVitalCard(0);
             restartVitalTimer();
+            checkInstallVisibility();
             updateAdminUI();
             updateCartBadge();
         }
