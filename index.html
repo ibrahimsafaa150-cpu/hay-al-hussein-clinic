@@ -27,6 +27,7 @@
         html, body { width: 100%; overflow-x: hidden; background-color: #030712; color: #f3f4f6; margin: 0; padding: 0; }
         .dark-glass { background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(3, 7, 18, 0.98) 100%); backdrop-filter: blur(14px); border: 1px solid rgba(14, 165, 233, 0.2); }
         .dark-glass-card { background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .med-img-frame { background: #ffffff; border: 1.5px solid rgba(14, 165, 233, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .modal-active { display: flex !important; }
@@ -443,7 +444,7 @@
         </div>
     </div>
 
-    <!-- Admin Add/Edit Service Modal -->
+    <!-- Admin Add/Edit Service Modal (مع دعم رفع الصور وتعديل الخدمات) -->
     <div id="adminItemModal" onclick="handleOutsideModalClick(event, 'adminItemModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
@@ -475,20 +476,25 @@
                     <input type="text" id="itemUsage" required placeholder="مثال: سحب دم وريدي - النتيجة خلال ساعتين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
-                <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة (د.ع):</label>
+                    <input type="text" id="itemPrice" required placeholder="مثال: 15000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <!-- قسم رفع واختيار الصور مثل الصيدلية -->
+                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-2">
+                    <label class="block text-[10px] font-bold text-cyan-400">صورة الخدمة / الإجراء بدقة عالية:</label>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة:</label>
-                        <input type="text" id="itemPrice" required placeholder="8000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                        <input type="file" id="itemFileInput" accept="image/*" onchange="handleClinicImageUpload(event)" class="w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-cyan-950 file:text-cyan-300 hover:file:bg-cyan-900 cursor-pointer">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة:</label>
-                        <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                        <input type="text" id="itemImage" placeholder="أو الصق رابط الصورة المباشر https://..." class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-white focus:outline-none">
                     </div>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
                     <button type="button" onclick="playUiAction(); closeAdminItemModal()" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
-                    <button type="submit" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">حفظ العنصر</button>
+                    <button type="submit" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">حفظ الخدمة ☁️</button>
                 </div>
             </form>
         </div>
@@ -743,8 +749,8 @@
                 <button onclick="playUiAction(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
-            <div class="w-full h-48 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden relative">
-                <img id="detailImage" src="" class="object-cover w-full h-full" loading="lazy">
+            <div class="w-full aspect-square max-w-[260px] mx-auto rounded-2xl bg-white med-img-frame flex items-center justify-center relative overflow-hidden shrink-0 p-2">
+                <img id="detailImage" src="" class="object-contain w-full h-full block" alt="صورة الخدمة">
             </div>
 
             <div class="space-y-1.5 text-right">
@@ -768,7 +774,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v7';
+                const CACHE_NAME = 'hay-alhussein-cache-v8';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -1121,6 +1127,49 @@
             setTimeout(() => toast.classList.remove('toast-show'), 2200);
         }
 
+        // معالجة وضغط الصور بدقة 1080p مثل نظام الصيدلية
+        function handleClinicImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 1080;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const fullHdBase64 = canvas.toDataURL('image/jpeg', 0.88);
+                    document.getElementById('itemImage').value = fullHdBase64;
+                    showToast('تمت معالجة الصورة بنجاح 🖼️', '✨');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         // Clinical Tools
         function calculateIvDrip() {
             playUiAction();
@@ -1249,19 +1298,20 @@
             showToast('تم حفظ بيانات الكادر بنجاح');
         }
 
-        // Services CRUD
-        function updateCategoryDropdownOptions() {
+        // Services CRUD (إضافة وتعديل الخدمات)
+        function updateCategoryDropdownOptions(selectedSub = null) {
             const sec = document.getElementById('itemSectionType').value;
             const subDropdown = document.getElementById('itemSubCategory');
             subDropdown.innerHTML = '';
             const list = (subCategoriesConfig[sec] || []).filter(x => x !== 'الكل');
             list.forEach(c => {
-                subDropdown.innerHTML += `<option value="${c}">${c}</option>`;
+                const isSel = selectedSub && selectedSub === c ? 'selected' : '';
+                subDropdown.innerHTML += `<option value="${c}" ${isSel}>${c}</option>`;
             });
         }
 
         function openAddModal() {
-            document.getElementById('adminModalTitle').innerHTML = '<span>✨</span> إضافة عنصر طبي جديد';
+            document.getElementById('adminModalTitle').innerHTML = '<span>✨</span> إضافة خدمة / تحليل جديد';
             document.getElementById('editItemId').value = '';
             document.getElementById('itemSectionType').value = currentMainTab === 'consult' ? 'services' : currentMainTab;
             updateCategoryDropdownOptions();
@@ -1269,9 +1319,41 @@
             document.getElementById('itemUsage').value = '';
             document.getElementById('itemPrice').value = '';
             document.getElementById('itemImage').value = '';
-            document.getElementById('adminItemModal').classList.remove('hidden');
-            document.getElementById('adminItemModal').classList.add('modal-active');
+            document.getElementById('itemFileInput').value = '';
+            
+            const modal = document.getElementById('adminItemModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
             pushModalState('adminItemModal');
+        }
+
+        function openEditItemModal(id, sec) {
+            const item = (allClinicData[sec] || []).find(x => String(x.id) === String(id));
+            if (!item) return;
+
+            document.getElementById('adminModalTitle').innerHTML = '<span>✏️</span> تعديل بيانات الخدمة الطبية';
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('itemSectionType').value = sec;
+            updateCategoryDropdownOptions(item.category);
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemUsage').value = item.usage;
+            document.getElementById('itemPrice').value = item.price.replace(/[^0-9]/g, '');
+            document.getElementById('itemImage').value = item.image;
+            document.getElementById('itemFileInput').value = '';
+
+            const modal = document.getElementById('adminItemModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('adminItemModal');
+        }
+
+        function deleteItemRecord(id, sec) {
+            if (!isAdmin) return;
+            if (confirm('هل أنت متأكد من حذف هذه الخدمة من الموقع؟')) {
+                allClinicData[sec] = (allClinicData[sec] || []).filter(x => String(x.id) !== String(id));
+                dataRef.set(allClinicData);
+                showToast('تم حذف الخدمة بنجاح 🗑️');
+            }
         }
 
         function closeAdminItemModal() {
@@ -1312,7 +1394,7 @@
 
             dataRef.set(allClinicData);
             closeAdminItemModal();
-            showToast('تمت إضافة ونشر الخدمة بنجاح ☁️');
+            showToast('تم حفظ الخدمة والصورة بنجاح ☁️');
         }
 
         function initClinicSystem() {
@@ -1469,9 +1551,9 @@
                 grid.innerHTML += `
                     <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
-                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
-                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
-                                <span class="absolute top-1.5 right-1.5 bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-[8.5px] font-black text-cyan-300 px-2 py-0.5 rounded-md">${item.category}</span>
+                            <div class="w-full h-28 rounded-xl bg-white med-img-frame flex items-center justify-center relative overflow-hidden p-1.5">
+                                <img src="${item.image}" class="object-contain w-full h-full block" loading="lazy">
+                                <span class="absolute top-1.5 right-1.5 bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-[8px] font-black text-cyan-300 px-1.5 py-0.5 rounded-md">${item.category}</span>
                             </div>
                             <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
                                 <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[32px]">${item.name}</h4>
@@ -1479,9 +1561,18 @@
                                 <span class="text-xs font-black text-cyan-400">${item.price}</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:opacity-95 text-white font-black py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1 shadow active:scale-95">
-                            <span>➕</span> <span>طلب للحجز</span>
-                        </button>
+
+                        <div class="flex flex-col gap-1 pt-1 border-t border-slate-800/70">
+                            <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:opacity-95 text-white font-black py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1 shadow active:scale-95">
+                                <span>➕</span> <span>طلب للحجز</span>
+                            </button>
+                            ${isAdmin ? `
+                            <div class="flex items-center justify-between gap-1 pt-0.5">
+                                <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95" title="تعديل الخدمة">✏️ تعديل</button>
+                                <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95" title="حذف الخدمة">🗑️</button>
+                            </div>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
             });
@@ -1554,11 +1645,16 @@
                 total += num * item.qty;
                 list.innerHTML += `
                     <div class="flex items-center justify-between bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800">
-                        <div class="min-w-0 text-right">
-                            <h5 class="text-xs font-black text-white truncate">${item.name}</h5>
-                            <span class="text-[10px] text-cyan-400 font-bold">${item.price}</span>
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-10 h-10 rounded-xl bg-white med-img-frame flex items-center justify-center p-1 shrink-0 overflow-hidden">
+                                <img src="${item.image}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <div class="min-w-0 text-right">
+                                <h5 class="text-xs font-black text-white truncate">${item.name}</h5>
+                                <span class="text-[10px] text-cyan-400 font-bold">${item.price}</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5 shrink-0">
                             <button onclick="changeCartQty(${idx}, -1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">-</button>
                             <span class="text-xs font-bold text-cyan-300">${item.qty}</span>
                             <button onclick="changeCartQty(${idx}, 1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">+</button>
@@ -1854,6 +1950,7 @@
                 h.classList.remove('flex');
             }
             renderReviews();
+            renderActiveTabContent();
             updateAdminMetrics();
         }
 
@@ -1931,8 +2028,8 @@
                 grid.innerHTML += `
                     <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
-                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 overflow-hidden">
-                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
+                            <div class="w-full h-28 rounded-xl bg-white med-img-frame flex items-center justify-center overflow-hidden p-1.5">
+                                <img src="${item.image}" class="object-contain w-full h-full block" loading="lazy">
                             </div>
                             <div class="space-y-1 text-right">
                                 <h4 class="text-xs font-black text-white leading-snug">${item.name}</h4>
@@ -1940,7 +2037,15 @@
                                 <span class="text-xs font-black text-cyan-400">${item.price}</span>
                             </div>
                         </div>
-                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
+                        <div class="flex flex-col gap-1 pt-1 border-t border-slate-800/70">
+                            <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
+                            ${isAdmin ? `
+                            <div class="flex items-center justify-between gap-1 pt-0.5">
+                                <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95">✏️ تعديل</button>
+                                <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95">🗑️</button>
+                            </div>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
             });
