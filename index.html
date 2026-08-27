@@ -193,8 +193,8 @@
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
                 </button>
-                <button id="drawerInstallBtn" onclick="triggerAppInstall()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right transition">
-                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
+                <button id="drawerInstallBtn" onclick="triggerAppInstall()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
+                    <span>📲</span> <span class="font-bold">تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
         </div>
@@ -323,7 +323,7 @@
         </button>
     </div>
 
-    <!-- Modals (All connected to URL history to prevent exiting app on back) -->
+    <!-- Modals -->
     <div id="howToUseModal" onclick="handleOutsideModalClick(event, 'howToUseModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -768,7 +768,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v6';
+                const CACHE_NAME = 'hay-alhussein-cache-v7';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -805,7 +805,6 @@
         let ordersList = [];
         let cart = [];
 
-        // History / Modal State Management (Prevents Exiting App on Back)
         function pushModalState(modalName) {
             history.pushState({ activeModal: modalName }, "");
         }
@@ -1037,6 +1036,7 @@
 
         function triggerAppInstall() {
             playUiAction();
+            closeDrawer();
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
@@ -1818,9 +1818,8 @@
         });
 
         function closePinModal() {
-            const modal = document.getElementById('adminPinModal');
-            modal.classList.remove('modal-active');
-            modal.classList.add('hidden');
+            document.getElementById('adminPinModal').classList.remove('modal-active');
+            document.getElementById('adminPinModal').classList.add('hidden');
         }
 
         // Firebase Auth High Security Handler
@@ -1890,9 +1889,8 @@
             pushModalState('patientTrackerModal');
         }
         function closeTrackerModal() {
-            const modal = document.getElementById('patientTrackerModal');
-            modal.classList.remove('modal-active');
-            modal.classList.add('hidden');
+            document.getElementById('patientTrackerModal').classList.remove('modal-active');
+            document.getElementById('patientTrackerModal').classList.add('hidden');
         }
         function searchPatientOrder() {
             const phone = document.getElementById('trackPhoneInput').value.trim();
