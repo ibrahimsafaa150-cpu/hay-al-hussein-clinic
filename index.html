@@ -17,7 +17,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
+    <!-- Firebase SDKs with Authentication -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <style>
@@ -32,9 +34,7 @@
         #sideDrawer.drawer-closed { transform: translateX(100%); }
         #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
         #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
-        .sortable-ghost { opacity: 0.35; transform: scale(0.95); }
-        .drag-handle { cursor: grab; }
-        .drag-handle:active { cursor: grabbing; }
+        iframe[src*="netlify"], div[data-netlify-deploy-id], .netlify-badge { display: none !important; visibility: hidden !important; }
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
         @media print {
@@ -46,6 +46,7 @@
 </head>
 <body class="flex flex-col min-h-screen relative w-full pb-24 select-none">
 
+    <!-- Global Toast Notification -->
     <div id="customToast" class="fixed top-5 left-1/2 bg-slate-900 border border-cyan-400 px-5 py-3 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 text-xs font-black text-white max-w-[92vw]">
         <span id="toastIcon" class="text-lg">✨</span>
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
@@ -64,15 +65,15 @@
             <div class="flex items-center justify-between gap-3 pt-1">
                 <div class="space-y-1 min-w-0 flex-1 text-right">
                     <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
-                    <p class="text-[10px] text-cyan-300 break-all leading-tight">hay-al-hussein-clinic.netlify.app</p>
+                    <p class="text-[10px] text-cyan-300 break-all leading-tight">الوصول السريع والآمن</p>
                 </div>
-                <div class="w-13 h-13 rounded-2xl bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-300 shrink-0 shadow-inner text-2xl p-2">
+                <div class="w-13 h-13 rounded-2xl bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-300 shrink-0 text-2xl p-2">
                     🩺
                 </div>
             </div>
 
             <p class="text-[10.5px] text-slate-300 leading-relaxed text-right">
-                ثبّت التطبيق لتصفح سريع وحجز الزيارات المنزلية والفحوصات بضغطة زر واحدة بدون متصفح.
+                ثبّت التطبيق لتصفح سريع وحجز الزيارات التمريضية المنزلية والفحوصات بضغطة زر واحدة.
             </p>
 
             <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 text-xs font-bold gap-2">
@@ -91,6 +92,7 @@
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
+                <!-- 5 Clicks Secure Trigger -->
                 <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
                     <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
@@ -116,7 +118,7 @@
             </div>
         </div>
 
-        <!-- Symmetrical Admin Control Bar -->
+        <!-- Admin Action Header -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
             <div class="grid grid-cols-5 gap-1 w-full text-center">
                 <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[10px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
@@ -160,7 +162,7 @@
         </div>
     </header>
 
-    <!-- Side Drawer -->
+    <!-- Side Drawer Menu -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-3.5">
@@ -176,7 +178,7 @@
             </div>
 
             <div class="space-y-1 text-xs">
-                <button onclick="playUiAction(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right hover:bg-slate-800/80 transition">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right hover:bg-slate-800 transition">
                     <span>🩺</span> <span class="font-bold">الخدمات التمريضية والمنزلية</span>
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
@@ -234,7 +236,7 @@
     <!-- Main Content Container -->
     <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
-        <!-- Interactive Swipeable Panoramic Vital Banner -->
+        <!-- Interactive Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
             <div id="vitalCardInner" class="space-y-1 text-right transition-all duration-300"></div>
             <div class="flex justify-center gap-1.5 mt-2" id="vitalDotsContainer">
@@ -244,7 +246,7 @@
             </div>
         </div>
 
-        <!-- Integrated Clinic Timings Info Card -->
+        <!-- Timings Info Card -->
         <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex flex-col gap-2">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -258,7 +260,7 @@
             </p>
         </div>
 
-        <!-- Dynamic Section Header -->
+        <!-- Dynamic Header -->
         <div class="flex items-center justify-between px-1">
             <h3 id="currentSectionTitle" class="text-xs font-black text-white flex items-center gap-1.5">
                 <span class="text-cyan-400">●</span> خدمات عيادة حي الحسين التمريضية
@@ -269,7 +271,7 @@
         <!-- Items Grid -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
-        <!-- Consultation Hub View -->
+        <!-- Consultation Hub -->
         <div id="consultationView" class="hidden space-y-3">
             <div class="dark-glass rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 shadow-lg">
                 <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl">👨‍⚕️</div>
@@ -283,7 +285,7 @@
             </div>
         </div>
 
-        <!-- Dynamic Nursing Team Section -->
+        <!-- Nursing Team Section -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -294,7 +296,7 @@
             <div id="staffMembersGrid" class="grid grid-cols-1 gap-2"></div>
         </div>
 
-        <!-- Dynamic 10-Second Auto-Cycling & Swipeable Panoramic Reviews Banner -->
+        <!-- Reviews Banner -->
         <div id="reviewsSwipeBox" class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden select-none cursor-grab">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -314,7 +316,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Including Direct Install Option) -->
+    <!-- Bottom Navigation Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2 px-4 flex justify-around items-center">
         <button onclick="playUiAction(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -334,7 +336,7 @@
         </button>
     </div>
 
-    <!-- How to Use Modal -->
+    <!-- Modals -->
     <div id="howToUseModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -350,7 +352,6 @@
         </div>
     </div>
 
-    <!-- Privacy Policy Modal -->
     <div id="privacyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -365,7 +366,6 @@
         </div>
     </div>
 
-    <!-- Location Modal with Accurate Street & Market Info -->
     <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -397,7 +397,7 @@
         </div>
     </div>
 
-    <!-- Direct Call Simulation Modal -->
+    <!-- Call Simulation Modal -->
     <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
@@ -407,7 +407,6 @@
                 <h4 class="text-xs font-black text-white">الاتصال المباشر بالعيادة</h4>
                 <p class="text-[10px] text-cyan-300 mt-1">كادر عيادة حي الحسين متاح على مدار 24 ساعة</p>
             </div>
-
             <div class="flex gap-2 pt-1">
                 <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
                 <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
@@ -415,7 +414,7 @@
         </div>
     </div>
 
-    <!-- Admin Orders Queue Modal -->
+    <!-- Orders Queue Modal -->
     <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
@@ -428,7 +427,7 @@
         </div>
     </div>
 
-    <!-- Add/Edit Staff Modal -->
+    <!-- Staff Management Modal -->
     <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -464,7 +463,6 @@
                 <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر طبي جديد</h3>
                 <button onclick="playUiAction(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
-            
             <form id="itemForm" onsubmit="saveItemRecord(event)" class="space-y-2.5">
                 <input type="hidden" id="editItemId">
                 <div>
@@ -493,10 +491,10 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة:</label>
-                        <input type="text" id="itemPrice" required placeholder="8,000 د.ع" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                        <input type="text" id="itemPrice" required placeholder="8000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (1080p):</label>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة:</label>
                         <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                     </div>
                 </div>
@@ -509,7 +507,7 @@
         </div>
     </div>
 
-    <!-- Clinical Suite & Tools Modal -->
+    <!-- Clinical Tools Modal -->
     <div id="clinicalToolsModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -519,16 +517,15 @@
                 <button onclick="playUiAction(); closeToolsModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
-            <!-- IV Drip Calculator -->
             <div class="bg-slate-950 p-3 rounded-xl border border-cyan-500/30 space-y-2">
                 <h4 class="text-xs font-black text-cyan-300">💧 حاسبة سرعة تقطير المغذي (IV Drip Rate)</h4>
                 <div class="grid grid-cols-2 gap-2 text-right">
                     <div>
-                        <label class="block text-[9.5px] text-slate-300">كمية المحلول (ملليلتر ml):</label>
+                        <label class="block text-[9.5px] text-slate-300">كمية المحلول (ml):</label>
                         <input type="number" id="ivVolume" value="500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
                     </div>
                     <div>
-                        <label class="block text-[9.5px] text-slate-300">المدة المطلوبة (بالساعات):</label>
+                        <label class="block text-[9.5px] text-slate-300">المدة المطلوبة (ساعات):</label>
                         <input type="number" id="ivHours" value="4" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
                     </div>
                 </div>
@@ -544,7 +541,6 @@
                 <div id="ivResult" class="hidden text-center text-xs font-black text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30"></div>
             </div>
 
-            <!-- Patient Vitals Tracker Log with Individual & Full Clear Actions -->
             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
                 <div class="flex items-center justify-between">
                     <h4 class="text-xs font-black text-amber-300">📈 سجل قراءات الضغط والسكر</h4>
@@ -553,8 +549,8 @@
                     </button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="logBpInput" placeholder="الضغط (مثال 120/80)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
-                    <input type="number" id="logSugarInput" placeholder="السكر (مثال 110 mg/dL)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                    <input type="text" id="logBpInput" placeholder="الضغط (120/80)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                    <input type="number" id="logSugarInput" placeholder="السكر (110)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
                 </div>
                 <button onclick="saveVitalEntry()" class="w-full bg-amber-700 text-white text-xs font-bold py-1.5 rounded-lg active:scale-95">+ تسجيل القراءة الآن</button>
                 <div id="vitalsLogHistory" class="space-y-1 max-h-36 overflow-y-auto no-scrollbar text-[10px]"></div>
@@ -562,7 +558,7 @@
         </div>
     </div>
 
-    <!-- Live Order Tracker Modal -->
+    <!-- Live Patient Tracker Modal -->
     <div id="patientTrackerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -581,7 +577,7 @@
         </div>
     </div>
 
-    <!-- Booking / Cart Modal -->
+    <!-- Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
@@ -623,7 +619,7 @@
                         <input type="tel" id="custPhone" required placeholder="077XXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">درجة الإلحاح (Triage):</label>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">درجة الإلحاح:</label>
                         <select id="urgencyLevel" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-bold">
                             <option value="عاجل وطارئ 🚨" class="text-rose-400">🚨 عاجل وطارئ جداً</option>
                             <option value="خلال ساعة ⚡" selected class="text-amber-400">⚡ خلال ساعة</option>
@@ -656,11 +652,10 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">ملاحظات أو رابط صورة الروشتة/الجرح (اختياري):</label>
-                    <input type="text" id="custNotes" placeholder="اكتب ملاحظاتك أو رابط صورة الوصفة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">ملاحظات إضافية (اختياري):</label>
+                    <input type="text" id="custNotes" placeholder="اكتب ملاحظاتك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                 </div>
 
-                <!-- GPS Location Sharing Button -->
                 <div>
                     <button type="button" onclick="fetchLiveGpsLocation()" id="gpsLocationBtn" class="w-full bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs py-2 rounded-xl flex items-center justify-center gap-1.5 font-bold active:scale-95 transition">
                         <span>📍</span> <span id="gpsBtnText">إرفاق موقعي الجغرافي الدقيق عبر الخريطة (GPS)</span>
@@ -668,7 +663,6 @@
                     <input type="hidden" id="custGpsCoords" value="">
                 </div>
 
-                <!-- Detailed Cost Breakdown -->
                 <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1 text-xs">
                     <div class="flex justify-between text-slate-300">
                         <span>أجور الخدمات والتحاليل:</span>
@@ -737,20 +731,24 @@
         </div>
     </div>
 
-    <!-- Admin PIN Entry Modal -->
+    <!-- High Security Firebase Authentication Modal -->
     <div id="adminPinModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative text-center space-y-3">
+        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs shadow-2xl relative text-center space-y-3.5 border border-cyan-500/40">
             <div class="text-3xl">🔐</div>
-            <h3 class="text-xs font-black text-white">لوحة تحكم المشرف الطبي</h3>
-            <input type="password" id="adminPinInput" placeholder="أدخل رمز المرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center text-xs text-white focus:outline-none focus:border-cyan-400">
-            <div class="flex gap-2 pt-1">
-                <button onclick="playUiAction(); closePinModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs font-semibold">إلغاء</button>
-                <button onclick="playUiAction(); verifyAdminPin()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-1.5 rounded-xl text-xs font-bold shadow">دخول</button>
-            </div>
+            <h3 class="text-xs font-black text-white">تسجيل الدخول الآمن للمشرف الطبي</h3>
+            <p class="text-[10px] text-slate-400">أدخل بيانات الاعتماد الرسمية للعيادة</p>
+            <form onsubmit="handleSecureAdminLogin(event)" class="space-y-2 text-right">
+                <input type="email" id="adminEmailInput" required placeholder="البريد الإلكتروني" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                <input type="password" id="adminPasswordInput" required placeholder="كلمة المرور المشفرة" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-400">
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="playUiAction(); closePinModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs font-semibold">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-1.5 rounded-xl text-xs font-bold shadow">دخول 🛡️</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Detail View Modal -->
+    <!-- Service Detail View Modal -->
     <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -779,8 +777,20 @@
         </div>
     </div>
 
-    <!-- Script Logic -->
+    <!-- Core App Logic -->
     <script>
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'hay-alhussein-cache-v3';
+                self.addEventListener('install', e => self.skipWaiting());
+                self.addEventListener('fetch', e => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
+        }
+
         const firebaseConfig = {
             apiKey: "AIzaSyCWFCDMuys366TxAn_ubNRSPF6fVDGD6N4",
             authDomain: "hay-al-hussein-clinic.firebaseapp.com",
@@ -792,13 +802,14 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.database();
         const dataRef = db.ref('clinic_master_data');
         const ordersRef = db.ref('clinic_bookings_queue');
         const staffRef = db.ref('clinic_staff_members');
         const reviewsRef = db.ref('clinic_reviews_data');
 
-        let isAdmin = localStorage.getItem('clinic_admin_auth') === 'true';
+        let isAdmin = false;
         let currentMainTab = 'services';
         let currentSubFilter = 'الكل';
         let allClinicData = { services: [], lab: [] };
@@ -806,6 +817,12 @@
         let reviewsList = [];
         let ordersList = [];
         let cart = [];
+
+        // Auth Security Observer
+        auth.onAuthStateChanged((user) => {
+            isAdmin = !!user;
+            updateAdminUI();
+        });
 
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية"],
@@ -898,7 +915,7 @@
             }
         }, { passive: true });
 
-        // Swipeable & Auto-Cycling Panoramic Reviews System (10 Seconds)
+        // Reviews System
         let currentReviewIdx = 0;
         let reviewCycleTimer = null;
 
@@ -977,14 +994,9 @@
             }
         }, { passive: true });
 
-        // Reliable PWA Install System
+        // PWA Install Prompt
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-        if (!isStandalone) {
-            localStorage.removeItem('clinic_pwa_installed');
-            localStorage.removeItem('pwa_prompt_dismissed_h');
-        }
 
         function checkInstallVisibility() {
             const drawerBtn = document.getElementById('drawerInstallBtn');
@@ -1002,14 +1014,11 @@
             e.preventDefault();
             deferredPrompt = e;
             if (!isStandalone) {
-                setTimeout(() => {
-                    showPwaPromptModal();
-                }, 1500);
+                setTimeout(() => { showPwaPromptModal(); }, 1500);
             }
         });
 
         window.addEventListener('appinstalled', () => {
-            localStorage.setItem('clinic_pwa_installed', 'true');
             checkInstallVisibility();
             showToast('تم تثبيت التطبيق بنجاح ✅');
         });
@@ -1037,7 +1046,6 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        localStorage.setItem('clinic_pwa_installed', 'true');
                         showToast('تم تثبيت التطبيق بنجاح ✅');
                         checkInstallVisibility();
                     }
@@ -1072,6 +1080,7 @@
         }
 
         function deleteReviewItem(key) {
+            if (!isAdmin) return;
             if (confirm('هل تريد بالتأكيد حذف هذا التقييم؟')) {
                 reviewsRef.child(key).remove();
                 showToast('تم حذف التقييم بنجاح');
@@ -1106,7 +1115,7 @@
             setTimeout(() => toast.classList.remove('toast-show'), 2200);
         }
 
-        // Clinical IV Calculator
+        // Clinical Tools
         function calculateIvDrip() {
             playUiAction();
             const vol = parseFloat(document.getElementById('ivVolume').value);
@@ -1127,7 +1136,6 @@
             resBox.innerHTML = `💧 معدل التنقيط: <b>${dripRate} قطرة / دقيقة (gtt/min)</b><br><span class="text-[10px] text-slate-300">معدل التدفق: ${mlPerHour} ملليلتر في الساعة</span>`;
         }
 
-        // Patient Vitals Tracker with Individual Delete & Full Clear
         function saveVitalEntry() {
             playUiAction();
             const bp = document.getElementById('logBpInput').value.trim();
@@ -1196,7 +1204,7 @@
             document.getElementById('clinicalToolsModal').classList.add('hidden');
         }
 
-        // Staff Modal Management
+        // Staff CRUD
         function openAddStaffModal() {
             document.getElementById('staffModalTitle').innerText = 'إضافة عضو كادر تمريضي';
             document.getElementById('staffEditId').value = '';
@@ -1214,6 +1222,7 @@
 
         function saveStaffMember(e) {
             e.preventDefault();
+            if (!isAdmin) { showToast('يجب تسجيل الدخول كـ مشرف', '⚠️'); return; }
             const editId = document.getElementById('staffEditId').value;
             const name = document.getElementById('staffName').value.trim();
             const role = document.getElementById('staffRole').value.trim();
@@ -1230,7 +1239,7 @@
             showToast('تم حفظ بيانات الكادر بنجاح');
         }
 
-        // Items & Services Modal Management
+        // Services CRUD
         function updateCategoryDropdownOptions() {
             const sec = document.getElementById('itemSectionType').value;
             const subDropdown = document.getElementById('itemSubCategory');
@@ -1261,6 +1270,7 @@
 
         function saveItemRecord(e) {
             e.preventDefault();
+            if (!isAdmin) { showToast('يجب تسجيل الدخول كـ مشرف', '⚠️'); return; }
             const editId = document.getElementById('editItemId').value;
             const sec = document.getElementById('itemSectionType').value;
             const subCat = document.getElementById('itemSubCategory').value;
@@ -1308,7 +1318,7 @@
                             { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1080&q=85" }
                         ]
                     };
-                    dataRef.set(allClinicData);
+                    if (isAdmin) dataRef.set(allClinicData);
                 }
                 renderActiveTabContent();
             });
@@ -1325,7 +1335,7 @@
                         { id: "stf_4", name: "الممرضة المعاونة / فاطمة علي", role: "إعطاء العلاجات ومتابعة مرضى السكري", avatar: "ف.ع" },
                         { id: "stf_5", name: "الممرض الاختصاص / علي سالم", role: "تجهيز مغذيات، كبس جروح، وإسعافات أولية متقدمة", avatar: "ع.س" }
                     ];
-                    staffRef.set(staffList);
+                    if (isAdmin) staffRef.set(staffList);
                 }
                 renderStaff();
             });
@@ -1708,6 +1718,7 @@
         }
 
         function deleteBookingOrder(keyId) {
+            if (!isAdmin) return;
             if (confirm('هل تريد حذف هذا الحجز نهائياً من السجل؟')) {
                 ordersRef.child(keyId).remove();
                 showToast('تم حذف الحجز بنجاح');
@@ -1767,7 +1778,8 @@
             if (emblemClicks === 5) {
                 emblemClicks = 0;
                 if (!isAdmin) {
-                    document.getElementById('adminPinInput').value = '';
+                    document.getElementById('adminEmailInput').value = '';
+                    document.getElementById('adminPasswordInput').value = '';
                     document.getElementById('adminPinModal').classList.remove('hidden');
                     document.getElementById('adminPinModal').classList.add('modal-active');
                 } else {
@@ -1781,24 +1793,25 @@
             document.getElementById('adminPinModal').classList.add('hidden');
         }
 
-        function verifyAdminPin() {
-            const pin = document.getElementById('adminPinInput').value.trim();
-            if (pin === 'google@20262027') {
-                isAdmin = true;
-                localStorage.setItem('clinic_admin_auth', 'true');
+        function handleSecureAdminLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('adminEmailInput').value.trim();
+            const pass = document.getElementById('adminPasswordInput').value;
+
+            auth.signInWithEmailAndPassword(email, pass)
+            .then(() => {
                 closePinModal();
-                updateAdminUI();
-                showToast('مرحباً بك في لوحة الإدارة 🚀');
-            } else {
-                showToast('رمز المرور غير صحيح', '❌');
-            }
+                showToast('تم تسجيل الدخول الآمن بنجاح 🚀', '🛡️');
+            })
+            .catch(() => {
+                showToast('البريد أو كلمة المرور غير صحيحة ❌', '⚠️');
+            });
         }
 
         function logoutAdmin() {
-            isAdmin = false;
-            localStorage.setItem('clinic_admin_auth', 'false');
-            updateAdminUI();
-            showToast('تم إغلاق لوحة الإدارة', '🔒');
+            auth.signOut().then(() => {
+                showToast('تم إغلاق لوحة الإدارة الآمنة', '🔒');
+            });
         }
 
         function updateAdminUI() {
