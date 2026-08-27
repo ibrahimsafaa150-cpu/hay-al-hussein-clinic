@@ -90,25 +90,27 @@
             </div>
         </div>
 
-        <!-- Separate Admin Control Bar (Only Visible to Admin) -->
+        <!-- Symmetrical Admin Control Bar (Only Visible to Admin) -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
-            <div class="flex items-center justify-between gap-1.5 flex-wrap">
-                <div class="flex items-center gap-1.5">
-                    <span class="text-[9.5px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-lg font-black">المشرف 🚀</span>
-                    <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
-                        <span>🔔 الحجوزات</span>
-                        <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
-                    </button>
-                    <button onclick="playUiAction(); openToolsModal()" class="bg-slate-900 border border-cyan-500/40 text-cyan-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
-                        <span>🧮 الأدوات السريرية</span>
-                    </button>
-                </div>
-                <div class="flex items-center gap-1">
-                    <button onclick="playUiAction(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">+ كادر</button>
-                    <button onclick="playUiAction(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg">+ خدمة</button>
-                    <button onclick="playUiAction(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">خروج 🔒</button>
-                </div>
+            <div class="grid grid-cols-5 gap-1 w-full text-center">
+                <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[10px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
+                    <span>🔔 حجز</span>
+                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
+                </button>
+                <button onclick="playUiAction(); openToolsModal()" class="bg-cyan-950/90 border border-cyan-500/60 text-cyan-300 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                    🧮 أدوات
+                </button>
+                <button onclick="playUiAction(); openAddStaffModal()" class="bg-indigo-950/90 border border-indigo-500/60 text-indigo-200 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                    + كادر
+                </button>
+                <button onclick="playUiAction(); openAddModal()" class="bg-sky-950/90 border border-sky-400/60 text-sky-200 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                    + خدمة
+                </button>
+                <button onclick="playUiAction(); logoutAdmin()" class="bg-rose-950/90 border border-rose-800/80 text-rose-300 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                    خروج 🔒
+                </button>
             </div>
+
             <!-- Admin Stats Strip -->
             <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-2 rounded-xl border border-slate-800 text-center">
                 <div>
@@ -300,7 +302,101 @@
         </button>
     </div>
 
-    <!-- Clinical Suite & Tools Modal (Accessible from Admin Header) -->
+    <!-- Admin Orders Queue Modal -->
+    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
+            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">🔔</span> سجل الحجوزات وإدارة الكوادر
+                </h3>
+                <button onclick="playUiAction(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            <div class="flex-grow overflow-y-auto space-y-2 pr-0.5 no-scrollbar my-2" id="ordersQueueList"></div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Staff Modal -->
+    <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 id="staffModalTitle" class="text-xs font-black text-white">إضافة عضو كادر تمريضي</h3>
+                <button onclick="playUiAction(); closeStaffModal()" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <form onsubmit="saveStaffMember(event)" class="space-y-2 text-right">
+                <input type="hidden" id="staffEditId">
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">اسم الممرض / اللقب:</label>
+                    <input type="text" id="staffName" required placeholder="مثال: الممرض الجامعي / علي سالم" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">التخصص والمهام:</label>
+                    <input type="text" id="staffRole" required placeholder="مثال: اختصاص زيارات منزلية، كانيولا وتخطيط قلب" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">رمز الحروف أو رابط الصورة:</label>
+                    <input type="text" id="staffAvatar" placeholder="مثال: ع.س أو رابط صورة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                </div>
+                <div class="pt-1 flex gap-2">
+                    <button type="button" onclick="closeStaffModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-cyan-600 text-white font-bold py-1.5 rounded-xl text-xs">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Add/Edit Item Modal -->
+    <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
+                <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر طبي جديد</h3>
+                <button onclick="playUiAction(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+            
+            <form id="itemForm" onsubmit="saveItemRecord(event)" class="space-y-2.5">
+                <input type="hidden" id="editItemId">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">القسم الرئيسي:</label>
+                    <select id="itemSectionType" onchange="updateCategoryDropdownOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                        <option value="services">🩺 خدمات تمريضية</option>
+                        <option value="lab">🧪 تحاليل مختبرية</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">التصنيف الفرعي:</label>
+                    <select id="itemSubCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"></select>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الاسم أو الإجراء الطبي:</label>
+                    <input type="text" id="itemName" required placeholder="مثال: تحليل صورة الدم الكاملة CBC" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الوصف / شروط الفحص والتجهيز:</label>
+                    <input type="text" id="itemUsage" required placeholder="مثال: سحب دم وريدي - النتيجة خلال ساعتين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة:</label>
+                        <input type="text" id="itemPrice" required placeholder="8,000 د.ع" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (1080p):</label>
+                        <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button type="button" onclick="playUiAction(); closeAdminItemModal()" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
+                    <button type="submit" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">حفظ العنصر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Clinical Suite & Tools Modal -->
     <div id="clinicalToolsModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -481,19 +577,6 @@
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Admin Orders Queue Modal -->
-    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
-            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
-                    <span class="text-cyan-400">🔔</span> سجل الحجوزات وإدارة الكوادر
-                </h3>
-                <button onclick="playUiAction(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
-            </div>
-            <div class="flex-grow overflow-y-auto space-y-2 pr-0.5 no-scrollbar my-2" id="ordersQueueList"></div>
         </div>
     </div>
 
@@ -929,6 +1012,103 @@
             document.getElementById('clinicalToolsModal').classList.add('hidden');
         }
 
+        // Staff Modal Management
+        function openAddStaffModal() {
+            document.getElementById('staffModalTitle').innerText = 'إضافة عضو كادر تمريضي';
+            document.getElementById('staffEditId').value = '';
+            document.getElementById('staffName').value = '';
+            document.getElementById('staffRole').value = '';
+            document.getElementById('staffAvatar').value = '';
+            document.getElementById('staffEditModal').classList.remove('hidden');
+            document.getElementById('staffEditModal').classList.add('modal-active');
+        }
+
+        function closeStaffModal() {
+            document.getElementById('staffEditModal').classList.remove('modal-active');
+            document.getElementById('staffEditModal').classList.add('hidden');
+        }
+
+        function saveStaffMember(e) {
+            e.preventDefault();
+            const editId = document.getElementById('staffEditId').value;
+            const name = document.getElementById('staffName').value.trim();
+            const role = document.getElementById('staffRole').value.trim();
+            const avatar = document.getElementById('staffAvatar').value.trim() || name.substring(0, 2);
+
+            if (editId) {
+                const idx = staffList.findIndex(x => String(x.id) === String(editId));
+                if (idx !== -1) staffList[idx] = { id: editId, name, role, avatar };
+            } else {
+                staffList.push({ id: 'stf_' + Date.now(), name, role, avatar });
+            }
+            staffRef.set(staffList);
+            closeStaffModal();
+            showToast('تم حفظ بيانات الكادر بنجاح');
+        }
+
+        // Items & Services Modal Management
+        function updateCategoryDropdownOptions() {
+            const sec = document.getElementById('itemSectionType').value;
+            const subDropdown = document.getElementById('itemSubCategory');
+            subDropdown.innerHTML = '';
+            const list = (subCategoriesConfig[sec] || []).filter(x => x !== 'الكل');
+            list.forEach(c => {
+                subDropdown.innerHTML += `<option value="${c}">${c}</option>`;
+            });
+        }
+
+        function openAddModal() {
+            document.getElementById('adminModalTitle').innerHTML = '<span>✨</span> إضافة عنصر طبي جديد';
+            document.getElementById('editItemId').value = '';
+            document.getElementById('itemSectionType').value = currentMainTab === 'consult' ? 'services' : currentMainTab;
+            updateCategoryDropdownOptions();
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemUsage').value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemImage').value = '';
+            document.getElementById('adminItemModal').classList.remove('hidden');
+            document.getElementById('adminItemModal').classList.add('modal-active');
+        }
+
+        function closeAdminItemModal() {
+            document.getElementById('adminItemModal').classList.remove('modal-active');
+            document.getElementById('adminItemModal').classList.add('hidden');
+        }
+
+        function saveItemRecord(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editItemId').value;
+            const sec = document.getElementById('itemSectionType').value;
+            const subCat = document.getElementById('itemSubCategory').value;
+            const name = document.getElementById('itemName').value.trim();
+            const usage = document.getElementById('itemUsage').value.trim();
+            let rawPrice = document.getElementById('itemPrice').value.trim();
+            let formattedPrice = rawPrice.includes('د.ع') ? rawPrice : Number(rawPrice.replace(/[^0-9]/g, '')).toLocaleString() + ' د.ع';
+            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85';
+
+            if (!allClinicData[sec]) allClinicData[sec] = [];
+
+            if (editId) {
+                const idx = allClinicData[sec].findIndex(x => String(x.id) === String(editId));
+                if (idx !== -1) {
+                    allClinicData[sec][idx] = { id: editId, category: subCat, name, usage, price: formattedPrice, image: img };
+                }
+            } else {
+                allClinicData[sec].unshift({
+                    id: 'itm_' + Date.now(),
+                    category: subCat,
+                    name,
+                    usage,
+                    price: formattedPrice,
+                    image: img
+                });
+            }
+
+            dataRef.set(allClinicData);
+            closeAdminItemModal();
+            showToast('تمت إضافة ونشر الخدمة بنجاح ☁️');
+        }
+
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
@@ -977,6 +1157,9 @@
                 const val = snapshot.val();
                 ordersList = val ? Object.keys(val).map(k => ({ keyId: k, ...val[k] })).reverse() : [];
                 updateAdminMetrics();
+                if (document.getElementById('ordersQueueModal').classList.contains('modal-active')) {
+                    renderOrdersQueue();
+                }
             });
 
             try { cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || []; } catch(e) { cart = []; }
@@ -1298,33 +1481,43 @@
             window.print();
         }
 
-        function openOrdersQueueModal() {
+        function renderOrdersQueue() {
             const c = document.getElementById('ordersQueueList');
             c.innerHTML = '';
             if (ordersList.length === 0) {
                 c.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">لا توجد حجوزات مسجلة حالياً</div>`;
-            } else {
-                ordersList.forEach(o => {
-                    c.innerHTML += `
-                        <div class="bg-slate-950 p-3 rounded-2xl border ${o.urgency && o.urgency.includes('🚨') ? 'border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]' : 'border-slate-800'} space-y-1.5 text-right">
-                            <div class="flex justify-between items-center">
-                                <h5 class="text-xs font-black text-white">${o.patientName} <span class="text-[9px] text-cyan-400">(${o.locationType})</span></h5>
-                                <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
-                            </div>
-                            <p class="text-[10px] text-slate-300">📞 ${o.patientPhone} | 📍 ${o.address}</p>
-                            <p class="text-[9.5px] text-amber-300 font-bold">🚨 الأولوية: ${o.urgency || 'عادي'} | 👥 الكادر: ${o.staffPreference}</p>
-                            <div class="flex gap-1.5 pt-1 border-t border-slate-800">
-                                <button onclick="printOrderReceipt('${o.keyId}')" class="bg-slate-800 text-slate-200 text-[10px] font-bold px-2 py-1 rounded-lg">🖨️ طباعة وصل</button>
-                                ${o.status === 'pending' ? `
-                                    <button onclick="ordersRef.child('${o.keyId}').update({status:'completed'})" class="bg-emerald-700 text-white text-[10px] font-bold px-3 py-1 rounded-lg">إنجاز ✅</button>
-                                ` : `
-                                    <button onclick="ordersRef.child('${o.keyId}').remove()" class="text-rose-400 text-[10px] font-bold">حذف 🗑️</button>
-                                `}
-                            </div>
-                        </div>
-                    `;
-                });
+                return;
             }
+            ordersList.forEach(o => {
+                c.innerHTML += `
+                    <div class="bg-slate-950 p-3 rounded-2xl border ${o.urgency && o.urgency.includes('🚨') ? 'border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]' : 'border-slate-800'} space-y-1.5 text-right">
+                        <div class="flex justify-between items-center">
+                            <h5 class="text-xs font-black text-white">${o.patientName} <span class="text-[9px] text-cyan-400">(${o.locationType})</span></h5>
+                            <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-300">📞 ${o.patientPhone} | 📍 ${o.address}</p>
+                        <p class="text-[9.5px] text-amber-300 font-bold">🚨 الأولوية: ${o.urgency || 'عادي'} | 👥 الكادر: ${o.staffPreference}</p>
+                        <div class="flex items-center gap-1.5 pt-1.5 border-t border-slate-800">
+                            <button onclick="printOrderReceipt('${o.keyId}')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-bold py-1 rounded-lg transition">🖨️ طباعة وصل</button>
+                            ${o.status === 'pending' ? `
+                                <button onclick="ordersRef.child('${o.keyId}').update({status:'completed'})" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-bold py-1 rounded-lg transition">إنجاز ✅</button>
+                            ` : ''}
+                            <button onclick="deleteBookingOrder('${o.keyId}')" class="bg-rose-950/80 border border-rose-800 text-rose-300 hover:text-white hover:bg-rose-900 text-[10px] font-bold px-2.5 py-1 rounded-lg transition">حذف 🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteBookingOrder(keyId) {
+            if (confirm('هل تريد حذف هذا الحجز نهائياً من السجل؟')) {
+                ordersRef.child(keyId).remove();
+                showToast('تم حذف الحجز بنجاح');
+            }
+        }
+
+        function openOrdersQueueModal() {
+            renderOrdersQueue();
             document.getElementById('ordersQueueModal').classList.remove('hidden');
             document.getElementById('ordersQueueModal').classList.add('modal-active');
         }
