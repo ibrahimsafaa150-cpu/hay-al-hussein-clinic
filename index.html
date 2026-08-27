@@ -27,7 +27,7 @@
         html, body { width: 100%; overflow-x: hidden; background-color: #030712; color: #f3f4f6; margin: 0; padding: 0; }
         .dark-glass { background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(3, 7, 18, 0.98) 100%); backdrop-filter: blur(14px); border: 1px solid rgba(14, 165, 233, 0.2); }
         .dark-glass-card { background: linear-gradient(145deg, rgba(30, 41, 59, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .med-img-frame { background: #ffffff; border: 1.5px solid rgba(14, 165, 233, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+        .med-img-frame { background: #0b1329; border: 1.5px solid rgba(14, 165, 233, 0.25); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .modal-active { display: flex !important; }
@@ -749,8 +749,8 @@
                 <button onclick="playUiAction(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
-            <div class="w-full aspect-square max-w-[260px] mx-auto rounded-2xl bg-white med-img-frame flex items-center justify-center relative overflow-hidden shrink-0 p-2">
-                <img id="detailImage" src="" class="object-contain w-full h-full block" alt="صورة الخدمة">
+            <div id="detailImageWrapper" class="w-full aspect-video max-w-[320px] mx-auto rounded-2xl bg-[#0b1329] med-img-frame flex items-center justify-center relative overflow-hidden shrink-0">
+                <img id="detailImage" src="" class="object-cover w-full h-full block" alt="صورة الخدمة">
             </div>
 
             <div class="space-y-1.5 text-right">
@@ -774,7 +774,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v8';
+                const CACHE_NAME = 'hay-alhussein-cache-v9';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -1338,7 +1338,7 @@
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemUsage').value = item.usage;
             document.getElementById('itemPrice').value = item.price.replace(/[^0-9]/g, '');
-            document.getElementById('itemImage').value = item.image;
+            document.getElementById('itemImage').value = item.image || '';
             document.getElementById('itemFileInput').value = '';
 
             const modal = document.getElementById('adminItemModal');
@@ -1372,7 +1372,7 @@
             const usage = document.getElementById('itemUsage').value.trim();
             let rawPrice = document.getElementById('itemPrice').value.trim();
             let formattedPrice = rawPrice.includes('د.ع') ? rawPrice : Number(rawPrice.replace(/[^0-9]/g, '')).toLocaleString() + ' د.ع';
-            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85';
+            let img = document.getElementById('itemImage').value.trim();
 
             if (!allClinicData[sec]) allClinicData[sec] = [];
 
@@ -1548,17 +1548,25 @@
             noResults.classList.add('hidden');
 
             dataset.forEach(item => {
+                let imgContent = '';
+                if (item.image && item.image.trim() !== '') {
+                    imgContent = `<img src="${item.image}" alt="${item.name}" class="object-cover w-full h-full block" loading="lazy">`;
+                } else {
+                    const fallbackIcon = currentMainTab === 'lab' ? '🧪' : '🩺';
+                    imgContent = `<div class="flex flex-col items-center justify-center gap-1 text-slate-600"><span class="text-3xl">${fallbackIcon}</span><span class="text-[8px] font-bold text-slate-500">عيادة حي الحسين</span></div>`;
+                }
+
                 grid.innerHTML += `
                     <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
-                            <div class="w-full h-28 rounded-xl bg-white med-img-frame flex items-center justify-center relative overflow-hidden p-1.5">
-                                <img src="${item.image}" class="object-contain w-full h-full block" loading="lazy">
+                            <div class="w-full aspect-[4/3] rounded-xl bg-[#0b1329] med-img-frame flex items-center justify-center relative overflow-hidden">
+                                ${imgContent}
                                 <span class="absolute top-1.5 right-1.5 bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-[8px] font-black text-cyan-300 px-1.5 py-0.5 rounded-md">${item.category}</span>
                             </div>
                             <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
-                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[32px]">${item.name}</h4>
-                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2 min-h-[26px]">${item.usage}</p>
-                                <span class="text-xs font-black text-cyan-400">${item.price}</span>
+                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[34px]">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2 min-h-[28px] leading-tight">${item.usage}</p>
+                                <span class="text-xs font-black text-cyan-400 pt-1 border-t border-slate-800/50">${item.price}</span>
                             </div>
                         </div>
 
@@ -1568,7 +1576,7 @@
                             </button>
                             ${isAdmin ? `
                             <div class="flex items-center justify-between gap-1 pt-0.5">
-                                <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95" title="تعديل الخدمة">✏️ تعديل</button>
+                                <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95" title="تعديل الخدمة والصورة">✏️ تعديل</button>
                                 <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95" title="حذف الخدمة">🗑️</button>
                             </div>
                             ` : ''}
@@ -1583,7 +1591,16 @@
             if (!item) return;
             playUiAction();
             document.getElementById('detailBadge').innerText = item.category;
-            document.getElementById('detailImage').src = item.image;
+            
+            const detailImg = document.getElementById('detailImage');
+            if (item.image && item.image.trim() !== '') {
+                detailImg.src = item.image;
+                detailImg.classList.remove('hidden');
+            } else {
+                detailImg.src = 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85';
+                detailImg.classList.remove('hidden');
+            }
+
             document.getElementById('detailName').innerText = item.name;
             document.getElementById('detailUsage').innerText = item.usage;
             document.getElementById('detailPrice').innerText = item.price;
@@ -1643,11 +1660,14 @@
             cart.forEach((item, idx) => {
                 let num = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
                 total += num * item.qty;
+                
+                let cartImgTag = item.image ? `<img src="${item.image}" class="max-w-full max-h-full object-cover rounded-lg">` : `<span class="text-lg">🩺</span>`;
+
                 list.innerHTML += `
                     <div class="flex items-center justify-between bg-slate-950/80 p-2.5 rounded-2xl border border-slate-800">
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <div class="w-10 h-10 rounded-xl bg-white med-img-frame flex items-center justify-center p-1 shrink-0 overflow-hidden">
-                                <img src="${item.image}" class="max-w-full max-h-full object-contain">
+                            <div class="w-10 h-10 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center p-0.5 shrink-0 overflow-hidden">
+                                ${cartImgTag}
                             </div>
                             <div class="min-w-0 text-right">
                                 <h5 class="text-xs font-black text-white truncate">${item.name}</h5>
@@ -2025,15 +2045,23 @@
             noResults.classList.add('hidden');
 
             filtered.forEach(item => {
+                let imgContent = '';
+                if (item.image && item.image.trim() !== '') {
+                    imgContent = `<img src="${item.image}" alt="${item.name}" class="object-cover w-full h-full block" loading="lazy">`;
+                } else {
+                    const fallbackIcon = currentMainTab === 'lab' ? '🧪' : '🩺';
+                    imgContent = `<div class="flex flex-col items-center justify-center gap-1 text-slate-600"><span class="text-3xl">${fallbackIcon}</span><span class="text-[8px] font-bold text-slate-500">عيادة حي الحسين</span></div>`;
+                }
+
                 grid.innerHTML += `
                     <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
-                            <div class="w-full h-28 rounded-xl bg-white med-img-frame flex items-center justify-center overflow-hidden p-1.5">
-                                <img src="${item.image}" class="object-contain w-full h-full block" loading="lazy">
+                            <div class="w-full aspect-[4/3] rounded-xl bg-[#0b1329] med-img-frame flex items-center justify-center overflow-hidden">
+                                ${imgContent}
                             </div>
                             <div class="space-y-1 text-right">
-                                <h4 class="text-xs font-black text-white leading-snug">${item.name}</h4>
-                                <p class="text-[9px] text-slate-400 font-semibold">${item.usage}</p>
+                                <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[34px]">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold line-clamp-2 min-h-[28px] leading-tight">${item.usage}</p>
                                 <span class="text-xs font-black text-cyan-400">${item.price}</span>
                             </div>
                         </div>
