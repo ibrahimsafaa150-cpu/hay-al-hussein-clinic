@@ -35,7 +35,6 @@
         #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
         #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
         
-        /* Auto Hide Netlify Injectors */
         iframe[src*="netlify"], div[data-netlify-deploy-id], .netlify-badge { display: none !important; visibility: hidden !important; }
 
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
@@ -59,32 +58,6 @@
     <a href="tel:07726053522" class="fixed bottom-20 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
         📞
     </a>
-
-    <!-- PWA Install Popup Modal -->
-    <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#1e2538] border border-cyan-500/40 rounded-[28px] p-6 w-full max-w-[325px] shadow-2xl relative text-right space-y-4">
-            <h3 class="text-base font-black text-white text-center">تثبيت التطبيق على الهاتف</h3>
-            
-            <div class="flex items-center justify-between gap-3 pt-1">
-                <div class="space-y-1 min-w-0 flex-1 text-right">
-                    <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
-                    <p class="text-[10px] text-cyan-300 break-all leading-tight">الوصول السريع والمباشر</p>
-                </div>
-                <div class="w-13 h-13 rounded-2xl bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-300 shrink-0 text-2xl p-2">
-                    🩺
-                </div>
-            </div>
-
-            <p class="text-[10.5px] text-slate-300 leading-relaxed text-right">
-                ثبّت التطبيق لتصفح سريع وحجز الزيارات التمريضية المنزلية والفحوصات بضغطة زر واحدة.
-            </p>
-
-            <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 text-xs font-bold gap-2">
-                <button onclick="dismissPwaPrompt()" class="flex-1 text-slate-400 hover:text-white py-2 rounded-xl border border-slate-700">إلغاء</button>
-                <button onclick="confirmPwaInstall()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت 📲</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Header Navigation -->
     <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2.5 w-full">
@@ -205,7 +178,7 @@
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
                 </button>
-                <button id="drawerInstallBtn" onclick="showPwaPromptModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right transition">
+                <button id="drawerInstallBtn" onclick="triggerPwaInstallManual()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right transition">
                     <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
@@ -319,8 +292,8 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2 px-4 flex justify-around items-center">
+    <!-- Bottom Navigation Bar (فقط التمريض والمختبر والحجز) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-6 flex justify-around items-center">
         <button onclick="playUiAction(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
             <span>التمريض</span>
@@ -332,10 +305,6 @@
         <button onclick="playUiAction(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
-        </button>
-        <button id="bottomInstallNavBtn" onclick="showPwaPromptModal()" class="flex flex-col items-center text-slate-400 hover:text-cyan-300 text-[10px] font-bold active:scale-95 transition">
-            <span class="text-lg">📲</span>
-            <span>تثبيت</span>
         </button>
     </div>
 
@@ -784,7 +753,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v3';
+                const CACHE_NAME = 'hay-alhussein-cache-v4';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -997,28 +966,23 @@
             }
         }, { passive: true });
 
-        // Reliable PWA Install
+        // Clean PWA Handler (No auto popups)
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
         function checkInstallVisibility() {
             const drawerBtn = document.getElementById('drawerInstallBtn');
-            const bottomBtn = document.getElementById('bottomInstallNavBtn');
             if (isStandalone) {
                 if (drawerBtn) drawerBtn.classList.add('hidden');
-                if (bottomBtn) bottomBtn.classList.add('hidden');
             } else {
                 if (drawerBtn) drawerBtn.classList.remove('hidden');
-                if (bottomBtn) bottomBtn.classList.remove('hidden');
             }
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if (!isStandalone) {
-                setTimeout(() => { showPwaPromptModal(); }, 1500);
-            }
+            checkInstallVisibility();
         });
 
         window.addEventListener('appinstalled', () => {
@@ -1026,25 +990,12 @@
             showToast('تم تثبيت التطبيق بنجاح ✅');
         });
 
-        function showPwaPromptModal() {
+        function triggerPwaInstallManual() {
             closeDrawer();
             if (isStandalone) {
-                showToast('التطبيق مثبت على هاتفك مسبقاً ✅');
+                showToast('التطبيق مثبت على جهازك بالفعل ✅');
                 return;
             }
-            const m = document.getElementById('pwaPromptModal');
-            m.classList.remove('hidden');
-            m.classList.add('modal-active');
-        }
-
-        function dismissPwaPrompt() {
-            const m = document.getElementById('pwaPromptModal');
-            m.classList.remove('modal-active');
-            m.classList.add('hidden');
-        }
-
-        function confirmPwaInstall() {
-            dismissPwaPrompt();
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
@@ -1055,7 +1006,7 @@
                     deferredPrompt = null;
                 });
             } else {
-                showToast('اضغط خيارات المتصفح (⋮) ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"', '📲');
+                showToast('اضغط على خيارات المتصفح (⋮) ثم اختر "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية"', '📲');
             }
         }
 
@@ -1796,7 +1747,6 @@
             document.getElementById('adminPinModal').classList.add('hidden');
         }
 
-        // Firebase Auth High Security Handler
         function handleSecureAdminLogin(e) {
             e.preventDefault();
             const email = document.getElementById('adminEmailInput').value.trim();
