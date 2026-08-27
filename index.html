@@ -92,61 +92,61 @@
         </button>
     </div>
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2.5 w-full">
-        <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
+    <!-- Header Navigation (Optimized Spacing for Full Title Visibility) -->
+    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-2.5 py-2 w-full">
+        <div class="flex items-center justify-between gap-1.5 w-full max-w-xl mx-auto">
             
-            <div class="flex items-center gap-2.5 min-w-0">
-                <button onclick="playUiClick(); openDrawer()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center text-white active:scale-90 transition">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <div class="flex items-center gap-1.5 min-w-0 flex-1">
+                <button onclick="playUiClick(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
+                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
                 <!-- Medical Shield Emblem Logo -->
-                <div id="secretLogoTrigger" class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-1">
-                    <svg class="w-7 h-7 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
+                    <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
                 </div>
 
-                <div class="flex flex-col min-w-0 cursor-pointer" onclick="playUiClick(); switchMainTab('services')">
-                    <div class="flex items-center gap-1.5">
-                        <h1 class="text-xs sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 truncate">
+                <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiClick(); switchMainTab('services')">
+                    <div class="flex items-center gap-1">
+                        <h1 class="text-[12.5px] sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
                             عيادة حي الحسين التمريضية
                         </h1>
-                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[8px] font-black px-1.5 py-0.2 rounded-full">24H</span>
+                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[7.5px] font-black px-1 py-0.2 rounded-full shrink-0">24H</span>
                     </div>
-                    <span class="text-[8px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
+                    <span class="text-[7.5px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="playUiClick(); openTrackerModal()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 active:scale-90 transition text-sm" title="تتبع الطلب">
-                    🔍
+            <div class="flex items-center gap-1 shrink-0">
+                <button onclick="playUiClick(); openTrackerModal()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 active:scale-90 transition text-xs" title="تتبع الطلب">
+                    🚗
                 </button>
-                <button onclick="playUiClick(); openCartModal()" class="relative w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
-                    <span class="text-sm">📋</span>
-                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                <button onclick="playUiClick(); openCartModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
+                    <span class="text-xs">📋</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[8.5px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
 
-                <div id="adminActionHeader" class="hidden items-center gap-1.5">
-                    <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950/80 border border-teal-500/60 text-teal-300 font-bold text-[10px] px-2 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                <div id="adminActionHeader" class="hidden items-center gap-1">
+                    <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950/80 border border-teal-500/60 text-teal-300 font-bold text-[9px] px-2 py-1.5 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
                         <span>🔔</span>
-                        <span id="pendingOrdersBadge" class="hidden absolute -top-1.5 -left-1.5 bg-rose-600 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-pulse">0</span>
+                        <span id="pendingOrdersBadge" class="hidden absolute -top-1.5 -left-1.5 bg-rose-600 text-white text-[7.5px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center animate-pulse">0</span>
                     </button>
-                    <button onclick="playUiClick(); openAddModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold text-[10px] px-2.5 py-2 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
+                    <button onclick="playUiClick(); openAddModal()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold text-[9px] px-2 py-1.5 rounded-xl transition flex items-center gap-1 shadow active:scale-95">
                         <span>➕</span>
                     </button>
-                    <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950/80 border border-rose-800 text-rose-300 font-bold text-[10px] px-2 py-2 rounded-xl active:scale-95">
+                    <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950/80 border border-rose-800 text-rose-300 font-bold text-[9px] px-2 py-1.5 rounded-xl active:scale-95">
                         <span>🔒</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="mt-2.5 relative w-full max-w-xl mx-auto flex items-center">
+        <div class="mt-2 relative w-full max-w-xl mx-auto flex items-center">
             <span class="absolute right-3 top-2.5 text-slate-500 text-xs pointer-events-none">🔍</span>
             <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة تمريضية أو تحليل مختبري..." 
-                   class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-2 border border-slate-800 focus:outline-none focus:border-cyan-400">
+                   class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-1.5 border border-slate-800 focus:outline-none focus:border-cyan-400">
         </div>
     </header>
 
@@ -367,7 +367,7 @@
         </button>
     </div>
 
-    <!-- Live Order Tracker Modal (For Patients) -->
+    <!-- Live Order Tracker Modal (For Patients with Cancel Booking Feature) -->
     <div id="patientTrackerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -940,7 +940,7 @@
             }
         }
 
-        // Live Order Tracker Logic
+        // Live Order Tracker Logic with Patient Cancellation Feature
         function openTrackerModal() {
             closeDrawer();
             document.getElementById('patientTrackerModal').classList.remove('hidden');
@@ -976,10 +976,25 @@
                         <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
                             <div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-2 ${isCompleted ? 'w-full' : 'w-2/3 animate-pulse'}"></div>
                         </div>
-                        <p class="text-[9.5px] text-slate-400 text-center font-bold">${isCompleted ? 'تم إنجاز الموعد بنجاح، نتمنى لكم دوام الصحة والعافية' : 'طلبك قيد المتابعة وسيصل الكادر بالموعد المحدد'}</p>
+                        <div class="flex justify-between items-center pt-1 border-t border-slate-800/80">
+                            <p class="text-[9.5px] text-slate-400 font-bold">${isCompleted ? 'تم إنجاز الموعد بنجاح' : 'طلبك قيد المتابعة وسيصل الكادر'}</p>
+                            ${!isCompleted ? `
+                                <button onclick="cancelPatientBooking('${o.keyId}')" class="bg-rose-950/80 border border-rose-800 text-rose-300 text-[10px] font-bold px-2.5 py-1 rounded-lg active:scale-95 transition">
+                                    إلغاء الطلب ✕
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
             });
+        }
+
+        function cancelPatientBooking(keyId) {
+            if (confirm('هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟')) {
+                ordersRef.child(keyId).remove();
+                showToast('تم إلغاء طلب الحجز بنجاح');
+                searchPatientOrder();
+            }
         }
 
         function initClinicSystem() {
