@@ -15,6 +15,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -31,7 +32,9 @@
         #sideDrawer.drawer-closed { transform: translateX(100%); }
         #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
         #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
-        .swipe-card { transition: transform 0.35s ease, opacity 0.35s ease; touch-action: pan-y; }
+        .sortable-ghost { opacity: 0.35; transform: scale(0.95); }
+        .drag-handle { cursor: grab; }
+        .drag-handle:active { cursor: grabbing; }
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
     </style>
@@ -93,57 +96,57 @@
     </div>
 
     <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2 w-full">
-        <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
+    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-2.5 py-2.5 w-full">
+        <div class="flex items-center justify-between gap-1.5 w-full max-w-xl mx-auto">
             
             <div class="flex items-center gap-2 min-w-0 flex-1">
-                <button onclick="playUiClick(); openDrawer()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <button onclick="playUiClick(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
+                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
                 <!-- Medical Shield Emblem Logo -->
-                <div id="secretLogoTrigger" class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-1">
-                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
+                    <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
                 </div>
 
                 <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiClick(); switchMainTab('services')">
-                    <div class="flex items-center gap-1.5">
-                        <h1 class="text-sm sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
+                    <div class="flex items-center gap-1">
+                        <h1 class="text-[12.5px] sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
                             عيادة حي الحسين التمريضية
                         </h1>
-                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[8px] font-black px-1.5 py-0.2 rounded-full shrink-0">24H</span>
+                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[7.5px] font-black px-1 py-0.2 rounded-full shrink-0">24H</span>
                     </div>
-                    <span class="text-[8px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
+                    <span class="text-[7.5px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="playUiClick(); openCartModal()" class="relative w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
-                    <span class="text-sm">📋</span>
-                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                <button onclick="playUiClick(); openCartModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
+                    <span class="text-xs">📋</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[8.5px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Separate Admin Top Bar (Clean & Professional) -->
-        <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 items-center justify-between gap-2">
+        <!-- Separate Admin Control Bar -->
+        <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 items-center justify-between gap-1.5 text-xs">
             <div class="flex items-center gap-1.5">
-                <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-1 rounded-lg font-black">وضع المشرف 🚀</span>
-                <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
+                <span class="text-[9.5px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-lg font-black">المشرف 🚀</span>
+                <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
                     <span>🔔 الحجوزات</span>
-                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[8px] font-black px-1.5 rounded-full animate-pulse">0</span>
+                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
                 </button>
             </div>
-            <div class="flex items-center gap-1.5">
-                <button onclick="playUiClick(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[10px] font-bold px-2.5 py-1 rounded-lg">
-                    <span>➕ كادر</span>
+            <div class="flex items-center gap-1">
+                <button onclick="playUiClick(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
+                    <span>+ كادر</span>
                 </button>
-                <button onclick="playUiClick(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">
-                    <span>➕ خدمة</span>
+                <button onclick="playUiClick(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
+                    <span>+ خدمة</span>
                 </button>
-                <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[10px] font-bold px-2 py-1 rounded-lg">
+                <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
                     <span>خروج 🔒</span>
                 </button>
             </div>
@@ -265,7 +268,7 @@
             <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
         </div>
 
-        <!-- Items Grid -->
+        <!-- Items Grid (Sortable Enabled for Admin) -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
         <!-- Consultation Hub View -->
@@ -295,8 +298,8 @@
             <div id="staffMembersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
         </div>
 
-        <!-- Interactive Patients Reviews Section (With Admin Delete Feature) -->
-        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
+        <!-- Dynamic 10-Second Auto-Cycling Reviews Banner -->
+        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-amber-400">⭐</span> آراء وتقييمات المراجعين
@@ -305,7 +308,8 @@
                     + أضف تقييمك
                 </button>
             </div>
-            <div id="reviewsContainerGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right"></div>
+            <div id="reviewsBannerContainer" class="min-h-[64px] flex flex-col justify-center"></div>
+            <div class="flex justify-center gap-1 mt-1" id="reviewsDotsContainer"></div>
         </div>
 
         <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
@@ -380,7 +384,7 @@
         </div>
     </div>
 
-    <!-- Add/Edit Staff Modal (Admin Only) -->
+    <!-- Add/Edit Staff Modal -->
     <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -409,7 +413,7 @@
         </div>
     </div>
 
-    <!-- Product / Service Detail Modal -->
+    <!-- Detail View Modal -->
     <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -723,6 +727,10 @@
         let reviewsList = [];
         let ordersList = [];
         let cart = [];
+        let sortableInstance = null;
+
+        let currentReviewIdx = 0;
+        let reviewCycleTimer = null;
 
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية"],
@@ -808,6 +816,53 @@
                 if (diff < 0) { nextVitalTip(); } else { prevVitalTip(); }
                 restartVitalTimer();
             }
+        }
+
+        // Reviews Carousel System (10 Seconds Auto-Cycle)
+        function renderReviews() {
+            const container = document.getElementById('reviewsBannerContainer');
+            const dots = document.getElementById('reviewsDotsContainer');
+            if (!container) return;
+
+            const listToRender = reviewsList.length > 0 ? reviewsList : [
+                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." },
+                { author: "أم مريم", stars: "★★★★★", text: "تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة." }
+            ];
+
+            if (currentReviewIdx >= listToRender.length) currentReviewIdx = 0;
+            const r = listToRender[currentReviewIdx];
+
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-1 relative">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black text-cyan-300">${r.author}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10.5px] text-amber-400">${r.stars}</span>
+                                ${isAdmin && r.key ? `<button onclick="deleteReviewItem('${r.key}')" class="text-rose-400 text-xs p-0.5" title="حذف">🗑️</button>` : ''}
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-300 font-semibold leading-relaxed">${r.text}</p>
+                    </div>
+                `;
+                container.style.opacity = '1';
+            }, 200);
+
+            if (dots) {
+                dots.innerHTML = listToRender.map((_, i) => `
+                    <span class="${i === currentReviewIdx ? 'w-2.5 bg-amber-400' : 'w-1.5 bg-slate-700'} h-1 rounded-full transition-all"></span>
+                `).join('');
+            }
+        }
+
+        function restartReviewTimer() {
+            clearInterval(reviewCycleTimer);
+            reviewCycleTimer = setInterval(() => {
+                const total = reviewsList.length > 0 ? reviewsList.length : 2;
+                currentReviewIdx = (currentReviewIdx + 1) % total;
+                renderReviews();
+            }, 10000);
         }
 
         let deferredPrompt = null;
@@ -1024,7 +1079,7 @@
             }
         }
 
-        // Reviews System (With Admin Delete Feature)
+        // Reviews System
         function openAddReviewModal() {
             closeDrawer();
             document.getElementById('addReviewModal').classList.remove('hidden');
@@ -1052,39 +1107,6 @@
                 reviewsRef.child(key).remove();
                 showToast('تم حذف التقييم');
             }
-        }
-
-        function renderReviews() {
-            const container = document.getElementById('reviewsContainerGrid');
-            container.innerHTML = '';
-            if (reviewsList.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-cyan-300">أبو سيف</span>
-                            <span class="text-[9px] text-amber-400">★★★★★</span>
-                        </div>
-                        <p class="text-[9px] text-slate-400 leading-tight">كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم.</p>
-                    </div>
-                `;
-                return;
-            }
-            reviewsList.forEach(r => {
-                container.innerHTML += `
-                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1 relative">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-cyan-300">${r.author}</span>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[9px] text-amber-400">${r.stars}</span>
-                                ${isAdmin ? `
-                                    <button onclick="deleteReviewItem('${r.key}')" class="text-rose-400 text-xs p-0.5" title="حذف">🗑️</button>
-                                ` : ''}
-                            </div>
-                        </div>
-                        <p class="text-[9px] text-slate-400 leading-tight">${r.text}</p>
-                    </div>
-                `;
-            });
         }
 
         // Staff Management
@@ -1148,8 +1170,8 @@
                 grid.innerHTML += `
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0">
-                                ${s.avatar ? (s.avatar.startsWith('http') ? `<img src="${s.avatar}" class="w-full h-full rounded-full object-cover">` : s.avatar) : s.name.substring(0, 2)}
+                            <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0 overflow-hidden">
+                                ${s.avatar && s.avatar.startsWith('http') ? `<img src="${s.avatar}" class="w-full h-full object-cover">` : (s.avatar || s.name.substring(0, 2))}
                             </div>
                             <div class="text-right min-w-0">
                                 <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
@@ -1167,23 +1189,32 @@
             });
         }
 
-        // Reorder Services Items (Move Left/Right/Up/Down in Array)
-        function moveItemPosition(id, sec, direction) {
-            playUiClick();
-            const list = allClinicData[sec] || [];
-            const index = list.findIndex(x => String(x.id) === String(id));
-            if (index === -1) return;
-
-            const targetIndex = index + direction;
-            if (targetIndex < 0 || targetIndex >= list.length) return;
-
-            const temp = list[index];
-            list[index] = list[targetIndex];
-            list[targetIndex] = temp;
-
-            allClinicData[sec] = list;
-            dataRef.set(allClinicData);
-            showToast('تم تحديث ترتيب الخدمات 🔄');
+        // Sortable Drag-and-Drop Implementation (Like Pharmacy App)
+        function initSortableGrid() {
+            const grid = document.getElementById('mainItemsGrid');
+            if (sortableInstance) sortableInstance.destroy();
+            if (isAdmin && currentMainTab !== 'consult') {
+                sortableInstance = new Sortable(grid, {
+                    handle: '.drag-handle',
+                    animation: 200,
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function () {
+                        const newOrderIds = Array.from(grid.children).map(c => c.getAttribute('data-id'));
+                        const currentDataset = allClinicData[currentMainTab] || [];
+                        const reordered = [];
+                        newOrderIds.forEach(id => {
+                            const itm = currentDataset.find(x => String(x.id) === String(id));
+                            if (itm) reordered.push(itm);
+                        });
+                        currentDataset.forEach(itm => {
+                            if (!reordered.find(x => String(x.id) === String(itm.id))) reordered.push(itm);
+                        });
+                        allClinicData[currentMainTab] = reordered;
+                        dataRef.set(allClinicData);
+                        showToast('تم حفظ الترتيب الجديد بنجاح 🔄');
+                    }
+                });
+            }
         }
 
         function initClinicSystem() {
@@ -1248,6 +1279,7 @@
                     reviewsList = [];
                 }
                 renderReviews();
+                restartReviewTimer();
             });
 
             ordersRef.on('value', (snapshot) => {
@@ -1367,7 +1399,7 @@
 
             dataset.forEach(item => {
                 grid.innerHTML += `
-                    <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
+                    <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
                                 <img src="${item.image || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85'}" class="object-cover w-full h-full hover:scale-105 transition duration-300" loading="lazy">
@@ -1388,21 +1420,18 @@
                                 <span>➕</span> <span>طلب للحجز</span>
                             </button>
                             ${isAdmin ? `
-                            <div class="space-y-1 pt-0.5">
-                                <div class="flex items-center justify-between gap-1">
-                                    <button onclick="moveItemPosition('${item.id}', '${currentMainTab}', -1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 py-1 rounded-lg text-xs font-bold" title="تحريك للأمام">◀</button>
-                                    <button onclick="moveItemPosition('${item.id}', '${currentMainTab}', 1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 py-1 rounded-lg text-xs font-bold" title="تحريك للخلف">▶</button>
-                                </div>
-                                <div class="flex items-center justify-between gap-1">
-                                    <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
-                                    <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
-                                </div>
+                            <div class="flex items-center justify-between gap-1 pt-0.5">
+                                <button class="drag-handle flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-1 rounded-lg text-xs font-bold border border-slate-700" title="سحب لنقل الخدمة">☰</button>
+                                <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
+                                <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
                             </div>
                             ` : ''}
                         </div>
                     </div>
                 `;
             });
+
+            initSortableGrid();
         }
 
         function openItemDetails(id, sec) {
@@ -1633,7 +1662,7 @@
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
-        // Secret Admin Trigger
+        // Secret Admin Trigger (5 Clicks on Logo)
         let emblemClicks = 0;
         let emblemTimer = null;
         document.getElementById('secretLogoTrigger').addEventListener('click', () => {
