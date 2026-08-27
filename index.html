@@ -54,7 +54,7 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Smart Banner (يظهر فقط لمن ليس لديه التطبيق) -->
+    <!-- PWA Smart Banner -->
     <div id="installAppPrompt" class="hidden fixed bottom-20 left-3 right-3 z-40 bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 p-3 rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.25)] flex items-center justify-between gap-2 max-w-xl mx-auto">
         <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-slate-950 p-1 border border-cyan-500/40 flex items-center justify-center shrink-0 text-lg">🩺</div>
@@ -323,9 +323,9 @@
         </button>
     </div>
 
-    <!-- Modals -->
-    <div id="howToUseModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+    <!-- Modals (All connected to URL history to prevent exiting app on back) -->
+    <div id="howToUseModal" onclick="handleOutsideModalClick(event, 'howToUseModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white">📖 طريقة الاستخدام والحجز</h3>
                 <button onclick="playUiAction(); closeStaticModal('howToUseModal')" class="text-slate-400 font-bold p-1">✕</button>
@@ -339,8 +339,8 @@
         </div>
     </div>
 
-    <div id="privacyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+    <div id="privacyModal" onclick="handleOutsideModalClick(event, 'privacyModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white">🔒 الخصوصية والشروط الطبية</h3>
                 <button onclick="playUiAction(); closeStaticModal('privacyModal')" class="text-slate-400 font-bold p-1">✕</button>
@@ -353,8 +353,8 @@
         </div>
     </div>
 
-    <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
+    <div id="locationModal" onclick="handleOutsideModalClick(event, 'locationModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white">📍 موقع العيادة وأوقات الدوام</h3>
                 <button onclick="playUiAction(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
@@ -385,8 +385,8 @@
     </div>
 
     <!-- Direct Call Simulation Modal -->
-    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+    <div id="callAudioModal" onclick="handleOutsideModalClick(event, 'callAudioModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
                 📞
             </div>
@@ -402,8 +402,8 @@
     </div>
 
     <!-- Admin Orders Queue Modal -->
-    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
+    <div id="ordersQueueModal" onclick="handleOutsideModalClick(event, 'ordersQueueModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-cyan-400">🔔</span> سجل الحجوزات وإدارة الكوادر
@@ -415,8 +415,8 @@
     </div>
 
     <!-- Staff Management Modal -->
-    <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
+    <div id="staffEditModal" onclick="handleOutsideModalClick(event, 'staffEditModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 id="staffModalTitle" class="text-xs font-black text-white">إضافة عضو كادر تمريضي</h3>
                 <button onclick="playUiAction(); closeStaffModal()" class="text-slate-400 font-bold p-1">✕</button>
@@ -444,8 +444,8 @@
     </div>
 
     <!-- Admin Add/Edit Service Modal -->
-    <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div id="adminItemModal" onclick="handleOutsideModalClick(event, 'adminItemModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
                 <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر طبي جديد</h3>
                 <button onclick="playUiAction(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
@@ -495,8 +495,8 @@
     </div>
 
     <!-- Clinical Suite & Tools Modal -->
-    <div id="clinicalToolsModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
+    <div id="clinicalToolsModal" onclick="handleOutsideModalClick(event, 'clinicalToolsModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-cyan-400">🧮</span> الأدوات السريرية وسجل الفحوصات
@@ -546,8 +546,8 @@
     </div>
 
     <!-- Live Patient Tracker Modal -->
-    <div id="patientTrackerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
+    <div id="patientTrackerModal" onclick="handleOutsideModalClick(event, 'patientTrackerModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-cyan-400">🚗</span> تتبع حالة طلبك وموعد الكادر
@@ -565,8 +565,8 @@
     </div>
 
     <!-- Cart Modal -->
-    <div id="cartModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
+    <div id="cartModal" onclick="handleOutsideModalClick(event, 'cartModal')" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1"><span>📋</span> قائمة الخدمات والتحاليل المطلوبة</h3>
                 <button onclick="playUiAction(); closeCartModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
@@ -587,8 +587,8 @@
     </div>
 
     <!-- Booking Details Confirmation Modal -->
-    <div id="customerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div id="customerModal" onclick="handleOutsideModalClick(event, 'customerModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1"><span>🩺</span> بيانات تأكيد الحجز الطبي</h3>
                 <button onclick="playUiAction(); closeCustomerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
@@ -688,8 +688,8 @@
     </div>
 
     <!-- Add Review Modal -->
-    <div id="addReviewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative space-y-3 text-right">
+    <div id="addReviewModal" onclick="handleOutsideModalClick(event, 'addReviewModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>⭐</span> تقييم خدمة العيادة</h3>
                 <button onclick="playUiAction(); closeAddReviewModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
@@ -719,8 +719,8 @@
     </div>
 
     <!-- High Security Firebase Authentication Modal -->
-    <div id="adminPinModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs shadow-2xl relative text-center space-y-3.5 border border-cyan-500/40">
+    <div id="adminPinModal" onclick="handleOutsideModalClick(event, 'adminPinModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs shadow-2xl relative text-center space-y-3.5 border border-cyan-500/40">
             <div class="text-3xl">🔐</div>
             <h3 class="text-xs font-black text-white">تسجيل الدخول الآمن للمشرف الطبي</h3>
             <p class="text-[10px] text-slate-400">أدخل بيانات الاعتماد الرسمية للعيادة</p>
@@ -736,8 +736,8 @@
     </div>
 
     <!-- Service Detail View Modal -->
-    <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
+    <div id="detailViewModal" onclick="handleOutsideModalClick(event, 'detailViewModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <span id="detailBadge" class="bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold px-2 py-0.5 rounded-md">تفاصيل الخدمة</span>
                 <button onclick="playUiAction(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
@@ -768,7 +768,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v5';
+                const CACHE_NAME = 'hay-alhussein-cache-v6';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -804,6 +804,48 @@
         let reviewsList = [];
         let ordersList = [];
         let cart = [];
+
+        // History / Modal State Management (Prevents Exiting App on Back)
+        function pushModalState(modalName) {
+            history.pushState({ activeModal: modalName }, "");
+        }
+
+        function handleOutsideModalClick(event, modalId) {
+            const modal = document.getElementById(modalId);
+            if (event.target === modal) {
+                playUiAction();
+                closeAnyModal(modalId);
+            }
+        }
+
+        function closeAnyModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.remove('modal-active');
+                modal.classList.add('hidden');
+                if (history.state && history.state.activeModal) {
+                    history.back();
+                }
+            }
+        }
+
+        window.addEventListener('popstate', function(event) {
+            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal'];
+            
+            allModals.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden')) {
+                    el.classList.remove('modal-active');
+                    el.classList.add('hidden');
+                }
+            });
+
+            const drawer = document.getElementById('sideDrawer');
+            if (drawer && !drawer.classList.contains('drawer-closed')) {
+                drawer.classList.add('drawer-closed');
+                document.getElementById('drawerBackdrop').classList.add('hidden');
+            }
+        });
 
         // Auth Security Observer
         auth.onAuthStateChanged((user) => {
@@ -981,7 +1023,7 @@
             }
         }, { passive: true });
 
-        // PWA Install System (Prompt only when not installed)
+        // PWA Install System
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -1021,11 +1063,13 @@
         function openAddReviewModal() {
             document.getElementById('addReviewModal').classList.remove('hidden');
             document.getElementById('addReviewModal').classList.add('modal-active');
+            pushModalState('addReviewModal');
         }
 
         function closeAddReviewModal() {
-            document.getElementById('addReviewModal').classList.remove('modal-active');
-            document.getElementById('addReviewModal').classList.add('hidden');
+            const modal = document.getElementById('addReviewModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function savePatientReview(e) {
@@ -1160,10 +1204,12 @@
             renderVitalLog();
             document.getElementById('clinicalToolsModal').classList.remove('hidden');
             document.getElementById('clinicalToolsModal').classList.add('modal-active');
+            pushModalState('clinicalToolsModal');
         }
         function closeToolsModal() {
-            document.getElementById('clinicalToolsModal').classList.remove('modal-active');
-            document.getElementById('clinicalToolsModal').classList.add('hidden');
+            const modal = document.getElementById('clinicalToolsModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         // Staff CRUD
@@ -1175,11 +1221,13 @@
             document.getElementById('staffAvatar').value = '';
             document.getElementById('staffEditModal').classList.remove('hidden');
             document.getElementById('staffEditModal').classList.add('modal-active');
+            pushModalState('staffEditModal');
         }
 
         function closeStaffModal() {
-            document.getElementById('staffEditModal').classList.remove('modal-active');
-            document.getElementById('staffEditModal').classList.add('hidden');
+            const modal = document.getElementById('staffEditModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function saveStaffMember(e) {
@@ -1223,11 +1271,13 @@
             document.getElementById('itemImage').value = '';
             document.getElementById('adminItemModal').classList.remove('hidden');
             document.getElementById('adminItemModal').classList.add('modal-active');
+            pushModalState('adminItemModal');
         }
 
         function closeAdminItemModal() {
-            document.getElementById('adminItemModal').classList.remove('modal-active');
-            document.getElementById('adminItemModal').classList.add('hidden');
+            const modal = document.getElementById('adminItemModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function saveItemRecord(e) {
@@ -1447,12 +1497,17 @@
             document.getElementById('detailUsage').innerText = item.usage;
             document.getElementById('detailPrice').innerText = item.price;
             document.getElementById('detailAddBtn').onclick = () => { addToCart(item.id, sec); closeDetailModal(); };
-            document.getElementById('detailViewModal').classList.remove('hidden');
-            document.getElementById('detailViewModal').classList.add('modal-active');
+            
+            const modal = document.getElementById('detailViewModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('detailViewModal');
         }
+
         function closeDetailModal() {
-            document.getElementById('detailViewModal').classList.remove('modal-active');
-            document.getElementById('detailViewModal').classList.add('hidden');
+            const modal = document.getElementById('detailViewModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function addToCart(id, section) {
@@ -1472,12 +1527,15 @@
 
         function openCartModal() {
             renderCartContent();
-            document.getElementById('cartModal').classList.remove('hidden');
-            document.getElementById('cartModal').classList.add('modal-active');
+            const modal = document.getElementById('cartModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('cartModal');
         }
         function closeCartModal() {
-            document.getElementById('cartModal').classList.remove('modal-active');
-            document.getElementById('cartModal').classList.add('hidden');
+            const modal = document.getElementById('cartModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function renderCartContent() {
@@ -1531,12 +1589,15 @@
             if (cart.length === 0) { showToast('يرجى اختيار عناصر أولاً', '⚠️'); return; }
             closeCartModal();
             updateCostBreakdown();
-            document.getElementById('customerModal').classList.remove('hidden');
-            document.getElementById('customerModal').classList.add('modal-active');
+            const modal = document.getElementById('customerModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('customerModal');
         }
         function closeCustomerModal() {
-            document.getElementById('customerModal').classList.remove('modal-active');
-            document.getElementById('customerModal').classList.add('hidden');
+            const modal = document.getElementById('customerModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function updateCostBreakdown() {
@@ -1688,12 +1749,15 @@
 
         function openOrdersQueueModal() {
             renderOrdersQueue();
-            document.getElementById('ordersQueueModal').classList.remove('hidden');
-            document.getElementById('ordersQueueModal').classList.add('modal-active');
+            const modal = document.getElementById('ordersQueueModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('ordersQueueModal');
         }
         function closeOrdersQueueModal() {
-            document.getElementById('ordersQueueModal').classList.remove('modal-active');
-            document.getElementById('ordersQueueModal').classList.add('hidden');
+            const modal = document.getElementById('ordersQueueModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         function openStaticModal(id) {
@@ -1702,6 +1766,7 @@
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('modal-active');
+                pushModalState(id);
             }
         }
 
@@ -1718,6 +1783,7 @@
             if (modal) {
                 modal.classList.remove('hidden');
                 modal.classList.add('modal-active');
+                pushModalState('callAudioModal');
             }
         }
 
@@ -1741,8 +1807,10 @@
                 if (!isAdmin) {
                     document.getElementById('adminEmailInput').value = '';
                     document.getElementById('adminPasswordInput').value = '';
-                    document.getElementById('adminPinModal').classList.remove('hidden');
-                    document.getElementById('adminPinModal').classList.add('modal-active');
+                    const modal = document.getElementById('adminPinModal');
+                    modal.classList.remove('hidden');
+                    modal.classList.add('modal-active');
+                    pushModalState('adminPinModal');
                 } else {
                     showToast('أنت مسجل كـ مشرف طبي حالياً', 'ℹ️');
                 }
@@ -1750,8 +1818,9 @@
         });
 
         function closePinModal() {
-            document.getElementById('adminPinModal').classList.remove('modal-active');
-            document.getElementById('adminPinModal').classList.add('hidden');
+            const modal = document.getElementById('adminPinModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
 
         // Firebase Auth High Security Handler
@@ -1807,6 +1876,7 @@
         function openDrawer() {
             document.getElementById('sideDrawer').classList.remove('drawer-closed');
             document.getElementById('drawerBackdrop').classList.remove('hidden');
+            pushModalState('sideDrawer');
         }
         function closeDrawer() {
             document.getElementById('sideDrawer').classList.add('drawer-closed');
@@ -1814,12 +1884,15 @@
         }
         function openTrackerModal() {
             closeDrawer();
-            document.getElementById('patientTrackerModal').classList.remove('hidden');
-            document.getElementById('patientTrackerModal').classList.add('modal-active');
+            const modal = document.getElementById('patientTrackerModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('patientTrackerModal');
         }
         function closeTrackerModal() {
-            document.getElementById('patientTrackerModal').classList.remove('modal-active');
-            document.getElementById('patientTrackerModal').classList.add('hidden');
+            const modal = document.getElementById('patientTrackerModal');
+            modal.classList.remove('modal-active');
+            modal.classList.add('hidden');
         }
         function searchPatientOrder() {
             const phone = document.getElementById('trackPhoneInput').value.trim();
