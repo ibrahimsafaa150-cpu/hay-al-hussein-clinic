@@ -151,28 +151,28 @@
             </div>
 
             <div class="space-y-1 text-xs">
-                <button onclick="playUiAction(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right hover:bg-slate-800/80 transition">
                     <span>🩺</span> <span class="font-bold">الخدمات التمريضية والمنزلية</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>🧪</span> <span class="font-bold">المختبر وسحب العينات</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية سريعة</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right transition">
                     <span>🚗</span> <span class="font-bold">تتبع حالة طلبي وحجز الكادر</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-amber-300 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right transition">
                     <span>⭐</span> <span class="font-bold">إضافة تقييم ورأي المراجع</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>🔒</span> <span class="font-bold">سياسة الخصوصية والشروط</span>
                 </button>
-                <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
                 </button>
             </div>
@@ -333,25 +333,27 @@
         </div>
     </div>
 
-    <!-- Location Modal with Accurate Plus Code -->
+    <!-- Location Modal with Accurate Street & Market Info -->
     <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white">📍 موقع العيادة وأوقات الدوام</h3>
                 <button onclick="playUiAction(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
-            <div class="space-y-1.5 text-xs text-slate-300">
-                <p class="font-bold text-white">العنوان الدقيق:</p>
-                <p class="text-[11px] text-slate-300 leading-relaxed font-semibold">
-                    📍 78M2+V4R، شارع 20، حي الحسين، بغداد، محافظة بغداد
-                </p>
-                <div class="pt-2 border-t border-slate-800/80 space-y-1">
-                    <p class="font-bold text-white">أوقات وساعات العمل:</p>
-                    <p class="text-[11px] text-emerald-400 font-bold">
-                        🕒 مفتوح على مدار 24 ساعة (طيلة أيام الأسبوع - السبت إلى الجمعة)
+            <div class="space-y-2 text-xs text-slate-300">
+                <div>
+                    <p class="font-bold text-white text-xs mb-0.5">العنوان بالتفصيل:</p>
+                    <p class="text-[11px] text-cyan-300 leading-relaxed font-bold">
+                        📍 بغداد، حي الحسين، شارع 20، قرب السوق العصري
                     </p>
-                    <p class="text-[10px] text-cyan-300">
-                        ⚡ استقبال الحالات الطارئة والزيارات المنزلية الخافرة ليلاً ونهاراً.
+                </div>
+                <div class="pt-2 border-t border-slate-800/80 space-y-1">
+                    <p class="font-bold text-white text-xs">أوقات وساعات العمل:</p>
+                    <p class="text-[11px] text-emerald-400 font-bold">
+                        🕒 مفتوح 24 ساعة (طيلة أيام الأسبوع - 24/7)
+                    </p>
+                    <p class="text-[10px] text-slate-300">
+                        ⚡ استقبال الحالات والزيارات المنزلية الخافرة على مدار الساعة.
                     </p>
                 </div>
             </div>
@@ -618,7 +620,7 @@
 
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">العنوان بالتفصيل / أقرب نقطة دالة:</label>
-                    <input type="text" id="custAddress" required placeholder="حي الحسين - قرب..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    <input type="text" id="custAddress" required value="حي الحسين - شارع 20 - قرب السوق العصري" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
                 <div>
