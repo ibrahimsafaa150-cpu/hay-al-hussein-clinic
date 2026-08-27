@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
-    <!-- Firebase SDKs with Authentication -->
+    <!-- Firebase SDKs with Authentication Support -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -34,7 +34,10 @@
         #sideDrawer.drawer-closed { transform: translateX(100%); }
         #customToast { transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translate(-50%, -150%); opacity: 0; pointer-events: none; z-index: 999999 !important; }
         #customToast.toast-show { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+        
+        /* Auto Hide Netlify Injectors */
         iframe[src*="netlify"], div[data-netlify-deploy-id], .netlify-badge { display: none !important; visibility: hidden !important; }
+
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
         @media print {
@@ -65,7 +68,7 @@
             <div class="flex items-center justify-between gap-3 pt-1">
                 <div class="space-y-1 min-w-0 flex-1 text-right">
                     <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
-                    <p class="text-[10px] text-cyan-300 break-all leading-tight">الوصول السريع والآمن</p>
+                    <p class="text-[10px] text-cyan-300 break-all leading-tight">الوصول السريع والمباشر</p>
                 </div>
                 <div class="w-13 h-13 rounded-2xl bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-300 shrink-0 text-2xl p-2">
                     🩺
@@ -92,8 +95,8 @@
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                <!-- 5 Clicks Secure Trigger -->
-                <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
+                <!-- 5 Clicks Secure Trigger for Admin Auth -->
+                <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5" title="لوحة المشرف">
                     <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
@@ -118,7 +121,7 @@
             </div>
         </div>
 
-        <!-- Admin Action Header -->
+        <!-- Authenticated Admin Action Header -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
             <div class="grid grid-cols-5 gap-1 w-full text-center">
                 <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[10px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
@@ -162,7 +165,7 @@
         </div>
     </header>
 
-    <!-- Side Drawer Menu -->
+    <!-- Side Drawer -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-3.5">
@@ -236,7 +239,7 @@
     <!-- Main Content Container -->
     <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
-        <!-- Interactive Vital Banner -->
+        <!-- Interactive Swipeable Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
             <div id="vitalCardInner" class="space-y-1 text-right transition-all duration-300"></div>
             <div class="flex justify-center gap-1.5 mt-2" id="vitalDotsContainer">
@@ -246,7 +249,7 @@
             </div>
         </div>
 
-        <!-- Timings Info Card -->
+        <!-- Integrated Timings Info Card -->
         <div class="dark-glass rounded-2xl p-3 border border-slate-800 flex flex-col gap-2">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -260,7 +263,7 @@
             </p>
         </div>
 
-        <!-- Dynamic Header -->
+        <!-- Dynamic Section Header -->
         <div class="flex items-center justify-between px-1">
             <h3 id="currentSectionTitle" class="text-xs font-black text-white flex items-center gap-1.5">
                 <span class="text-cyan-400">●</span> خدمات عيادة حي الحسين التمريضية
@@ -271,7 +274,7 @@
         <!-- Items Grid -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
-        <!-- Consultation Hub -->
+        <!-- Consultation Hub View -->
         <div id="consultationView" class="hidden space-y-3">
             <div class="dark-glass rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 shadow-lg">
                 <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl">👨‍⚕️</div>
@@ -296,7 +299,7 @@
             <div id="staffMembersGrid" class="grid grid-cols-1 gap-2"></div>
         </div>
 
-        <!-- Reviews Banner -->
+        <!-- Panoramic Reviews Banner -->
         <div id="reviewsSwipeBox" class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden select-none cursor-grab">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -397,7 +400,7 @@
         </div>
     </div>
 
-    <!-- Call Simulation Modal -->
+    <!-- Direct Call Simulation Modal -->
     <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
             <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
@@ -414,7 +417,7 @@
         </div>
     </div>
 
-    <!-- Orders Queue Modal -->
+    <!-- Admin Orders Queue Modal -->
     <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
@@ -456,7 +459,7 @@
         </div>
     </div>
 
-    <!-- Admin Add/Edit Item Modal -->
+    <!-- Admin Add/Edit Service Modal -->
     <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
@@ -507,7 +510,7 @@
         </div>
     </div>
 
-    <!-- Clinical Tools Modal -->
+    <!-- Clinical Suite & Tools Modal -->
     <div id="clinicalToolsModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -599,7 +602,7 @@
         </div>
     </div>
 
-    <!-- Booking Confirmation Details Modal -->
+    <!-- Booking Details Confirmation Modal -->
     <div id="customerModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
@@ -994,7 +997,7 @@
             }
         }, { passive: true });
 
-        // PWA Install Prompt
+        // Reliable PWA Install
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -1793,6 +1796,7 @@
             document.getElementById('adminPinModal').classList.add('hidden');
         }
 
+        // Firebase Auth High Security Handler
         function handleSecureAdminLogin(e) {
             e.preventDefault();
             const email = document.getElementById('adminEmailInput').value.trim();
