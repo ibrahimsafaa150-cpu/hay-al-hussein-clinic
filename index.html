@@ -92,51 +92,48 @@
         </button>
     </div>
 
-    <!-- Header Navigation (Full Title Visibility Guarantee) -->
-    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-2.5 py-2 w-full">
-        <div class="flex items-center justify-between gap-1.5 w-full max-w-xl mx-auto">
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 py-2 w-full">
+        <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
             
             <div class="flex items-center gap-2 min-w-0 flex-1">
-                <button onclick="playUiClick(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
-                    <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <button onclick="playUiClick(); openDrawer()" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
                 <!-- Medical Shield Emblem Logo -->
-                <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
-                    <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                <div id="secretLogoTrigger" class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-1">
+                    <svg class="w-6 h-6 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
                 </div>
 
                 <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiClick(); switchMainTab('services')">
                     <div class="flex items-center gap-1.5">
-                        <h1 class="text-[13px] sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
+                        <h1 class="text-sm sm:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
                             عيادة حي الحسين التمريضية
                         </h1>
-                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[7.5px] font-black px-1 py-0.2 rounded-full shrink-0">24H</span>
+                        <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[8px] font-black px-1.5 py-0.2 rounded-full shrink-0">24H</span>
                     </div>
-                    <span class="text-[7.5px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
+                    <span class="text-[8px] text-slate-400 font-bold tracking-wider uppercase truncate">HAY AL-HUSSEIN CLINIC</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="playUiClick(); openTrackerModal()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-cyan-400 active:scale-90 transition text-xs" title="تتبع الطلب">
-                    🚗
-                </button>
-                <button onclick="playUiClick(); openCartModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
-                    <span class="text-xs">📋</span>
-                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[8.5px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
+                <button onclick="playUiClick(); openCartModal()" class="relative w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
+                    <span class="text-sm">📋</span>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Separate Admin Top Bar (Clean & Doesn't Mess Up the Header) -->
+        <!-- Separate Admin Top Bar (Clean & Professional) -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 items-center justify-between gap-2">
             <div class="flex items-center gap-1.5">
-                <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-1 rounded-lg font-black">وضع المشرف الطبي 🚀</span>
+                <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-1 rounded-lg font-black">وضع المشرف 🚀</span>
                 <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1">
                     <span>🔔 الحجوزات</span>
-                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1.5 rounded-full animate-pulse">0</span>
+                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[8px] font-black px-1.5 rounded-full animate-pulse">0</span>
                 </button>
             </div>
             <div class="flex items-center gap-1.5">
@@ -287,7 +284,7 @@
             </div>
         </div>
 
-        <!-- Dynamic Nursing Team Section (Fully Manageable by Admin) -->
+        <!-- Dynamic Nursing Team Section -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -298,7 +295,7 @@
             <div id="staffMembersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
         </div>
 
-        <!-- Interactive Patients Reviews Section -->
+        <!-- Interactive Patients Reviews Section (With Admin Delete Feature) -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -308,7 +305,7 @@
                     + أضف تقييمك
                 </button>
             </div>
-            <div id="reviewsContainerGrid" class="grid grid-cols-2 gap-2 text-right"></div>
+            <div id="reviewsContainerGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-right"></div>
         </div>
 
         <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
@@ -1027,7 +1024,7 @@
             }
         }
 
-        // Reviews System
+        // Reviews System (With Admin Delete Feature)
         function openAddReviewModal() {
             closeDrawer();
             document.getElementById('addReviewModal').classList.remove('hidden');
@@ -1050,19 +1047,39 @@
             document.getElementById('reviewText').value = '';
         }
 
+        function deleteReviewItem(key) {
+            if (confirm('هل تريد حذف هذا التقييم؟')) {
+                reviewsRef.child(key).remove();
+                showToast('تم حذف التقييم');
+            }
+        }
+
         function renderReviews() {
             const container = document.getElementById('reviewsContainerGrid');
             container.innerHTML = '';
-            const listToRender = reviewsList.length > 0 ? reviewsList : [
-                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." },
-                { author: "أم مريم", stars: "★★★★★", text: "تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة." }
-            ];
-            listToRender.slice(0, 4).forEach(r => {
-                container.innerHTML += `
+            if (reviewsList.length === 0) {
+                container.innerHTML = `
                     <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1">
                         <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-bold text-cyan-300">أبو سيف</span>
+                            <span class="text-[9px] text-amber-400">★★★★★</span>
+                        </div>
+                        <p class="text-[9px] text-slate-400 leading-tight">كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم.</p>
+                    </div>
+                `;
+                return;
+            }
+            reviewsList.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 space-y-1 relative">
+                        <div class="flex items-center justify-between">
                             <span class="text-[10px] font-bold text-cyan-300">${r.author}</span>
-                            <span class="text-[9px] text-amber-400">${r.stars}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[9px] text-amber-400">${r.stars}</span>
+                                ${isAdmin ? `
+                                    <button onclick="deleteReviewItem('${r.key}')" class="text-rose-400 text-xs p-0.5" title="حذف">🗑️</button>
+                                ` : ''}
+                            </div>
                         </div>
                         <p class="text-[9px] text-slate-400 leading-tight">${r.text}</p>
                     </div>
@@ -1148,6 +1165,25 @@
                     </div>
                 `;
             });
+        }
+
+        // Reorder Services Items (Move Left/Right/Up/Down in Array)
+        function moveItemPosition(id, sec, direction) {
+            playUiClick();
+            const list = allClinicData[sec] || [];
+            const index = list.findIndex(x => String(x.id) === String(id));
+            if (index === -1) return;
+
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= list.length) return;
+
+            const temp = list[index];
+            list[index] = list[targetIndex];
+            list[targetIndex] = temp;
+
+            allClinicData[sec] = list;
+            dataRef.set(allClinicData);
+            showToast('تم تحديث ترتيب الخدمات 🔄');
         }
 
         function initClinicSystem() {
@@ -1352,9 +1388,15 @@
                                 <span>➕</span> <span>طلب للحجز</span>
                             </button>
                             ${isAdmin ? `
-                            <div class="flex items-center justify-between gap-1 pt-0.5">
-                                <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
-                                <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
+                            <div class="space-y-1 pt-0.5">
+                                <div class="flex items-center justify-between gap-1">
+                                    <button onclick="moveItemPosition('${item.id}', '${currentMainTab}', -1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 py-1 rounded-lg text-xs font-bold" title="تحريك للأمام">◀</button>
+                                    <button onclick="moveItemPosition('${item.id}', '${currentMainTab}', 1)" class="flex-1 bg-slate-800 hover:bg-slate-700 text-cyan-300 py-1 rounded-lg text-xs font-bold" title="تحريك للخلف">▶</button>
+                                </div>
+                                <div class="flex items-center justify-between gap-1">
+                                    <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
+                                    <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
+                                </div>
                             </div>
                             ` : ''}
                         </div>
@@ -1591,7 +1633,7 @@
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
-        // Secret Admin Trigger (5 Clicks on Logo)
+        // Secret Admin Trigger
         let emblemClicks = 0;
         let emblemTimer = null;
         document.getElementById('secretLogoTrigger').addEventListener('click', () => {
@@ -1648,6 +1690,7 @@
             updateAdminBadge();
             renderActiveTabContent();
             renderStaff();
+            renderReviews();
         }
 
         function updateAdminBadge() {
