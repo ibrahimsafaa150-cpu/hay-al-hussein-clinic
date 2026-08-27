@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="عيادة حي الحسين">
 
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%8A%D8%A9%22%2C%22short_name%22%3A%22%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%23030712%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%8A%D8%A9%22%2C%22short_name%22%3A%22%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%23030712%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -224,10 +224,10 @@
     <!-- Main Content Container -->
     <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
-        <!-- Interactive Swipeable Vital Banner -->
+        <!-- Interactive Swipeable Panoramic Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
-            <div id="vitalCardInner" class="space-y-1 text-right"></div>
-            <div class="flex justify-center gap-1.5 mt-2">
+            <div id="vitalCardInner" class="space-y-1 text-right transition-all duration-300"></div>
+            <div class="flex justify-center gap-1.5 mt-2" id="vitalDotsContainer">
                 <span id="vDot0" class="w-2.5 h-1 rounded-full bg-cyan-400 transition-all"></span>
                 <span id="vDot1" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
                 <span id="vDot2" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
@@ -281,21 +281,21 @@
                 </h4>
                 <span class="text-[9px] text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded-md font-bold">رجالي - نسائي</span>
             </div>
-            <div id="staffMembersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+            <div id="staffMembersGrid" class="grid grid-cols-1 gap-2"></div>
         </div>
 
-        <!-- Reviews Banner -->
-        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden">
+        <!-- Dynamic 10-Second Auto-Cycling & Swipeable Panoramic Reviews Banner -->
+        <div id="reviewsSwipeBox" class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden select-none cursor-grab">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
-                    <span class="text-amber-400">⭐</span> آراء وتقييمات المراجعين
+                    <span class="text-amber-400">★</span> آراء وتقييمات المراجعين
                 </h4>
-                <button onclick="openAddReviewModal()" class="bg-amber-950/80 border border-amber-500/50 text-amber-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg active:scale-95">
+                <button onclick="playUiAction(); openAddReviewModal()" class="bg-amber-950/80 border border-amber-500/50 text-amber-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg active:scale-95 transition">
                     + أضف تقييمك
                 </button>
             </div>
-            <div id="reviewsBannerContainer" class="min-h-[64px] flex flex-col justify-center"></div>
-            <div class="flex justify-center gap-1 mt-1" id="reviewsDotsContainer"></div>
+            <div id="reviewsBannerContainer" class="min-h-[64px] flex flex-col justify-center transition-all duration-300"></div>
+            <div class="flex justify-center gap-1.5 mt-1" id="reviewsDotsContainer"></div>
         </div>
 
         <div id="noResults" class="hidden text-center py-12 text-slate-400 dark-glass rounded-2xl">
@@ -604,7 +604,6 @@
 
     <!-- Script Logic -->
     <script>
-        // High-Performance PWA Cache Registration
         if ('serviceWorker' in navigator) {
             const swCode = `
                 const CACHE_NAME = 'hay-alhussein-cache-v2';
@@ -647,42 +646,209 @@
         let ordersList = [];
         let cart = [];
         let sortableInstance = null;
-        let currentReviewIdx = 0;
-        let reviewCycleTimer = null;
 
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية"],
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر", "تحاليل الإدرار والشوائب"]
         };
 
+        // Panoramic Swipeable Vital Tips
         const vitalTips = [
+            {
+                title: "🩸 إرشادات القياس الصحيح للسكر بالدم:",
+                points: [
+                    "• تجنب المجهود الشديد والمنبهات والتوتر قبل الفحص بساعتين",
+                    "• غسل اليدين وتجفيفهما تماماً لتفادي أي قراءة غير صحيحة",
+                    "• فحص السكر الصائم بعد صيام 8 إلى 10 ساعات عن الطعام"
+                ]
+            },
             {
                 title: "🫀 إرشادات القياس الصحيح لضغط الدم:",
                 points: [
                     "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات",
                     "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب",
+                    "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد",
                     "• المعدل الطبيعي المعتمد: 120/80"
-                ]
-            },
-            {
-                title: "🩸 إرشادات القياس الصحيح للسكر بالدم:",
-                points: [
-                    "• تجنب المجهود الشديد والمنبهات قبل الفحص بساعتين",
-                    "• غسل اليدين وتجفيفهما تماماً لتفادي أي قراءة غير صحيحة",
-                    "• فحص السكر الصائم بعد صيام 8 إلى 10 ساعات"
                 ]
             },
             {
                 title: "💧 إرشادات المحاليل الوريدية والكانيولا:",
                 points: [
                     "• تبديل الكانيولا كل 72 ساعة كحد أقصى لتفادي الالتهاب الوريدي",
-                    "• مراقبة أي تورم أو احمرار في مكان المغذي فوراً"
+                    "• مراقبة أي تورم أو احمرار في مكان المغذي فوراً",
+                    "• التأكد من فتح المغذي بالسرعة الموصى بها طبياً"
                 ]
             }
         ];
 
         let currentVitalIdx = 0;
         let vitalTimer = null;
+
+        function renderVitalCard(idx) {
+            const container = document.getElementById('vitalCardInner');
+            const dots = document.getElementById('vitalDotsContainer');
+            if (!container) return;
+            
+            container.style.opacity = '0';
+            setTimeout(() => {
+                const tip = vitalTips[idx];
+                container.innerHTML = `
+                    <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${tip.title}</h5>
+                    <div class="space-y-0.5 text-[10px] text-slate-300 font-semibold leading-relaxed">
+                        ${tip.points.map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                `;
+                if (dots) {
+                    dots.innerHTML = vitalTips.map((_, i) => `
+                        <span class="${i === idx ? 'w-2.5 bg-cyan-400' : 'w-1.5 bg-slate-700'} h-1 rounded-full transition-all"></span>
+                    `).join('');
+                }
+                container.style.opacity = '1';
+            }, 180);
+        }
+
+        function nextVitalTip() {
+            currentVitalIdx = (currentVitalIdx + 1) % vitalTips.length;
+            renderVitalCard(currentVitalIdx);
+        }
+
+        function prevVitalTip() {
+            currentVitalIdx = (currentVitalIdx - 1 + vitalTips.length) % vitalTips.length;
+            renderVitalCard(currentVitalIdx);
+        }
+
+        function restartVitalTimer() {
+            clearInterval(vitalTimer);
+            vitalTimer = setInterval(nextVitalTip, 10000);
+        }
+
+        // Swipe Touch Gesture for Vitals
+        let vTouchStartX = 0;
+        let vTouchEndX = 0;
+        const vSwipeBox = document.getElementById('vitalSwipeContainer');
+
+        vSwipeBox.addEventListener('touchstart', e => {
+            vTouchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        vSwipeBox.addEventListener('touchend', e => {
+            vTouchEndX = e.changedTouches[0].screenX;
+            const diff = vTouchEndX - vTouchStartX;
+            if (Math.abs(diff) > 40) {
+                if (diff < 0) { nextVitalTip(); } else { prevVitalTip(); }
+                restartVitalTimer();
+            }
+        }, { passive: true });
+
+        // Swipeable & Auto-Cycling Panoramic Reviews System (10 Seconds)
+        let currentReviewIdx = 0;
+        let reviewCycleTimer = null;
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsBannerContainer');
+            const dots = document.getElementById('reviewsDotsContainer');
+            if (!container) return;
+
+            const listToRender = reviewsList.length > 0 ? reviewsList : [
+                { author: "احمد قاسم كريم", stars: "★★★★★", text: "عاشت ايدكم سهل بالاستخدام تطبيق" },
+                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." }
+            ];
+
+            if (currentReviewIdx >= listToRender.length) currentReviewIdx = 0;
+            const r = listToRender[currentReviewIdx];
+
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="bg-[#0b1329] p-3 rounded-2xl border border-slate-800/80 space-y-1 relative">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black text-cyan-300">${r.author}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] text-amber-400 tracking-wider">${r.stars}</span>
+                                ${isAdmin && r.key ? `
+                                    <button onclick="deleteReviewItem('${r.key}')" class="text-rose-400 bg-rose-950/80 px-2 py-0.5 rounded-lg border border-rose-800 text-[10px] font-bold" title="حذف التقييم">
+                                        حذف 🗑️
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-300 font-semibold leading-relaxed">${r.text}</p>
+                    </div>
+                `;
+                container.style.opacity = '1';
+            }, 180);
+
+            if (dots) {
+                dots.innerHTML = listToRender.map((_, i) => `
+                    <span class="${i === currentReviewIdx ? 'w-2.5 bg-amber-400' : 'w-1.5 bg-slate-700'} h-1 rounded-full transition-all"></span>
+                `).join('');
+            }
+        }
+
+        function nextReview() {
+            const total = reviewsList.length > 0 ? reviewsList.length : 2;
+            currentReviewIdx = (currentReviewIdx + 1) % total;
+            renderReviews();
+        }
+
+        function prevReview() {
+            const total = reviewsList.length > 0 ? reviewsList.length : 2;
+            currentReviewIdx = (currentReviewIdx - 1 + total) % total;
+            renderReviews();
+        }
+
+        function restartReviewTimer() {
+            clearInterval(reviewCycleTimer);
+            reviewCycleTimer = setInterval(nextReview, 10000);
+        }
+
+        // Swipe Touch Gesture for Reviews Banner
+        let rTouchStartX = 0;
+        let rTouchEndX = 0;
+        const rSwipeBox = document.getElementById('reviewsSwipeBox');
+
+        rSwipeBox.addEventListener('touchstart', e => {
+            rTouchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        rSwipeBox.addEventListener('touchend', e => {
+            rTouchEndX = e.changedTouches[0].screenX;
+            const diff = rTouchEndX - rTouchStartX;
+            if (Math.abs(diff) > 40) {
+                if (diff < 0) { nextReview(); } else { prevReview(); }
+                restartReviewTimer();
+            }
+        }, { passive: true });
+
+        function openAddReviewModal() {
+            document.getElementById('addReviewModal').classList.remove('hidden');
+            document.getElementById('addReviewModal').classList.add('modal-active');
+        }
+
+        function closeAddReviewModal() {
+            document.getElementById('addReviewModal').classList.remove('modal-active');
+            document.getElementById('addReviewModal').classList.add('hidden');
+        }
+
+        function savePatientReview(e) {
+            e.preventDefault();
+            const author = document.getElementById('reviewAuthor').value.trim();
+            const stars = document.getElementById('reviewStars').value;
+            const text = document.getElementById('reviewText').value.trim();
+            
+            reviewsRef.push({ author, stars, text, date: Date.now() });
+            closeAddReviewModal();
+            showToast('شكراً لمشاركتك رأيك وتقييمك ⭐');
+            document.getElementById('reviewAuthor').value = '';
+            document.getElementById('reviewText').value = '';
+        }
+
+        function deleteReviewItem(key) {
+            if (confirm('هل تريد بالتأكيد حذف هذا التقييم؟')) {
+                reviewsRef.child(key).remove();
+                showToast('تم حذف التقييم بنجاح');
+            }
+        }
 
         function playUiAction() {
             try {
@@ -780,27 +946,6 @@
             document.getElementById('clinicalToolsModal').classList.add('hidden');
         }
 
-        function renderVitalCard(idx) {
-            const container = document.getElementById('vitalCardInner');
-            if (!container) return;
-            const tip = vitalTips[idx];
-            container.innerHTML = `
-                <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${tip.title}</h5>
-                <div class="space-y-0.5 text-[10px] text-slate-300 font-semibold leading-relaxed">
-                    ${tip.points.map(p => `<p>${p}</p>`).join('')}
-                </div>
-            `;
-            [0, 1, 2].forEach(i => {
-                const d = document.getElementById(`vDot${i}`);
-                if (d) d.className = i === idx ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
-            });
-        }
-
-        function nextVitalTip() {
-            currentVitalIdx = (currentVitalIdx + 1) % vitalTips.length;
-            renderVitalCard(currentVitalIdx);
-        }
-
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
@@ -832,8 +977,11 @@
                     staffList = val;
                 } else {
                     staffList = [
-                        { id: "stf_1", name: "الممرض الماجستير / أحمد محمد", role: "اختصاص طوارئ وعناية مركزة منزلية", avatar: "أ.م" },
-                        { id: "stf_2", name: "الممرضة الجامعية / هند طارق", role: "اختصاص زيارات نسائية، كانيولا وغيار جروح", avatar: "هـ.ط" }
+                        { id: "stf_0", name: "عبد رحمان", role: "اختصاص تمريض وعمليات صغرى", avatar: "عب" },
+                        { id: "stf_2", name: "الممرضة الجامعية / هند طارق", role: "اختصاص زيارات نسائية، كانيولا وغيار جروح", avatar: "هـ.ط" },
+                        { id: "stf_3", name: "الممرض الفني / محمد خالد", role: "سحب دم فوري وتخطيط قلب ECG منزلي", avatar: "م.خ" },
+                        { id: "stf_4", name: "الممرضة المعاونة / فاطمة علي", role: "إعطاء العلاجات ومتابعة مرضى السكري", avatar: "ف.ع" },
+                        { id: "stf_5", name: "الممرض الاختصاص / علي سالم", role: "تجهيز مغذيات، كبس جروح، وإسعافات أولية متقدمة", avatar: "ع.س" }
                     ];
                     staffRef.set(staffList);
                 }
@@ -842,8 +990,13 @@
 
             reviewsRef.on('value', (snapshot) => {
                 const val = snapshot.val();
-                reviewsList = val ? Object.keys(val).map(k => ({ key: k, ...val[k] })).reverse() : [];
+                if (val) {
+                    reviewsList = Object.keys(val).map(k => ({ key: k, ...val[k] })).reverse();
+                } else {
+                    reviewsList = [];
+                }
                 renderReviews();
+                restartReviewTimer();
             });
 
             ordersRef.on('value', (snapshot) => {
@@ -855,7 +1008,7 @@
             try { cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || []; } catch(e) { cart = []; }
 
             renderVitalCard(0);
-            vitalTimer = setInterval(nextVitalTip, 8000);
+            restartVitalTimer();
             updateAdminUI();
             updateCartBadge();
         }
@@ -942,7 +1095,7 @@
             let dataset = allClinicData[currentMainTab] || [];
             if (currentSubFilter !== 'الكل') dataset = dataset.filter(item => item.category === currentSubFilter);
 
-            sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${currentMainTab === 'services' ? 'الخدمات التمريضية' : 'المختبر والتحاليل'}`;
+            sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${currentMainTab === 'services' ? 'خدمات عيادة حي الحسين التمريضية' : 'قسم المختبر والتحاليل'}`;
             counterText.innerText = `${dataset.length} عنصر`;
 
             grid.innerHTML = '';
@@ -1274,42 +1427,23 @@
                 h.classList.add('hidden');
                 h.classList.remove('flex');
             }
+            renderReviews();
             renderActiveTabContent();
         }
 
         function renderStaff() {
             const grid = document.getElementById('staffMembersGrid');
             grid.innerHTML = staffList.map(s => `
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0">
-                            ${s.avatar || s.name.substring(0, 2)}
-                        </div>
-                        <div class="text-right min-w-0">
-                            <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
-                            <p class="text-[9px] text-slate-400 truncate">${s.role}</p>
-                        </div>
+                <div class="bg-[#0b1329] p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-3 shadow">
+                    <div class="text-right min-w-0 flex-1">
+                        <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
+                        <p class="text-[9.5px] text-slate-400 truncate mt-0.5">${s.role}</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0 shadow-inner">
+                        ${s.avatar || s.name.substring(0, 2)}
                     </div>
                 </div>
             `).join('');
-        }
-
-        function renderReviews() {
-            const container = document.getElementById('reviewsBannerContainer');
-            if (!container) return;
-            const list = reviewsList.length > 0 ? reviewsList : [
-                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." }
-            ];
-            const r = list[0];
-            container.innerHTML = `
-                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-1">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-black text-cyan-300">${r.author}</span>
-                        <span class="text-[10.5px] text-amber-400">${r.stars}</span>
-                    </div>
-                    <p class="text-[10px] text-slate-300 font-semibold">${r.text}</p>
-                </div>
-            `;
         }
 
         function openDrawer() {
@@ -1344,6 +1478,43 @@
                         <p class="text-[10px] text-slate-400">${o.locationType} - الإجمالي: ${o.totalPrice}</p>
                     </div>
                 `).join('');
+        }
+
+        function handleGlobalSearch(q) {
+            const query = q.trim().toLowerCase();
+            if (!query) { renderActiveTabContent(); return; }
+            if (currentMainTab === 'consult') return;
+
+            let dataset = allClinicData[currentMainTab] || [];
+            const filtered = dataset.filter(i => i.name.toLowerCase().includes(query) || i.usage.toLowerCase().includes(query));
+            
+            const grid = document.getElementById('mainItemsGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            noResults.classList.add('hidden');
+
+            filtered.forEach(item => {
+                grid.innerHTML += `
+                    <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
+                        <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
+                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 overflow-hidden">
+                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
+                            </div>
+                            <div class="space-y-1 text-right">
+                                <h4 class="text-xs font-black text-white leading-snug">${item.name}</h4>
+                                <p class="text-[9px] text-slate-400 font-semibold">${item.usage}</p>
+                                <span class="text-xs font-black text-cyan-400">${item.price}</span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
+                    </div>
+                `;
+            });
         }
 
         initClinicSystem();
