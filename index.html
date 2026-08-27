@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="عيادة حي الحسين">
 
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%8A%D8%A9%22%2C%22short_name%22%3A%22%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%23030712%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%8A%D8%A9%22%2C%22short_name%22%3A%22%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AD%D8%B3%D9%8A%D9%86%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23030712%22%2C%22theme_color%22%3A%22%23030712%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F2966%2F2966327.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -37,6 +37,11 @@
         .drag-handle:active { cursor: grabbing; }
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
+        @media print {
+            body * { visibility: hidden; }
+            #printableReceipt, #printableReceipt * { visibility: visible; }
+            #printableReceipt { position: absolute; left: 0; top: 0; width: 100%; color: #000 !important; background: #fff !important; }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen relative w-full pb-28 select-none">
@@ -51,39 +56,12 @@
         📞
     </a>
 
-    <!-- PWA Install Popup -->
-    <div id="pwaPromptModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-[#242938] border border-slate-600/40 rounded-[28px] p-6 w-full max-w-[325px] shadow-2xl relative text-right space-y-4">
-            <h3 class="text-base font-black text-white text-center">تثبيت التطبيق</h3>
-            
-            <div class="flex items-center justify-between gap-3 pt-1">
-                <div class="space-y-1 min-w-0 flex-1">
-                    <h4 class="text-sm font-black text-white truncate">عيادة حي الحسين</h4>
-                    <p class="text-[10px] text-slate-300 break-all leading-tight">hay-al-hussein-clinic.github.io</p>
-                </div>
-                <div class="w-14 h-14 rounded-2xl bg-[#1a2030] border border-slate-600/60 flex items-center justify-center text-slate-300 shrink-0 shadow-inner">
-                    <svg class="w-8 h-8 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        <path d="M12 7v6M9 10h6" stroke-linecap="round"/>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-4 border-t border-slate-700/60 text-xs font-bold">
-                <button onclick="dismissPwaPrompt()" class="text-slate-300 hover:text-white px-4 py-2 transition">إلغاء</button>
-                <button onclick="confirmPwaInstall()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-6 py-2 rounded-xl shadow font-black active:scale-95 transition">تثبيت</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Floating Install Strip -->
     <div id="stickyInstallStrip" class="fixed bottom-16 left-3 right-3 z-40 bg-gradient-to-r from-slate-900 via-cyan-950 to-slate-900 border border-cyan-500/40 rounded-2xl p-2.5 shadow-2xl hidden items-center justify-between max-w-xl mx-auto">
         <div class="flex items-center gap-2 min-w-0">
             <button onclick="closeInstallStrip()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
             <div class="w-8 h-8 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
-                </svg>
+                🩺
             </div>
             <div class="text-right truncate">
                 <h5 class="text-[11px] font-black text-white truncate">تطبيق عيادة حي الحسين</h5>
@@ -100,18 +78,17 @@
         <div class="flex items-center justify-between gap-1.5 w-full max-w-xl mx-auto">
             
             <div class="flex items-center gap-2 min-w-0 flex-1">
-                <button onclick="playUiClick(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
+                <button onclick="playUiAction(); openDrawer()" class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-white active:scale-90 transition shrink-0">
                     <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                <!-- Medical Shield Emblem Logo -->
                 <div id="secretLogoTrigger" class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-950 via-slate-950 to-slate-900 border border-cyan-500/50 shadow flex items-center justify-center shrink-0 cursor-pointer active:scale-95 transition p-0.5">
                     <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
                     </svg>
                 </div>
 
-                <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiClick(); switchMainTab('services')">
+                <div class="flex flex-col min-w-0 cursor-pointer justify-center" onclick="playUiAction(); switchMainTab('services')">
                     <div class="flex items-center gap-1">
                         <h1 class="text-[12.5px] sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap">
                             عيادة حي الحسين التمريضية
@@ -123,38 +100,52 @@
             </div>
 
             <div class="flex items-center gap-1.5 shrink-0">
-                <button onclick="playUiClick(); openCartModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
+                <button onclick="playUiAction(); openToolsModal()" class="w-8 h-8 rounded-xl bg-slate-900 border border-cyan-500/30 flex items-center justify-center text-xs text-cyan-300 active:scale-90 transition" title="أدوات سريرية">
+                    🧮
+                </button>
+                <button onclick="playUiAction(); openCartModal()" class="relative w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
                     <span class="text-xs">📋</span>
                     <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 text-[8.5px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Separate Admin Control Bar -->
-        <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 items-center justify-between gap-1.5 text-xs">
-            <div class="flex items-center gap-1.5">
-                <span class="text-[9.5px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-lg font-black">المشرف 🚀</span>
-                <button onclick="playUiClick(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
-                    <span>🔔 الحجوزات</span>
-                    <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
-                </button>
+        <!-- Admin Live Metric Bar -->
+        <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
+            <div class="flex items-center justify-between gap-1.5">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-[9.5px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-lg font-black">المشرف 🚀</span>
+                    <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950 border border-teal-500/60 text-teal-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
+                        <span>🔔 الحجوزات</span>
+                        <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button onclick="playUiAction(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">+ كادر</button>
+                    <button onclick="playUiAction(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg">+ خدمة</button>
+                    <button onclick="playUiAction(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">خروج 🔒</button>
+                </div>
             </div>
-            <div class="flex items-center gap-1">
-                <button onclick="playUiClick(); openAddStaffModal()" class="bg-indigo-950 border border-indigo-500 text-indigo-200 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
-                    <span>+ كادر</span>
-                </button>
-                <button onclick="playUiClick(); openAddModal()" class="bg-cyan-900 border border-cyan-400 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
-                    <span>+ خدمة</span>
-                </button>
-                <button onclick="playUiClick(); logoutAdmin()" class="bg-rose-950 border border-rose-800 text-rose-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg">
-                    <span>خروج 🔒</span>
-                </button>
+            <!-- Quick Stats Strip -->
+            <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-2 rounded-xl border border-slate-800 text-center">
+                <div>
+                    <span class="text-[8px] text-slate-400 block">إجمالي الحجوزات</span>
+                    <span id="statTotalOrders" class="text-[10.5px] font-black text-cyan-400">0</span>
+                </div>
+                <div>
+                    <span class="text-[8px] text-slate-400 block">حالات قيد التنفيذ</span>
+                    <span id="statPendingOrders" class="text-[10.5px] font-black text-amber-400">0</span>
+                </div>
+                <div>
+                    <span class="text-[8px] text-slate-400 block">الإيراد التقديري</span>
+                    <span id="statRevenue" class="text-[10.5px] font-black text-emerald-400">0 د.ع</span>
+                </div>
             </div>
         </div>
 
         <div class="mt-2 relative w-full max-w-xl mx-auto flex items-center">
             <span class="absolute right-3 top-2.5 text-slate-500 text-xs pointer-events-none">🔍</span>
-            <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة تمريضية أو تحليل مختبري..." 
+            <input type="search" id="headerSearch" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن خدمة تمريضية، تحليل مختبري، أو فحص..." 
                    class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-1.5 border border-slate-800 focus:outline-none focus:border-cyan-400">
         </div>
     </header>
@@ -165,46 +156,42 @@
         <div class="space-y-3.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/>
-                        </svg>
-                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black">🩺</div>
                     <div>
                         <h3 class="text-xs font-black text-white">عيادة حي الحسين التمريضية</h3>
                         <span class="text-[9px] text-cyan-400">المركزية الخافرة 24 ساعة</span>
                     </div>
                 </div>
-                <button onclick="playUiClick(); closeDrawer()" class="text-slate-400 hover:text-white font-bold text-sm p-1">✕</button>
+                <button onclick="playUiAction(); closeDrawer()" class="text-slate-400 hover:text-white font-bold text-sm p-1">✕</button>
             </div>
 
             <div class="space-y-1 text-xs">
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('services')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-slate-900/80 text-slate-200 text-right">
                     <span>🩺</span> <span class="font-bold">الخدمات التمريضية والمنزلية</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('lab')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>🧪</span> <span class="font-bold">المختبر وسحب العينات</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openToolsModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-teal-300 text-right">
+                    <span>🧮</span> <span class="font-bold">حاسبة التنقيط وسجل العلامات الحيوية</span>
+                </button>
+                <button onclick="playUiAction(); closeDrawer(); switchMainTab('consult')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>👨‍⚕️</span> <span class="font-bold">طلب استشارة طبية سريعة</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openTrackerModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-cyan-300 text-right">
                     <span>🚗</span> <span class="font-bold">تتبع حالة طلبي وحجز الكادر</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-amber-300 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-amber-300 text-right">
                     <span>⭐</span> <span class="font-bold">إضافة تقييم ورأي المراجع</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>🔒</span> <span class="font-bold">سياسة الخصوصية والشروط</span>
                 </button>
-                <button onclick="playUiClick(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
+                <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
-                </button>
-                <button id="drawerInstallBtn" onclick="showPwaPromptModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-bold text-right">
-                    <span>📲</span> <span>تثبيت التطبيق على الشاشة</span>
                 </button>
             </div>
         </div>
@@ -217,13 +204,13 @@
     <!-- Main Navigation Top Pills -->
     <nav class="bg-slate-950 border-b border-slate-800/80 py-2 px-3">
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="mainSectionPills">
-            <button onclick="playUiClick(); switchMainTab('services')" id="pill-services" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow">
+            <button onclick="playUiAction(); switchMainTab('services')" id="pill-services" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow">
                 <span>🩺</span> <span>الخدمات التمريضية</span>
             </button>
-            <button onclick="playUiClick(); switchMainTab('lab')" id="pill-lab" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
+            <button onclick="playUiAction(); switchMainTab('lab')" id="pill-lab" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
                 <span>🧪</span> <span>المختبر والتحاليل</span>
             </button>
-            <button onclick="playUiClick(); switchMainTab('consult')" id="pill-consult" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
+            <button onclick="playUiAction(); switchMainTab('consult')" id="pill-consult" class="px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition">
                 <span>👨‍⚕️</span> <span>الاستشارة الطبية</span>
             </button>
         </div>
@@ -243,6 +230,7 @@
             <div class="flex justify-center gap-1.5 mt-2">
                 <span id="vDot0" class="w-2.5 h-1 rounded-full bg-cyan-400 transition-all"></span>
                 <span id="vDot1" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
+                <span id="vDot2" class="w-1.5 h-1 rounded-full bg-slate-700 transition-all"></span>
             </div>
         </div>
 
@@ -268,17 +256,15 @@
             <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
         </div>
 
-        <!-- Items Grid (Sortable Enabled for Admin) -->
+        <!-- Items Grid -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
         <!-- Consultation Hub View -->
         <div id="consultationView" class="hidden space-y-3">
             <div class="dark-glass rounded-2xl p-5 border border-cyan-500/30 text-center space-y-3 shadow-lg">
-                <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl">
-                    👨‍⚕️
-                </div>
+                <div class="w-16 h-16 mx-auto rounded-full bg-cyan-950 border border-cyan-400 flex items-center justify-center text-3xl">👨‍⚕️</div>
                 <div>
-                    <h4 class="text-sm font-black text-white">مركز الاستشارات الطبية السريعة</h4>
+                    <h4 class="text-sm font-black text-white">مركز الاستشارات الطبية والتمريضية</h4>
                     <p class="text-xs text-slate-300 mt-1">تواصل مع كادر العيادة للحصول على توجيه لحالتك الصحية فوراً</p>
                 </div>
                 <button onclick="startClinicCallExperience()" class="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-2 active:scale-95 transition">
@@ -298,7 +284,7 @@
             <div id="staffMembersGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
         </div>
 
-        <!-- Dynamic 10-Second Auto-Cycling Reviews Banner -->
+        <!-- Reviews Banner -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5 relative overflow-hidden">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
@@ -320,18 +306,70 @@
 
     <!-- Bottom Navigation Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 py-2.5 px-8 flex justify-around items-center">
-        <button onclick="playUiClick(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
+        <button onclick="playUiAction(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
             <span>التمريض</span>
         </button>
-        <button onclick="playUiClick(); switchMainTab('lab')" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+        <button onclick="playUiAction(); switchMainTab('lab')" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🧪</span>
             <span>المختبر</span>
         </button>
-        <button onclick="playUiClick(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
+        <button onclick="playUiAction(); openToolsModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition">
+            <span class="text-lg">🧮</span>
+            <span>الأدوات</span>
+        </button>
+        <button onclick="playUiAction(); openCartModal()" class="flex flex-col items-center text-slate-400 hover:text-white text-[10px] font-bold active:scale-95 transition relative">
             <span class="text-lg">📋</span>
             <span>الحجز</span>
         </button>
+    </div>
+
+    <!-- Clinical Suite & Tools Modal -->
+    <div id="clinicalToolsModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3.5 text-right">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">🧮</span> الأدوات السريرية وسجل الفحوصات
+                </h3>
+                <button onclick="playUiAction(); closeToolsModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            </div>
+
+            <!-- IV Drip Calculator -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-cyan-500/30 space-y-2">
+                <h4 class="text-xs font-black text-cyan-300">💧 حاسبة سرعة تقطير المغذي (IV Drip Rate)</h4>
+                <div class="grid grid-cols-2 gap-2 text-right">
+                    <div>
+                        <label class="block text-[9.5px] text-slate-300">كمية المحلول (ملليلتر ml):</label>
+                        <input type="number" id="ivVolume" value="500" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[9.5px] text-slate-300">المدة المطلوبة (بالساعات):</label>
+                        <input type="number" id="ivHours" value="4" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[9.5px] text-slate-300">نوع جهاز الإعطاء (Drop Factor):</label>
+                    <select id="ivDropFactor" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                        <option value="20">جهاز عادي للبالغين (Standard: 20 gtt/ml)</option>
+                        <option value="60">جهاز أطفال دقيق (Microdrip: 60 gtt/ml)</option>
+                        <option value="15">جهاز نقل الدم (Blood Set: 15 gtt/ml)</option>
+                    </select>
+                </div>
+                <button onclick="calculateIvDrip()" class="w-full bg-cyan-700 text-white text-xs font-bold py-1.5 rounded-lg active:scale-95">احسب معدل التنقيط ⚡</button>
+                <div id="ivResult" class="hidden text-center text-xs font-black text-emerald-400 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30"></div>
+            </div>
+
+            <!-- Patient Vitals Tracker Log -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+                <h4 class="text-xs font-black text-amber-300">📈 سجل قراءات الضغط والسكر (محفوظ محلياً)</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="logBpInput" placeholder="الضغط (مثال 120/80)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                    <input type="number" id="logSugarInput" placeholder="السكر (مثال 110 mg/dL)" class="bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-xs text-white">
+                </div>
+                <button onclick="saveVitalEntry()" class="w-full bg-amber-700 text-white text-xs font-bold py-1.5 rounded-lg active:scale-95">+ تسجيل القراءة الآن</button>
+                <div id="vitalsLogHistory" class="space-y-1 max-h-28 overflow-y-auto no-scrollbar text-[10px]"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Live Order Tracker Modal -->
@@ -341,7 +379,7 @@
                 <h3 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-cyan-400">🚗</span> تتبع حالة طلبك وموعد الكادر
                 </h3>
-                <button onclick="playUiClick(); closeTrackerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+                <button onclick="playUiAction(); closeTrackerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
             
             <div class="flex gap-2">
@@ -353,101 +391,12 @@
         </div>
     </div>
 
-    <!-- Add Review Modal -->
-    <div id="addReviewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative space-y-3 text-right">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>⭐</span> تقييم خدمة العيادة</h3>
-                <button onclick="playUiClick(); closeAddReviewModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
-            </div>
-            <form onsubmit="savePatientReview(event)" class="space-y-2">
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">اسمك الكريم:</label>
-                    <input type="text" id="reviewAuthor" required placeholder="مثال: أحمد العراقي" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">التقييم:</label>
-                    <select id="reviewStars" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 focus:outline-none">
-                        <option value="★★★★★">★★★★★ ممتاز جداً</option>
-                        <option value="★★★★☆">★★★★☆ جيد جداً</option>
-                        <option value="★★★☆☆">★★★☆☆ جيد</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">رأيك وتجربتك مع الكادر:</label>
-                    <textarea id="reviewText" rows="2" required placeholder="اكتب تجربتك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
-                </div>
-                <div class="pt-1">
-                    <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-black py-2 rounded-xl text-xs active:scale-95 shadow">نشر التقييم ⭐</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add/Edit Staff Modal -->
-    <div id="staffEditModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 id="staffModalTitle" class="text-xs font-black text-white">إضافة عضو كادر تمريضي</h3>
-                <button onclick="playUiClick(); closeStaffModal()" class="text-slate-400 font-bold p-1">✕</button>
-            </div>
-            <form onsubmit="saveStaffMember(event)" class="space-y-2 text-right">
-                <input type="hidden" id="staffEditId">
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">اسم الممرض / اللقب:</label>
-                    <input type="text" id="staffName" required placeholder="مثال: الممرض الجامعي / علي سالم" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">التخصص والمهام:</label>
-                    <input type="text" id="staffRole" required placeholder="مثال: اختصاص زيارات منزلية، كانيولا وتخطيط قلب" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">رمز الحروف أو رابط الصورة:</label>
-                    <input type="text" id="staffAvatar" placeholder="مثال: ع.س أو رابط صورة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
-                </div>
-                <div class="pt-1 flex gap-2">
-                    <button type="button" onclick="closeStaffModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs">إلغاء</button>
-                    <button type="submit" class="flex-1 bg-cyan-600 text-white font-bold py-1.5 rounded-xl text-xs">حفظ</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Detail View Modal -->
-    <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <span id="detailBadge" class="bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold px-2 py-0.5 rounded-md">تفاصيل الخدمة</span>
-                <button onclick="playUiClick(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
-            </div>
-
-            <div class="w-full h-52 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden relative">
-                <img id="detailImage" src="" class="object-cover w-full h-full" loading="lazy">
-            </div>
-
-            <div class="space-y-1.5 text-right">
-                <h3 id="detailName" class="text-sm font-black text-white"></h3>
-                <p id="detailUsage" class="text-xs text-slate-300 font-semibold leading-relaxed"></p>
-                <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
-                    <span class="text-xs text-slate-400 font-bold">الأجرة / التكلفة:</span>
-                    <span id="detailPrice" class="text-sm font-black text-cyan-400"></span>
-                </div>
-            </div>
-
-            <div class="pt-2 flex gap-2">
-                <button id="detailAddBtn" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg active:scale-95 transition">
-                    طلب الخدمة فوراً ➕
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Booking / Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[88vh] flex flex-col">
             <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1"><span>📋</span> قائمة الخدمات والتحاليل المطلوبة</h3>
-                <button onclick="playUiClick(); closeCartModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+                <button onclick="playUiAction(); closeCartModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
             <div id="cartItemsList" class="overflow-y-auto space-y-2 flex-grow my-2 pr-0.5 no-scrollbar"></div>
@@ -457,7 +406,7 @@
                     <span>المجموع التقديري:</span>
                     <span id="cartTotalPrice" class="text-cyan-400 font-black text-sm">0 د.ع</span>
                 </div>
-                <button onclick="playUiClick(); openCustomerDetailsModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition">
+                <button onclick="playUiAction(); openCustomerDetailsModal()" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg flex items-center justify-center gap-1.5 active:scale-95 transition">
                     <span>📝</span> <span>تثبيت الموعد وتأكيد الطلب</span>
                 </button>
             </div>
@@ -469,7 +418,7 @@
         <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-2.5 border-b border-slate-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-1"><span>🩺</span> بيانات تأكيد الحجز الطبي</h3>
-                <button onclick="playUiClick(); closeCustomerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+                <button onclick="playUiAction(); closeCustomerModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
             <form onsubmit="processBookingSubmission(event)" class="space-y-2.5 text-right">
@@ -484,11 +433,11 @@
                         <input type="tel" id="custPhone" required placeholder="077XXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">نوع الكادر المفضل:</label>
-                        <select id="staffPref" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                            <option value="كادر رجالي">👨‍⚕️ كادر رجالي</option>
-                            <option value="كادر نسائي">👩‍⚕️ كادر نسائي</option>
-                            <option value="لا يوجد تفضيل">⚡ الأسرع متاحاً</option>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">درجة الإلحاح (Triage):</label>
+                        <select id="urgencyLevel" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white font-bold">
+                            <option value="عاجل وطارئ 🚨" class="text-rose-400">🚨 عاجل وطارئ جداً</option>
+                            <option value="خلال ساعة ⚡" selected class="text-amber-400">⚡ خلال ساعة</option>
+                            <option value="موعد اعتيادي 📅" class="text-emerald-400">📅 موعد اعتيادي</option>
                         </select>
                     </div>
                 </div>
@@ -502,12 +451,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">وقت الزيارة المفضل:</label>
-                        <select id="timeSlotPref" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                            <option value="فوري وطارئ الآن">⚡ فوري وطارئ الآن</option>
-                            <option value="صباحاً (9:00 ص - 1:00 ظ)">☀️ صباحاً (9 - 1)</option>
-                            <option value="عصراً (4:00 ع - 8:00 م)">⛅ عصراً (4 - 8)</option>
-                            <option value="ليلاً (8:00 م - 12:00 ل)">🌙 ليلاً (8 - 12)</option>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">نوع الكادر المفضل:</label>
+                        <select id="staffPref" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            <option value="كادر رجالي">👨‍⚕️ كادر رجالي</option>
+                            <option value="كادر نسائي">👩‍⚕️ كادر نسائي</option>
+                            <option value="لا يوجد تفضيل">⚡ الأسرع متاحاً</option>
                         </select>
                     </div>
                 </div>
@@ -515,6 +463,11 @@
                 <div>
                     <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">العنوان بالتفصيل / أقرب نقطة دالة:</label>
                     <input type="text" id="custAddress" required placeholder="حي الحسين - قرب..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">ملاحظات أو رابط صورة الروشتة/الجرح (اختياري):</label>
+                    <input type="text" id="custNotes" placeholder="اكتب ملاحظاتك أو رابط صورة الوصفة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                 </div>
 
                 <!-- GPS Location Sharing Button -->
@@ -550,69 +503,60 @@
         </div>
     </div>
 
-    <!-- How to Use Modal -->
-    <div id="howToUseModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white">📖 طريقة الاستخدام والحجز</h3>
-                <button onclick="playUiClick(); closeStaticModal('howToUseModal')" class="text-slate-400 font-bold p-1">✕</button>
+    <!-- Admin Orders Queue Modal -->
+    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
+            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">🔔</span> سجل الحجوزات وإدارة الكوادر
+                </h3>
+                <button onclick="playUiAction(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
-            <div class="space-y-2 text-[10.5px] text-slate-300">
-                <p>1️⃣ اختر الخدمة أو التحليل المطلوب واضغط <b>طلب للحجز</b></p>
-                <p>2️⃣ افتح أيقونة <b>الحجز 📋</b> لتأكيد العناصر والمجموع</p>
-                <p>3️⃣ اكتب اسمك وعنوانك ونوع الكادر المفضل (رجالي/نسائي)</p>
-                <p>4️⃣ اضغط إرسال وسيتم تحويلك فوراً للواتساب لتثبيت الموعد وانطلاق الكادر إليك</p>
-            </div>
+            <div class="flex-grow overflow-y-auto space-y-2 pr-0.5 no-scrollbar my-2" id="ordersQueueList"></div>
         </div>
     </div>
 
-    <!-- Privacy Policy Modal -->
-    <div id="privacyModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white">🔒 الخصوصية والشروط الطبية</h3>
-                <button onclick="playUiClick(); closeStaticModal('privacyModal')" class="text-slate-400 font-bold p-1">✕</button>
-            </div>
-            <div class="space-y-2 text-[10.5px] text-slate-300">
-                <p>• نلتزم بسرية تامة لجميع بيانات المرضى وسجلات الفحوصات الطبية</p>
-                <p>• كافة الأدوات المستخدمة معقمة وتُفتح أمام المريض لمرة واحدة فقط</p>
-                <p>• الحالات الطارئة جداً يتم التعامل معها بأقصى سرعة وأولوية قصوى</p>
-            </div>
+    <!-- Thermal Print Receipt Template -->
+    <div id="printableReceipt" class="hidden p-6 text-black bg-white max-w-sm mx-auto text-right font-sans">
+        <div class="text-center border-b pb-2 mb-2">
+            <h2 class="text-base font-black">عيادة حي الحسين التمريضية</h2>
+            <p class="text-xs">خدمات طبية وتمريضية متكاملة 24 ساعة</p>
+            <p class="text-[10px]">هاتف: 07726053522</p>
+        </div>
+        <div id="receiptContent" class="text-xs space-y-1"></div>
+        <div class="border-t pt-2 mt-3 text-center text-[10px]">
+            <p>نتمنى لكم دوام الصحة والعافية</p>
         </div>
     </div>
 
-    <!-- Location Modal -->
-    <div id="locationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right">
+    <!-- Add Review Modal -->
+    <div id="addReviewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-xs shadow-2xl relative space-y-3 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white">📍 موقع العيادة وأوقات العمل</h3>
-                <button onclick="playUiClick(); closeStaticModal('locationModal')" class="text-slate-400 font-bold p-1">✕</button>
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>⭐</span> تقييم خدمة العيادة</h3>
+                <button onclick="playUiAction(); closeAddReviewModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
-            <p class="text-xs text-slate-300 font-semibold">بغداد - حي الحسين - الشارع العام (العيادة المركزية الخافرة - خدمة 24 ساعة)</p>
-            <p class="text-[11px] text-cyan-400 font-bold">🩺 عيادة حي الحسين التمريضية: طوارئ 24 ساعة طول اليوم</p>
-            <div class="pt-1">
-                <a href="https://maps.google.com" target="_blank" class="w-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5">
-                    <span>🗺️</span> <span>عرض الموقع على الخريطة</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Direct Call Simulation Modal -->
-    <div id="callAudioModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-4 relative border border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.3)]">
-            <div class="w-16 h-16 rounded-full bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center text-3xl mx-auto">
-                📞
-            </div>
-            <div>
-                <h4 class="text-xs font-black text-white">الاتصال المباشر بالعيادة</h4>
-                <p id="callAudioStatus" class="text-[10px] text-cyan-300 mt-1">كادر عيادة حي الحسين متاح على مدار 24 ساعة</p>
-            </div>
-
-            <div class="flex gap-2 pt-1">
-                <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
-                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
-            </div>
+            <form onsubmit="savePatientReview(event)" class="space-y-2">
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">اسمك الكريم:</label>
+                    <input type="text" id="reviewAuthor" required placeholder="مثال: أحمد العراقي" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">التقييم:</label>
+                    <select id="reviewStars" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-amber-400 focus:outline-none">
+                        <option value="★★★★★">★★★★★ ممتاز جداً</option>
+                        <option value="★★★★☆">★★★★☆ جيد جداً</option>
+                        <option value="★★★☆☆">★★★☆☆ جيد</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">رأيك وتجربتك مع الكادر:</label>
+                    <textarea id="reviewText" rows="2" required placeholder="اكتب تجربتك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
+                </div>
+                <div class="pt-1">
+                    <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-black py-2 rounded-xl text-xs active:scale-95 shadow">نشر التقييم ⭐</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -623,83 +567,58 @@
             <h3 class="text-xs font-black text-white">لوحة تحكم المشرف الطبي</h3>
             <input type="password" id="adminPinInput" placeholder="أدخل رمز المرور" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center text-xs text-white focus:outline-none focus:border-cyan-400">
             <div class="flex gap-2 pt-1">
-                <button onclick="playUiClick(); closePinModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs font-semibold">إلغاء</button>
-                <button onclick="playUiClick(); verifyAdminPin()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-1.5 rounded-xl text-xs font-bold shadow">دخول</button>
+                <button onclick="playUiAction(); closePinModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs font-semibold">إلغاء</button>
+                <button onclick="playUiAction(); verifyAdminPin()" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-1.5 rounded-xl text-xs font-bold shadow">دخول</button>
             </div>
         </div>
     </div>
 
-    <!-- Admin Orders Queue Modal -->
-    <div id="ordersQueueModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-lg shadow-2xl relative max-h-[88vh] flex flex-col">
-            <div class="flex justify-between items-center mb-2 border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-1.5">
-                    <span class="text-cyan-400">🔔</span> سجل الحجوزات والعينات
-                </h3>
-                <button onclick="playUiClick(); closeOrdersQueueModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+    <!-- Detail View Modal -->
+    <div id="detailViewModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <span id="detailBadge" class="bg-cyan-950 text-cyan-300 border border-cyan-500/30 text-[9px] font-bold px-2 py-0.5 rounded-md">تفاصيل الخدمة</span>
+                <button onclick="playUiAction(); closeDetailModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
-            <div class="flex-grow overflow-y-auto space-y-2 pr-0.5 no-scrollbar my-2" id="ordersQueueList"></div>
-        </div>
-    </div>
 
-    <!-- Admin Add/Edit Item Modal -->
-    <div id="adminItemModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden items-center justify-center p-3">
-        <div class="dark-glass rounded-2xl p-4 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-2">
-                <h3 id="adminModalTitle" class="text-xs font-black text-white flex items-center gap-1"><span>✨</span> إضافة عنصر طبي جديد</h3>
-                <button onclick="playUiClick(); closeAdminItemModal()" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
+            <div class="w-full h-48 rounded-xl bg-slate-950 border border-slate-800 overflow-hidden relative">
+                <img id="detailImage" src="" class="object-cover w-full h-full" loading="lazy">
             </div>
-            
-            <form id="itemForm" onsubmit="saveItemRecord(event)" class="space-y-2.5">
-                <input type="hidden" id="editItemId">
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">القسم الرئيسي:</label>
-                    <select id="itemSectionType" onchange="updateCategoryDropdownOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                        <option value="services">🩺 خدمات تمريضية</option>
-                        <option value="lab">🧪 تحاليل مختبرية</option>
-                    </select>
-                </div>
 
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">التصنيف الفرعي:</label>
-                    <select id="itemSubCategory" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"></select>
+            <div class="space-y-1.5 text-right">
+                <h3 id="detailName" class="text-sm font-black text-white"></h3>
+                <p id="detailUsage" class="text-xs text-slate-300 font-semibold leading-relaxed"></p>
+                <div class="pt-2 border-t border-slate-800 flex justify-between items-center">
+                    <span class="text-xs text-slate-400 font-bold">الأجرة / التكلفة:</span>
+                    <span id="detailPrice" class="text-sm font-black text-cyan-400"></span>
                 </div>
+            </div>
 
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الاسم أو الإجراء الطبي:</label>
-                    <input type="text" id="itemName" required placeholder="مثال: تحليل صورة الدم الكاملة CBC" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">الوصف / شروط الفحص والتجهيز:</label>
-                    <input type="text" id="itemUsage" required placeholder="مثال: سحب دم وريدي - النتيجة خلال ساعتين" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">السعر / التكلفة:</label>
-                        <input type="text" id="itemPrice" required placeholder="8,000 د.ع" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-300 mb-0.5">رابط الصورة (1080p):</label>
-                        <input type="text" id="itemImage" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-                    <button type="button" onclick="playUiClick(); closeAdminItemModal()" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg text-xs">إلغاء</button>
-                    <button type="submit" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow">حفظ العنصر</button>
-                </div>
-            </form>
+            <div class="pt-2 flex gap-2">
+                <button id="detailAddBtn" class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-black py-2.5 rounded-xl text-xs shadow-lg active:scale-95 transition">
+                    طلب الخدمة فوراً ➕
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Script Logic -->
     <script>
+        // High-Performance PWA Cache Registration
         if ('serviceWorker' in navigator) {
-            const swCode = `self.addEventListener('fetch', function(e){});`;
+            const swCode = `
+                const CACHE_NAME = 'hay-alhussein-cache-v2';
+                self.addEventListener('install', e => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        fetch(e.request).catch(() => caches.match(e.request))
+                    );
+                });
+            `;
             const blob = new Blob([swCode], {type: 'application/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(function(){});
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{});
         }
 
         const firebaseConfig = {
@@ -728,7 +647,6 @@
         let ordersList = [];
         let cart = [];
         let sortableInstance = null;
-
         let currentReviewIdx = 0;
         let reviewCycleTimer = null;
 
@@ -743,16 +661,22 @@
                 points: [
                     "• الاسترخاء التام لمدة 5 دقائق وتجنب التدخين والمنبهات",
                     "• الجلوس بظهر مسنود ووضع الذراع مستندة بمستوى القلب",
-                    "• وضع الكفة فوق مفصل الكوع بـ 2 سم مباشرة على الجلد",
                     "• المعدل الطبيعي المعتمد: 120/80"
                 ]
             },
             {
                 title: "🩸 إرشادات القياس الصحيح للسكر بالدم:",
                 points: [
-                    "• تجنب المجهود الشديد والمنبهات والتوتر قبل الفحص بساعتين",
+                    "• تجنب المجهود الشديد والمنبهات قبل الفحص بساعتين",
                     "• غسل اليدين وتجفيفهما تماماً لتفادي أي قراءة غير صحيحة",
-                    "• فحص السكر الصائم بعد صيام 8 إلى 10 ساعات عن الطعام"
+                    "• فحص السكر الصائم بعد صيام 8 إلى 10 ساعات"
+                ]
+            },
+            {
+                title: "💧 إرشادات المحاليل الوريدية والكانيولا:",
+                points: [
+                    "• تبديل الكانيولا كل 72 ساعة كحد أقصى لتفادي الالتهاب الوريدي",
+                    "• مراقبة أي تورم أو احمرار في مكان المغذي فوراً"
                 ]
             }
         ];
@@ -760,190 +684,9 @@
         let currentVitalIdx = 0;
         let vitalTimer = null;
 
-        function renderVitalCard(idx) {
-            const container = document.getElementById('vitalCardInner');
-            if (!container) return;
-            container.style.opacity = '0';
-            container.style.transform = 'scale(0.97)';
-            
-            setTimeout(() => {
-                const tip = vitalTips[idx];
-                container.innerHTML = `
-                    <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${tip.title}</h5>
-                    <div class="space-y-0.5 text-[10px] text-slate-300 font-semibold leading-relaxed">
-                        ${tip.points.map(p => `<p>${p}</p>`).join('')}
-                    </div>
-                `;
-                document.getElementById('vDot0').className = idx === 0 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
-                document.getElementById('vDot1').className = idx === 1 ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
-                
-                container.style.opacity = '1';
-                container.style.transform = 'scale(1)';
-            }, 250);
-        }
-
-        function nextVitalTip() {
-            currentVitalIdx = (currentVitalIdx + 1) % vitalTips.length;
-            renderVitalCard(currentVitalIdx);
-        }
-
-        function prevVitalTip() {
-            currentVitalIdx = (currentVitalIdx - 1 + vitalTips.length) % vitalTips.length;
-            renderVitalCard(currentVitalIdx);
-        }
-
-        function restartVitalTimer() {
-            clearInterval(vitalTimer);
-            vitalTimer = setInterval(nextVitalTip, 10000);
-        }
-
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const swipeBox = document.getElementById('vitalSwipeContainer');
-
-        swipeBox.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        swipeBox.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipeGesture();
-        }, { passive: true });
-
-        function handleSwipeGesture() {
-            const diff = touchEndX - touchStartX;
-            if (Math.abs(diff) > 40) {
-                if (diff < 0) { nextVitalTip(); } else { prevVitalTip(); }
-                restartVitalTimer();
-            }
-        }
-
-        // Reviews Carousel System (10 Seconds Auto-Cycle)
-        function renderReviews() {
-            const container = document.getElementById('reviewsBannerContainer');
-            const dots = document.getElementById('reviewsDotsContainer');
-            if (!container) return;
-
-            const listToRender = reviewsList.length > 0 ? reviewsList : [
-                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." },
-                { author: "أم مريم", stars: "★★★★★", text: "تعقيم ممتاز جداً وخياطة جرح مرتبة ونظيفة، شكراً لكادر العيادة." }
-            ];
-
-            if (currentReviewIdx >= listToRender.length) currentReviewIdx = 0;
-            const r = listToRender[currentReviewIdx];
-
-            container.style.opacity = '0';
-            setTimeout(() => {
-                container.innerHTML = `
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-1 relative">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-black text-cyan-300">${r.author}</span>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[10.5px] text-amber-400">${r.stars}</span>
-                                ${isAdmin && r.key ? `<button onclick="deleteReviewItem('${r.key}')" class="text-rose-400 text-xs p-0.5" title="حذف">🗑️</button>` : ''}
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-slate-300 font-semibold leading-relaxed">${r.text}</p>
-                    </div>
-                `;
-                container.style.opacity = '1';
-            }, 200);
-
-            if (dots) {
-                dots.innerHTML = listToRender.map((_, i) => `
-                    <span class="${i === currentReviewIdx ? 'w-2.5 bg-amber-400' : 'w-1.5 bg-slate-700'} h-1 rounded-full transition-all"></span>
-                `).join('');
-            }
-        }
-
-        function restartReviewTimer() {
-            clearInterval(reviewCycleTimer);
-            reviewCycleTimer = setInterval(() => {
-                const total = reviewsList.length > 0 ? reviewsList.length : 2;
-                currentReviewIdx = (currentReviewIdx + 1) % total;
-                renderReviews();
-            }, 10000);
-        }
-
-        let deferredPrompt = null;
-        const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || localStorage.getItem('clinic_pwa_installed') === 'true';
-
-        function checkInstallVisibility() {
-            const strip = document.getElementById('stickyInstallStrip');
-            const drawerBtn = document.getElementById('drawerInstallBtn');
-            if (isAppInstalled) {
-                if (strip) strip.classList.add('hidden');
-                if (drawerBtn) drawerBtn.classList.add('hidden');
-            } else {
-                if (strip && !localStorage.getItem('clinic_install_strip_dismissed')) {
-                    strip.classList.remove('hidden');
-                    strip.classList.add('flex');
-                }
-            }
-        }
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            if (!isAppInstalled && !localStorage.getItem('pwa_prompt_dismissed_h')) {
-                setTimeout(() => {
-                    showPwaPromptModal();
-                }, 1800);
-            }
-        });
-
-        window.addEventListener('appinstalled', () => {
-            localStorage.setItem('clinic_pwa_installed', 'true');
-            closeInstallStrip();
-            const drawerBtn = document.getElementById('drawerInstallBtn');
-            if (drawerBtn) drawerBtn.classList.add('hidden');
-            showToast('تم تثبيت التطبيق بنجاح ✅');
-        });
-
-        function showPwaPromptModal() {
-            closeDrawer();
-            if (isAppInstalled) {
-                showToast('التطبيق مثبت على هاتفك مسبقاً ✅');
-                return;
-            }
-            const m = document.getElementById('pwaPromptModal');
-            m.classList.remove('hidden');
-            m.classList.add('modal-active');
-        }
-
-        function dismissPwaPrompt() {
-            localStorage.setItem('pwa_prompt_dismissed_h', 'true');
-            const m = document.getElementById('pwaPromptModal');
-            m.classList.remove('modal-active');
-            m.classList.add('hidden');
-        }
-
-        function confirmPwaInstall() {
-            dismissPwaPrompt();
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        localStorage.setItem('clinic_pwa_installed', 'true');
-                        showToast('تم تثبيت التطبيق بنجاح ✅');
-                        closeInstallStrip();
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                showToast('اضغط خيارات المتصفح (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"', '📲');
-            }
-        }
-
-        function closeInstallStrip() {
-            localStorage.setItem('clinic_install_strip_dismissed', 'true');
-            const strip = document.getElementById('stickyInstallStrip');
-            strip.classList.remove('flex');
-            strip.classList.add('hidden');
-        }
-
-        function playUiClick() {
+        function playUiAction() {
             try {
+                if (navigator.vibrate) navigator.vibrate(20);
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
@@ -959,16 +702,6 @@
             } catch(e) {}
         }
 
-        function startClinicCallExperience() {
-            document.getElementById('callAudioModal').classList.remove('hidden');
-            document.getElementById('callAudioModal').classList.add('modal-active');
-        }
-
-        function stopClinicCallExperience() {
-            document.getElementById('callAudioModal').classList.remove('modal-active');
-            document.getElementById('callAudioModal').classList.add('hidden');
-        }
-
         function showToast(msg, icon = "✨") {
             const toast = document.getElementById('customToast');
             document.getElementById('toastMessage').innerText = msg;
@@ -979,273 +712,112 @@
             setTimeout(() => toast.classList.remove('toast-show'), 2200);
         }
 
-        function openDrawer() {
-            document.getElementById('sideDrawer').classList.remove('drawer-closed');
-            document.getElementById('drawerBackdrop').classList.remove('hidden');
-        }
-        function closeDrawer() {
-            document.getElementById('sideDrawer').classList.add('drawer-closed');
-            document.getElementById('drawerBackdrop').classList.add('hidden');
-        }
+        // Clinical IV Calculator
+        function calculateIvDrip() {
+            playUiAction();
+            const vol = parseFloat(document.getElementById('ivVolume').value);
+            const hrs = parseFloat(document.getElementById('ivHours').value);
+            const dropFactor = parseFloat(document.getElementById('ivDropFactor').value);
+            const resBox = document.getElementById('ivResult');
 
-        function openStaticModal(id) {
-            closeDrawer();
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById(id).classList.add('modal-active');
-        }
-        function closeStaticModal(id) {
-            document.getElementById(id).classList.remove('modal-active');
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        // Live GPS Geolocation Fetcher
-        function fetchLiveGpsLocation() {
-            const btnText = document.getElementById('gpsBtnText');
-            if (navigator.geolocation) {
-                btnText.innerText = "جاري تحديد إحداثيات موقعك بدقة 🛰️...";
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        document.getElementById('custGpsCoords').value = `https://maps.google.com/?q=${lat},${lng}`;
-                        btnText.innerText = "تم حفظ الموقع عبر الخريطة بنجاح ✅";
-                        showToast('تم تحديد الموقع بدقة 📍');
-                    },
-                    (error) => {
-                        btnText.innerText = "تعذر تحديد الموقع، يرجى كتابة العنوان باليد ⚠️";
-                        showToast('يرجى تفعيل الـ GPS بالهاتف', '⚠️');
-                    },
-                    { enableHighAccuracy: true, timeout: 8000 }
-                );
-            } else {
-                showToast('المتصفح لا يدعم تحديد الموقع', '❌');
-            }
-        }
-
-        // Live Order Tracker Logic
-        function openTrackerModal() {
-            closeDrawer();
-            document.getElementById('patientTrackerModal').classList.remove('hidden');
-            document.getElementById('patientTrackerModal').classList.add('modal-active');
-        }
-        function closeTrackerModal() {
-            document.getElementById('patientTrackerModal').classList.remove('modal-active');
-            document.getElementById('patientTrackerModal').classList.add('hidden');
-        }
-
-        function searchPatientOrder() {
-            const phone = document.getElementById('trackPhoneInput').value.trim();
-            const resBox = document.getElementById('trackerResultContainer');
-            if (!phone) { showToast('أدخل رقم الهاتف للبحث', '⚠️'); return; }
-            
-            const matched = ordersList.filter(o => String(o.patientPhone).includes(phone));
-            resBox.innerHTML = '';
-            
-            if (matched.length === 0) {
-                resBox.innerHTML = `<p class="text-xs text-rose-400 text-center py-4">لم يتم العثور على أي حجز مسجل بهذا الرقم</p>`;
+            if (!vol || !hrs || hrs <= 0) {
+                showToast('يرجى إدخال قيم صحيحة', '⚠️');
                 return;
             }
 
-            matched.forEach(o => {
-                const isCompleted = o.status === 'completed';
-                resBox.innerHTML += `
-                    <div class="bg-slate-950 p-3 rounded-2xl border ${isCompleted ? 'border-emerald-500/50' : 'border-cyan-500/50'} space-y-2">
-                        <div class="flex justify-between items-center text-xs font-black">
-                            <span class="text-white">${o.patientName}</span>
-                            <span class="${isCompleted ? 'text-emerald-400' : 'text-amber-400'}">${isCompleted ? '✅ تم تقديم الخدمة' : '🚗 الكادر في طريقه إليك'}</span>
-                        </div>
-                        <p class="text-[10.5px] text-slate-300">👥 الكادر: ${o.staffPreference} | ⏰ ${o.timeSlot || 'فوري'}</p>
-                        <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
-                            <div class="bg-gradient-to-r from-cyan-500 to-emerald-400 h-2 ${isCompleted ? 'w-full' : 'w-2/3 animate-pulse'}"></div>
-                        </div>
-                        <div class="flex justify-between items-center pt-1 border-t border-slate-800/80">
-                            <p class="text-[9.5px] text-slate-400 font-bold">${isCompleted ? 'تم إنجاز الموعد بنجاح' : 'طلبك قيد المتابعة وسيصل الكادر'}</p>
-                            ${!isCompleted ? `
-                                <button onclick="cancelPatientBooking('${o.keyId}')" class="bg-rose-950/80 border border-rose-800 text-rose-300 text-[10px] font-bold px-2.5 py-1 rounded-lg active:scale-95 transition">
-                                    إلغاء الطلب ✕
-                                </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
+            const totalMins = hrs * 60;
+            const dripRate = Math.round((vol * dropFactor) / totalMins);
+            const mlPerHour = Math.round(vol / hrs);
+
+            resBox.classList.remove('hidden');
+            resBox.innerHTML = `💧 معدل التنقيط: <b>${dripRate} قطرة / دقيقة (gtt/min)</b><br><span class="text-[10px] text-slate-300">معدل التدفق: ${mlPerHour} ملليلتر في الساعة</span>`;
+        }
+
+        // Patient Vitals Tracker
+        function saveVitalEntry() {
+            playUiAction();
+            const bp = document.getElementById('logBpInput').value.trim();
+            const sugar = document.getElementById('logSugarInput').value.trim();
+            if (!bp && !sugar) return;
+
+            let records = JSON.parse(localStorage.getItem('patient_vitals_records') || '[]');
+            records.unshift({
+                bp: bp || '-',
+                sugar: sugar || '-',
+                time: new Date().toLocaleTimeString('ar-IQ', { hour: '2-digit', minute: '2-digit' }),
+                date: new Date().toLocaleDateString('ar-IQ')
+            });
+            localStorage.setItem('patient_vitals_records', JSON.stringify(records.slice(0, 10)));
+            document.getElementById('logBpInput').value = '';
+            document.getElementById('logSugarInput').value = '';
+            renderVitalLog();
+            showToast('تم تسجيل القياس بنجاح 📈');
+        }
+
+        function renderVitalLog() {
+            const box = document.getElementById('vitalsLogHistory');
+            const records = JSON.parse(localStorage.getItem('patient_vitals_records') || '[]');
+            if (records.length === 0) {
+                box.innerHTML = `<p class="text-slate-500 text-center py-1">لا توجد قراءات مسجلة بعد</p>`;
+                return;
+            }
+            box.innerHTML = records.map(r => `
+                <div class="flex justify-between items-center bg-slate-900 p-1.5 rounded-lg border border-slate-800">
+                    <span class="text-cyan-300">🫀 ${r.bp}</span>
+                    <span class="text-amber-300">🩸 ${r.sugar}</span>
+                    <span class="text-slate-400 text-[9px]">${r.date} ${r.time}</span>
+                </div>
+            `).join('');
+        }
+
+        function openToolsModal() {
+            renderVitalLog();
+            document.getElementById('clinicalToolsModal').classList.remove('hidden');
+            document.getElementById('clinicalToolsModal').classList.add('modal-active');
+        }
+        function closeToolsModal() {
+            document.getElementById('clinicalToolsModal').classList.remove('modal-active');
+            document.getElementById('clinicalToolsModal').classList.add('hidden');
+        }
+
+        function renderVitalCard(idx) {
+            const container = document.getElementById('vitalCardInner');
+            if (!container) return;
+            const tip = vitalTips[idx];
+            container.innerHTML = `
+                <h5 class="text-xs font-black text-cyan-300 flex items-center gap-1">${tip.title}</h5>
+                <div class="space-y-0.5 text-[10px] text-slate-300 font-semibold leading-relaxed">
+                    ${tip.points.map(p => `<p>${p}</p>`).join('')}
+                </div>
+            `;
+            [0, 1, 2].forEach(i => {
+                const d = document.getElementById(`vDot${i}`);
+                if (d) d.className = i === idx ? "w-2.5 h-1 rounded-full bg-cyan-400 transition-all" : "w-1.5 h-1 rounded-full bg-slate-700 transition-all";
             });
         }
 
-        function cancelPatientBooking(keyId) {
-            if (confirm('هل أنت متأكد من رغبتك في إلغاء هذا الطلب؟')) {
-                ordersRef.child(keyId).remove();
-                showToast('تم إلغاء طلب الحجز بنجاح');
-                searchPatientOrder();
-            }
-        }
-
-        // Reviews System
-        function openAddReviewModal() {
-            closeDrawer();
-            document.getElementById('addReviewModal').classList.remove('hidden');
-            document.getElementById('addReviewModal').classList.add('modal-active');
-        }
-        function closeAddReviewModal() {
-            document.getElementById('addReviewModal').classList.remove('modal-active');
-            document.getElementById('addReviewModal').classList.add('hidden');
-        }
-
-        function savePatientReview(e) {
-            e.preventDefault();
-            const author = document.getElementById('reviewAuthor').value.trim();
-            const stars = document.getElementById('reviewStars').value;
-            const text = document.getElementById('reviewText').value.trim();
-            reviewsRef.push({ author, stars, text, date: Date.now() });
-            closeAddReviewModal();
-            showToast('شكراً لمشاركتك رأيك وتقييمك ⭐');
-            document.getElementById('reviewAuthor').value = '';
-            document.getElementById('reviewText').value = '';
-        }
-
-        function deleteReviewItem(key) {
-            if (confirm('هل تريد حذف هذا التقييم؟')) {
-                reviewsRef.child(key).remove();
-                showToast('تم حذف التقييم');
-            }
-        }
-
-        // Staff Management
-        function openAddStaffModal() {
-            document.getElementById('staffModalTitle').innerText = 'إضافة عضو كادر تمريضي';
-            document.getElementById('staffEditId').value = '';
-            document.getElementById('staffName').value = '';
-            document.getElementById('staffRole').value = '';
-            document.getElementById('staffAvatar').value = '';
-            document.getElementById('staffEditModal').classList.remove('hidden');
-            document.getElementById('staffEditModal').classList.add('modal-active');
-        }
-
-        function openEditStaffModal(id) {
-            const s = staffList.find(x => String(x.id) === String(id));
-            if (!s) return;
-            document.getElementById('staffModalTitle').innerText = 'تعديل بيانات الممرض';
-            document.getElementById('staffEditId').value = s.id;
-            document.getElementById('staffName').value = s.name;
-            document.getElementById('staffRole').value = s.role;
-            document.getElementById('staffAvatar').value = s.avatar || '';
-            document.getElementById('staffEditModal').classList.remove('hidden');
-            document.getElementById('staffEditModal').classList.add('modal-active');
-        }
-
-        function closeStaffModal() {
-            document.getElementById('staffEditModal').classList.remove('modal-active');
-            document.getElementById('staffEditModal').classList.add('hidden');
-        }
-
-        function saveStaffMember(e) {
-            e.preventDefault();
-            const editId = document.getElementById('staffEditId').value;
-            const name = document.getElementById('staffName').value.trim();
-            const role = document.getElementById('staffRole').value.trim();
-            const avatar = document.getElementById('staffAvatar').value.trim() || name.substring(0, 2);
-
-            if (editId) {
-                const idx = staffList.findIndex(x => String(x.id) === String(editId));
-                if (idx !== -1) staffList[idx] = { id: editId, name, role, avatar };
-            } else {
-                staffList.push({ id: 'stf_' + Date.now(), name, role, avatar });
-            }
-            staffRef.set(staffList);
-            closeStaffModal();
-            showToast('تم حفظ بيانات الكادر بنجاح');
-        }
-
-        function deleteStaffMember(id) {
-            if (confirm('هل تريد حذف هذا الممرض من الكادر؟')) {
-                staffList = staffList.filter(x => String(x.id) !== String(id));
-                staffRef.set(staffList);
-                showToast('تم حذف الممرض');
-            }
-        }
-
-        function renderStaff() {
-            const grid = document.getElementById('staffMembersGrid');
-            grid.innerHTML = '';
-            staffList.forEach(s => {
-                grid.innerHTML += `
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2.5 min-w-0">
-                            <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0 overflow-hidden">
-                                ${s.avatar && s.avatar.startsWith('http') ? `<img src="${s.avatar}" class="w-full h-full object-cover">` : (s.avatar || s.name.substring(0, 2))}
-                            </div>
-                            <div class="text-right min-w-0">
-                                <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
-                                <p class="text-[9px] text-slate-400 truncate">${s.role}</p>
-                            </div>
-                        </div>
-                        ${isAdmin ? `
-                        <div class="flex items-center gap-1 shrink-0">
-                            <button onclick="openEditStaffModal('${s.id}')" class="text-xs text-slate-300 bg-slate-800 p-1 rounded-lg">✏️</button>
-                            <button onclick="deleteStaffMember('${s.id}')" class="text-xs text-rose-400 bg-rose-950/80 p-1 rounded-lg">🗑️</button>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            });
-        }
-
-        // Sortable Drag-and-Drop Implementation (Like Pharmacy App)
-        function initSortableGrid() {
-            const grid = document.getElementById('mainItemsGrid');
-            if (sortableInstance) sortableInstance.destroy();
-            if (isAdmin && currentMainTab !== 'consult') {
-                sortableInstance = new Sortable(grid, {
-                    handle: '.drag-handle',
-                    animation: 200,
-                    ghostClass: 'sortable-ghost',
-                    onEnd: function () {
-                        const newOrderIds = Array.from(grid.children).map(c => c.getAttribute('data-id'));
-                        const currentDataset = allClinicData[currentMainTab] || [];
-                        const reordered = [];
-                        newOrderIds.forEach(id => {
-                            const itm = currentDataset.find(x => String(x.id) === String(id));
-                            if (itm) reordered.push(itm);
-                        });
-                        currentDataset.forEach(itm => {
-                            if (!reordered.find(x => String(x.id) === String(itm.id))) reordered.push(itm);
-                        });
-                        allClinicData[currentMainTab] = reordered;
-                        dataRef.set(allClinicData);
-                        showToast('تم حفظ الترتيب الجديد بنجاح 🔄');
-                    }
-                });
-            }
+        function nextVitalTip() {
+            currentVitalIdx = (currentVitalIdx + 1) % vitalTips.length;
+            renderVitalCard(currentVitalIdx);
         }
 
         function initClinicSystem() {
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
-                if (val && val.services && val.services.length >= 10) {
+                if (val && val.services && val.services.length >= 5) {
                     allClinicData = val;
                 } else {
                     allClinicData = {
                         services: [
                             { id: "srv_1", category: "تمريض منزلي ورعاية", name: "زيارة تمريضية منزلية (كادر رجالي / نسائي)", usage: "خدمة تمريضية متكاملة في المنزل ومتابعة العلامات الحيوية", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85" },
                             { id: "srv_2", category: "تمريض منزلي ورعاية", name: "رعاية صحية ومتابعة بعد العمليات الجراحية", usage: "غيار معقم وتضميد ومتابعة التئام الجروح الجراحية بالمنزل", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_3", category: "تمريض منزلي ورعاية", name: "علاج طبيعي وتأهيل بالأجهزة (منزلي)", usage: "جلسات علاج فيزيائي بالأجهزة الحديثة لتأهيل العضلات والمفاصل", price: "25,000 د.ع", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_4", category: "تمريض منزلي ورعاية", name: "العناية بالقدم السكري وقروح الفراش", usage: "تنظيف وتعقيم متقدم بأحدث المستلزمات الطبية المعتمدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=1080&q=85" },
                             { id: "srv_5", category: "كانيولا وزرق ومحاليل", name: "تركيب الكانيولا وإعطاء المحاليل الوريدية", usage: "تركيب معقم وإعطاء المغذيات والعلاجات الوريدية بدقة", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1583912267670-6575ad472688?auto=format&fit=crop&w=1080&q=85" },
                             { id: "srv_6", category: "كانيولا وزرق ومحاليل", name: "زرق الإبر (عضلي / وريدي / تحت الجلد)", usage: "حقن آمن بأدوات استخدام لمرة واحدة معقمة بالكامل", price: "3,000 د.ع", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_7", category: "قسطرة وتجبير كسور", name: "تركيب وتبديل القسطرة البولية", usage: "إجراء تمريضي معقم مع تثبيت كيس جمع البول", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_8", category: "قسطرة وتجبير كسور", name: "تجبير الكسور وتثبيت الأربطة والمفاصل", usage: "جبائر طبية وتثبيت احترافي لحالات الرضوض والكسور", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1080&q=85" },
                             { id: "srv_9", category: "جراحة صغرى وتضميد", name: "خياطة وكبس الجروح ورفع الغرز", usage: "تخدير موضعي، خياطة تجميلية أو كبس، وتضميد معقم", price: "12,000 د.ع", image: "https://images.unsplash.com/photo-1603398938378-e54eab446dde?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_10", category: "جراحة صغرى وتضميد", name: "إسعافات أولية متقدمة وتضميد الحروق", usage: "معالجة الحروق والتسلخات والنزيف السطحي الفوري", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_11", category: "جراحة صغرى وتضميد", name: "ثقب الأذن الطبي المعقم", usage: "باستخدام جهاز طبي خاص وحلق طبي معقم", price: "7,000 د.ع", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_12", category: "فحوصات وECG", name: "تخطيط القلب السريري (ECG)", usage: "تخطيط فوري لنبضات ونشاط القلب الكهربائي في العيادة أو المنزل", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_13", category: "فحوصات وECG", name: "قياس ضغط الدم والسكر والأكسجين والحرارة", usage: "فحص شامل للمؤشرات الحيوية ونسبة تشبع الأكسجين SpO2", price: "5,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_14", category: "فحوصات وECG", name: "سحب عينات الدم من المنزل", usage: "سحب وريدي سريع وإرسال العينات للمختبر مع النتائج", price: "5,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_15", category: "حجامة طبية", name: "حجامة رجالية (داخل العيادة)", usage: "حجامة وقائية وعلاجية معقمة بكؤوس استخدام مفرد لمرة واحدة", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_16", category: "حجامة طبية", name: "حجامة نسائية (داخل المنزل)", usage: "بإشراف كادر تمريضي نسائي متخصص ومعقم بالكامل", price: "25,000 د.ع", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1080&q=85" }
+                            { id: "srv_12", category: "فحوصات وECG", name: "تخطيط القلب السريري (ECG)", usage: "تخطيط فوري لنبضات ونشاط القلب الكهربائي في العيادة أو المنزل", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1080&q=85" }
                         ],
                         lab: [
                             { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "lab_2", category: "وظائف كبد وكلى", name: "وظائف الكلى (Urea & Creatinine)", usage: "تقييم كفاءة الكلى ونسبة اليوريا والكرياتينين بالدم", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "lab_3", category: "الهرمونات والفيتامينات", name: "فحص فيتامين د (Vitamin D3)", usage: "فحص دقيق لمستوى فيتامين د بجهاز التوهج المناعي", price: "18,000 د.ع", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1080&q=85" },
                             { id: "lab_4", category: "فحوصات سريعة وسكر", name: "السكر التراكمي HbA1c", usage: "معدل انضباط السكر التراكمي لآخر 3 أشهر بدقة عالية", price: "10,000 د.ع", image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?auto=format&fit=crop&w=1080&q=85" }
                         ]
                     };
@@ -1261,10 +833,7 @@
                 } else {
                     staffList = [
                         { id: "stf_1", name: "الممرض الماجستير / أحمد محمد", role: "اختصاص طوارئ وعناية مركزة منزلية", avatar: "أ.م" },
-                        { id: "stf_2", name: "الممرضة الجامعية / هند طارق", role: "اختصاص زيارات نسائية، كانيولا وغيار جروح", avatar: "هـ.ط" },
-                        { id: "stf_3", name: "الممرض الفني / محمد خالد", role: "سحب دم فوري وتخطيط قلب ECG منزلي", avatar: "م.خ" },
-                        { id: "stf_4", name: "الممرضة المعاونة / فاطمة علي", role: "إعطاء العلاجات ومتابعة مرضى السكري", avatar: "ف.ع" },
-                        { id: "stf_5", name: "الممرض الاختصاص / علي سالم", role: "تجهيز مغذيات، كبس جروح، وإسعافات أولية متقدمة", avatar: "ع.س" }
+                        { id: "stf_2", name: "الممرضة الجامعية / هند طارق", role: "اختصاص زيارات نسائية، كانيولا وغيار جروح", avatar: "هـ.ط" }
                     ];
                     staffRef.set(staffList);
                 }
@@ -1273,82 +842,75 @@
 
             reviewsRef.on('value', (snapshot) => {
                 const val = snapshot.val();
-                if (val) {
-                    reviewsList = Object.keys(val).map(k => ({ key: k, ...val[k] })).reverse();
-                } else {
-                    reviewsList = [];
-                }
+                reviewsList = val ? Object.keys(val).map(k => ({ key: k, ...val[k] })).reverse() : [];
                 renderReviews();
-                restartReviewTimer();
             });
 
             ordersRef.on('value', (snapshot) => {
                 const val = snapshot.val();
-                if (val) {
-                    ordersList = Object.keys(val).map(k => ({ keyId: k, ...val[k] })).reverse();
-                } else {
-                    ordersList = [];
-                }
-                updateAdminBadge();
-                if (document.getElementById('ordersQueueModal').classList.contains('modal-active')) {
-                    renderOrdersQueue();
-                }
+                ordersList = val ? Object.keys(val).map(k => ({ keyId: k, ...val[k] })).reverse() : [];
+                updateAdminMetrics();
             });
 
-            try {
-                cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || [];
-            } catch(e) { cart = []; }
+            try { cart = JSON.parse(localStorage.getItem('clinic_h_cart')) || []; } catch(e) { cart = []; }
 
             renderVitalCard(0);
-            restartVitalTimer();
-            checkInstallVisibility();
+            vitalTimer = setInterval(nextVitalTip, 8000);
             updateAdminUI();
             updateCartBadge();
+        }
+
+        function updateAdminMetrics() {
+            const total = ordersList.length;
+            const pending = ordersList.filter(o => o.status === 'pending').length;
+            let rev = 0;
+            ordersList.forEach(o => {
+                let num = parseFloat(String(o.totalPrice).replace(/[^0-9.]/g, '')) || 0;
+                rev += num;
+            });
+
+            document.getElementById('statTotalOrders').innerText = total;
+            document.getElementById('statPendingOrders').innerText = pending;
+            document.getElementById('statRevenue').innerText = rev.toLocaleString() + ' د.ع';
+
+            const b = document.getElementById('pendingOrdersBadge');
+            if (pending > 0 && isAdmin) {
+                b.innerText = pending;
+                b.classList.remove('hidden');
+            } else {
+                b.classList.add('hidden');
+            }
         }
 
         function switchMainTab(tab) {
             currentMainTab = tab;
             currentSubFilter = 'الكل';
-            
             ['services', 'lab', 'consult'].forEach(t => {
                 const el = document.getElementById(`pill-${t}`);
                 if (el) {
-                    if (t === tab) {
-                        el.className = "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow";
-                    } else {
-                        el.className = "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition";
-                    }
+                    el.className = t === tab 
+                        ? "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border transition bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow"
+                        : "px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shrink-0 text-xs font-bold border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white transition";
                 }
             });
-
             renderActiveTabContent();
         }
 
         function renderSubCategories() {
             const container = document.getElementById('subCategoryPills');
             const subFilterBar = document.getElementById('subFilterBar');
-
-            if (currentMainTab === 'consult') {
-                subFilterBar.classList.add('hidden');
-                return;
-            } else {
-                subFilterBar.classList.remove('hidden');
-            }
+            if (currentMainTab === 'consult') { subFilterBar.classList.add('hidden'); return; }
+            subFilterBar.classList.remove('hidden');
 
             const list = subCategoriesConfig[currentMainTab] || [];
-            let html = '';
-            list.forEach(sub => {
-                const isActive = currentSubFilter === sub;
-                html += `
-                    <button onclick="playUiClick(); filterBySub('${sub}')" 
-                            class="px-3 py-1 rounded-xl text-[10.5px] font-bold border transition shrink-0 ${
-                                isActive ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-                            }">
-                        ${sub}
-                    </button>
-                `;
-            });
-            container.innerHTML = html;
+            container.innerHTML = list.map(sub => `
+                <button onclick="playUiAction(); filterBySub('${sub}')" 
+                        class="px-3 py-1 rounded-xl text-[10.5px] font-bold border transition shrink-0 ${
+                            currentSubFilter === sub ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                        }">
+                    ${sub}
+                </button>
+            `).join('');
         }
 
         function filterBySub(sub) {
@@ -1378,142 +940,68 @@
             consultView.classList.add('hidden');
 
             let dataset = allClinicData[currentMainTab] || [];
-            if (currentSubFilter !== 'الكل') {
-                dataset = dataset.filter(item => item.category === currentSubFilter);
-            }
+            if (currentSubFilter !== 'الكل') dataset = dataset.filter(item => item.category === currentSubFilter);
 
-            const titlesMap = {
-                services: "خدمات عيادة حي الحسين التمريضية",
-                lab: "قسم المختبر والتحاليل وسحب العينات"
-            };
-            sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${titlesMap[currentMainTab]} ${currentSubFilter !== 'الكل' ? `(${currentSubFilter})` : ''}`;
+            sectionTitle.innerHTML = `<span class="text-cyan-400">●</span> ${currentMainTab === 'services' ? 'الخدمات التمريضية' : 'المختبر والتحاليل'}`;
             counterText.innerText = `${dataset.length} عنصر`;
 
             grid.innerHTML = '';
-            if (dataset.length === 0) {
-                noResults.classList.remove('hidden');
-                return;
-            } else {
-                noResults.classList.add('hidden');
-            }
+            if (dataset.length === 0) { noResults.classList.remove('hidden'); return; }
+            noResults.classList.add('hidden');
 
             dataset.forEach(item => {
                 grid.innerHTML += `
                     <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 flex items-center justify-center relative overflow-hidden">
-                                <img src="${item.image || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85'}" class="object-cover w-full h-full hover:scale-105 transition duration-300" loading="lazy">
+                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
                                 <span class="absolute top-1.5 right-1.5 bg-slate-950/85 backdrop-blur-md border border-cyan-500/30 text-[8.5px] font-black text-cyan-300 px-2 py-0.5 rounded-md">${item.category}</span>
                             </div>
-
                             <div class="flex flex-col justify-between flex-grow space-y-1 text-right">
                                 <h4 class="text-xs font-black text-white leading-snug line-clamp-2 min-h-[32px]">${item.name}</h4>
                                 <p class="text-[9px] text-slate-400 font-semibold line-clamp-2 min-h-[26px]">${item.usage}</p>
-                                <div class="pt-1 border-t border-slate-800/60 flex items-center justify-between">
-                                    <span class="text-xs font-black text-cyan-400">${item.price}</span>
-                                </div>
+                                <span class="text-xs font-black text-cyan-400">${item.price}</span>
                             </div>
                         </div>
-
-                        <div class="flex flex-col gap-1.5 pt-1 border-t border-slate-800">
-                            <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:opacity-95 text-white font-black py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1 shadow active:scale-95">
-                                <span>➕</span> <span>طلب للحجز</span>
-                            </button>
-                            ${isAdmin ? `
-                            <div class="flex items-center justify-between gap-1 pt-0.5">
-                                <button class="drag-handle flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-1 rounded-lg text-xs font-bold border border-slate-700" title="سحب لنقل الخدمة">☰</button>
-                                <button onclick="openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700">✏️</button>
-                                <button onclick="deleteItemRecord('${item.id}', '${currentMainTab}')" class="flex-1 bg-rose-950/60 text-rose-400 py-1 rounded-lg text-xs border border-rose-900">🗑️</button>
-                            </div>
-                            ` : ''}
-                        </div>
+                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:opacity-95 text-white font-black py-1.5 rounded-xl text-xs transition flex items-center justify-center gap-1 shadow active:scale-95">
+                            <span>➕</span> <span>طلب للحجز</span>
+                        </button>
                     </div>
                 `;
             });
-
-            initSortableGrid();
         }
 
         function openItemDetails(id, sec) {
             const item = (allClinicData[sec] || []).find(x => String(x.id) === String(id));
             if (!item) return;
-            playUiClick();
+            playUiAction();
             document.getElementById('detailBadge').innerText = item.category;
             document.getElementById('detailImage').src = item.image;
             document.getElementById('detailName').innerText = item.name;
             document.getElementById('detailUsage').innerText = item.usage;
             document.getElementById('detailPrice').innerText = item.price;
-            
-            const addBtn = document.getElementById('detailAddBtn');
-            addBtn.onclick = () => {
-                addToCart(item.id, sec);
-                closeDetailModal();
-            };
-
+            document.getElementById('detailAddBtn').onclick = () => { addToCart(item.id, sec); closeDetailModal(); };
             document.getElementById('detailViewModal').classList.remove('hidden');
             document.getElementById('detailViewModal').classList.add('modal-active');
         }
-
         function closeDetailModal() {
             document.getElementById('detailViewModal').classList.remove('modal-active');
             document.getElementById('detailViewModal').classList.add('hidden');
-        }
-
-        function handleGlobalSearch(q) {
-            const query = q.trim().toLowerCase();
-            if (!query) { renderActiveTabContent(); return; }
-            if (currentMainTab === 'consult') return;
-
-            let dataset = allClinicData[currentMainTab] || [];
-            const filtered = dataset.filter(i => i.name.toLowerCase().includes(query) || i.usage.toLowerCase().includes(query));
-            
-            const grid = document.getElementById('mainItemsGrid');
-            const noResults = document.getElementById('noResults');
-            grid.innerHTML = '';
-            
-            if (filtered.length === 0) {
-                noResults.classList.remove('hidden');
-                return;
-            }
-            noResults.classList.add('hidden');
-
-            filtered.forEach(item => {
-                grid.innerHTML += `
-                    <div class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md">
-                        <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
-                            <div class="w-full h-28 rounded-xl bg-slate-950 border border-cyan-500/20 overflow-hidden">
-                                <img src="${item.image}" class="object-cover w-full h-full" loading="lazy">
-                            </div>
-                            <div class="space-y-1 text-right">
-                                <h4 class="text-xs font-black text-white leading-snug">${item.name}</h4>
-                                <p class="text-[9px] text-slate-400 font-semibold">${item.usage}</p>
-                                <span class="text-xs font-black text-cyan-400">${item.price}</span>
-                            </div>
-                        </div>
-                        <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
-                    </div>
-                `;
-            });
         }
 
         function addToCart(id, section) {
             const item = (allClinicData[section] || []).find(x => String(x.id) === String(id));
             if (!item) return;
             const exist = cart.find(c => String(c.id) === String(id));
-            if (exist) {
-                exist.qty += 1;
-            } else {
-                cart.push({ ...item, section, qty: 1 });
-            }
-            playUiClick();
+            if (exist) { exist.qty += 1; } else { cart.push({ ...item, section, qty: 1 }); }
+            playUiAction();
             localStorage.setItem('clinic_h_cart', JSON.stringify(cart));
             updateCartBadge();
             showToast(`تمت إضافة "${item.name}" للسلة`, '📋');
         }
 
         function updateCartBadge() {
-            const count = cart.reduce((s, i) => s + i.qty, 0);
-            document.getElementById('cartBadge').innerText = count;
+            document.getElementById('cartBadge').innerText = cart.reduce((s, i) => s + i.qty, 0);
         }
 
         function openCartModal() {
@@ -1530,7 +1018,6 @@
             const list = document.getElementById('cartItemsList');
             const totalEl = document.getElementById('cartTotalPrice');
             list.innerHTML = '';
-
             if (cart.length === 0) {
                 list.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">قائمة الحجز فارغة حالياً</div>`;
                 totalEl.innerText = '0 د.ع';
@@ -1595,60 +1082,77 @@
             const type = document.getElementById('custType').value;
             const visitFee = type.includes('منزلية') ? 5000 : 0;
             const total = itemsSum + visitFee;
-
             document.getElementById('breakdownItemsPrice').innerText = itemsSum.toLocaleString() + ' د.ع';
             document.getElementById('breakdownVisitPrice').innerText = visitFee > 0 ? '5,000 د.ع' : 'مجاناً (داخل العيادة)';
             document.getElementById('breakdownFinalPrice').innerText = total.toLocaleString() + ' د.ع';
+        }
+
+        function fetchLiveGpsLocation() {
+            const btnText = document.getElementById('gpsBtnText');
+            if (navigator.geolocation) {
+                btnText.innerText = "جاري تحديد إحداثيات موقعك بدقة 🛰️...";
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const link = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                        document.getElementById('custGpsCoords').value = link;
+                        btnText.innerText = "تم حفظ الموقع عبر الخريطة بنجاح ✅";
+                        showToast('تم تحديد الموقع بدقة 📍');
+                    },
+                    () => {
+                        btnText.innerText = "تعذر تحديد الموقع تلقائياً ⚠️";
+                    },
+                    { enableHighAccuracy: true, timeout: 8000 }
+                );
+            }
         }
 
         function processBookingSubmission(e) {
             e.preventDefault();
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
+            const urgency = document.getElementById('urgencyLevel').value;
             const staff = document.getElementById('staffPref').value;
             const type = document.getElementById('custType').value;
-            const timeSlot = document.getElementById('timeSlotPref').value;
             const address = document.getElementById('custAddress').value.trim();
+            const notes = document.getElementById('custNotes').value.trim();
             const gpsLink = document.getElementById('custGpsCoords').value;
 
             let itemsSum = 0;
             let itemsSummary = [];
             let msg = `🩺 *طلب موعد وحجز - عيادة حي الحسين التمريضية*\n`;
             msg += `━━━━━━━━━━━━━━━━━━━━\n`;
+            msg += `🚨 *الأولوية:* ${urgency}\n`;
             msg += `👤 *المريض:* ${name}\n`;
             msg += `📞 *الهاتف:* ${phone}\n`;
             msg += `👥 *الكادر المطلوب:* ${staff}\n`;
             msg += `📍 *المكان:* ${type}\n`;
-            msg += `⏰ *الوقت المفضل:* ${timeSlot}\n`;
             msg += `🏠 *العنوان:* ${address}\n`;
+            if (notes) msg += `📝 *ملاحظات:* ${notes}\n`;
             if (gpsLink) msg += `🗺️ *الموقع GPS:* ${gpsLink}\n`;
-            msg += `━━━━━━━━━━━━━━━━━━━━\n📦 *الخدمات والتحاليل المطلوبة:*\n`;
+            msg += `━━━━━━━━━━━━━━━━━━━━\n📦 *الخدمات والتحاليل:*\n`;
 
             cart.forEach((c, i) => {
                 let num = parseFloat(c.price.replace(/[^0-9.]/g, '')) || 0;
                 itemsSum += num * c.qty;
-                itemsSummary.push({ name: c.name, price: c.price, qty: c.qty, section: c.section });
-                msg += `${i + 1}. ${c.name} (${c.qty}x) - ${c.price}\n`;
+                itemsSummary.push({ name: c.name, price: c.price, qty: c.qty });
+                msg += `${i + 1}. ${c.name} (${c.qty}x)\n`;
             });
 
             const visitFee = type.includes('منزلية') ? 5000 : 0;
             const finalTotal = itemsSum + visitFee;
-
-            if (visitFee > 0) msg += `🚗 *أجور الزيارة المنزلية:* 5,000 د.ع\n`;
-            msg += `\n💰 *الإجمالي الكلي:* ${finalTotal.toLocaleString()} د.ع\n`;
-            msg += `⏰ *وقت التسجيل:* ${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`;
+            msg += `\n💰 *الإجمالي:* ${finalTotal.toLocaleString()} د.ع`;
 
             ordersRef.push({
                 patientName: name,
                 patientPhone: phone,
+                urgency: urgency,
                 staffPreference: staff,
                 locationType: type,
-                timeSlot: timeSlot,
                 address: address,
+                notes: notes || '-',
                 gpsLocation: gpsLink || 'غير مرفق',
                 items: itemsSummary,
                 totalPrice: finalTotal.toLocaleString() + ' د.ع',
-                sampleDrawnTime: new Date().toLocaleTimeString('ar-IQ'),
                 dateCreated: `${new Date().toLocaleDateString('ar-IQ')} ${new Date().toLocaleTimeString('ar-IQ')}`,
                 status: 'pending'
             });
@@ -1662,11 +1166,65 @@
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
-        // Secret Admin Trigger (5 Clicks on Logo)
+        // Admin Orders & Thermal Printing
+        function printOrderReceipt(orderKey) {
+            const o = ordersList.find(x => x.keyId === orderKey);
+            if (!o) return;
+            const box = document.getElementById('receiptContent');
+            box.innerHTML = `
+                <p><b>اسم المريض:</b> ${o.patientName}</p>
+                <p><b>رقم الهاتف:</b> ${o.patientPhone}</p>
+                <p><b>التاريخ والوقت:</b> ${o.dateCreated}</p>
+                <p><b>نوع الحجز:</b> ${o.locationType}</p>
+                <div class="border-t border-b py-1 my-1">
+                    <p class="font-bold">العناصر المطلوبة:</p>
+                    ${(o.items || []).map(i => `<p>• ${i.name} (${i.qty}x) - ${i.price || ''}</p>`).join('')}
+                </div>
+                <p class="font-black text-sm">الإجمالي: ${o.totalPrice}</p>
+            `;
+            window.print();
+        }
+
+        function openOrdersQueueModal() {
+            const c = document.getElementById('ordersQueueList');
+            c.innerHTML = '';
+            if (ordersList.length === 0) {
+                c.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">لا توجد حجوزات مسجلة حالياً</div>`;
+            } else {
+                ordersList.forEach(o => {
+                    c.innerHTML += `
+                        <div class="bg-slate-950 p-3 rounded-2xl border ${o.urgency && o.urgency.includes('🚨') ? 'border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.3)]' : 'border-slate-800'} space-y-1.5 text-right">
+                            <div class="flex justify-between items-center">
+                                <h5 class="text-xs font-black text-white">${o.patientName} <span class="text-[9px] text-cyan-400">(${o.locationType})</span></h5>
+                                <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
+                            </div>
+                            <p class="text-[10px] text-slate-300">📞 ${o.patientPhone} | 📍 ${o.address}</p>
+                            <p class="text-[9.5px] text-amber-300 font-bold">🚨 الأولوية: ${o.urgency || 'عادي'} | 👥 الكادر: ${o.staffPreference}</p>
+                            <div class="flex gap-1.5 pt-1 border-t border-slate-800">
+                                <button onclick="printOrderReceipt('${o.keyId}')" class="bg-slate-800 text-slate-200 text-[10px] font-bold px-2 py-1 rounded-lg">🖨️ طباعة وصل</button>
+                                ${o.status === 'pending' ? `
+                                    <button onclick="ordersRef.child('${o.keyId}').update({status:'completed'})" class="bg-emerald-700 text-white text-[10px] font-bold px-3 py-1 rounded-lg">إنجاز ✅</button>
+                                ` : `
+                                    <button onclick="ordersRef.child('${o.keyId}').remove()" class="text-rose-400 text-[10px] font-bold">حذف 🗑️</button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('ordersQueueModal').classList.remove('hidden');
+            document.getElementById('ordersQueueModal').classList.add('modal-active');
+        }
+        function closeOrdersQueueModal() {
+            document.getElementById('ordersQueueModal').classList.remove('modal-active');
+            document.getElementById('ordersQueueModal').classList.add('hidden');
+        }
+
+        // Secret Admin Authentication
         let emblemClicks = 0;
         let emblemTimer = null;
         document.getElementById('secretLogoTrigger').addEventListener('click', () => {
-            playUiClick();
+            playUiAction();
             emblemClicks++;
             clearTimeout(emblemTimer);
             emblemTimer = setTimeout(() => { emblemClicks = 0; }, 1800);
@@ -1716,161 +1274,76 @@
                 h.classList.add('hidden');
                 h.classList.remove('flex');
             }
-            updateAdminBadge();
             renderActiveTabContent();
-            renderStaff();
-            renderReviews();
         }
 
-        function updateAdminBadge() {
-            const pending = ordersList.filter(o => o.status === 'pending').length;
-            const b = document.getElementById('pendingOrdersBadge');
-            if (pending > 0 && isAdmin) {
-                b.innerText = pending;
-                b.classList.remove('hidden');
-            } else {
-                b.classList.add('hidden');
-            }
-        }
-
-        function openOrdersQueueModal() {
-            renderOrdersQueue();
-            document.getElementById('ordersQueueModal').classList.remove('hidden');
-            document.getElementById('ordersQueueModal').classList.add('modal-active');
-        }
-        function closeOrdersQueueModal() {
-            document.getElementById('ordersQueueModal').classList.remove('modal-active');
-            document.getElementById('ordersQueueModal').classList.add('hidden');
-        }
-
-        function renderOrdersQueue() {
-            const c = document.getElementById('ordersQueueList');
-            c.innerHTML = '';
-            if (ordersList.length === 0) {
-                c.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">لا توجد حجوزات مسجلة حالياً</div>`;
-                return;
-            }
-
-            ordersList.forEach(o => {
-                c.innerHTML += `
-                    <div class="bg-slate-950 p-3 rounded-2xl border ${o.status === 'pending' ? 'border-cyan-500/60' : 'border-slate-800'} space-y-1.5 text-right">
-                        <div class="flex justify-between items-center">
-                            <h5 class="text-xs font-black text-white">${o.patientName} (${o.locationType})</h5>
-                            <span class="text-[9px] ${o.status === 'pending' ? 'text-amber-400' : 'text-emerald-400'} font-bold">${o.status === 'pending' ? '⏳ قيد المتابعة' : '✅ مكتمل'}</span>
+        function renderStaff() {
+            const grid = document.getElementById('staffMembersGrid');
+            grid.innerHTML = staffList.map(s => `
+                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-9 h-9 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0">
+                            ${s.avatar || s.name.substring(0, 2)}
                         </div>
-                        <p class="text-[10px] text-cyan-400">📞 ${o.patientPhone} | 📍 ${o.address} | 👥 ${o.staffPreference}</p>
-                        <p class="text-[9.5px] text-slate-300">⏰ الموعد: ${o.timeSlot || 'فوري'} | 🩸 وقت أول عينة: <span class="text-teal-300 font-bold">${o.sampleDrawnTime || 'غير محدد'}</span></p>
-                        ${o.gpsLocation && o.gpsLocation !== 'غير مرفق' ? `<p class="text-[9.5px] text-cyan-300"><a href="${o.gpsLocation}" target="_blank" class="underline">🗺️ فتح الموقع على خرائط Google</a></p>` : ''}
-                        <div class="text-[9.5px] text-slate-400">
-                            ${(o.items || []).map(i => `<span>• ${i.name} (${i.qty}x)</span>`).join(' ')}
-                        </div>
-                        <div class="flex justify-between items-center pt-1 border-t border-slate-800">
-                            <span class="text-xs font-black text-cyan-300">💰 ${o.totalPrice}</span>
-                            ${o.status === 'pending' ? `
-                                <button onclick="markOrderCompleted('${o.keyId}')" class="bg-emerald-700 text-white text-[10px] font-bold px-3 py-1 rounded-lg">إنجاز الخدمة ✅</button>
-                            ` : `
-                                <button onclick="deleteOrderRecord('${o.keyId}')" class="text-rose-400 text-[10px] font-bold">حذف 🗑️</button>
-                            `}
+                        <div class="text-right min-w-0">
+                            <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
+                            <p class="text-[9px] text-slate-400 truncate">${s.role}</p>
                         </div>
                     </div>
-                `;
-            });
+                </div>
+            `).join('');
         }
 
-        function markOrderCompleted(k) {
-            ordersRef.child(k).update({ status: 'completed' });
-            showToast('تم تأكيد إنجاز الخدمة ✅');
-        }
-        function deleteOrderRecord(k) {
-            ordersRef.child(k).remove();
-            showToast('تم حذف السجل');
-        }
-
-        function updateCategoryDropdownOptions() {
-            const sec = document.getElementById('itemSectionType').value;
-            const subDropdown = document.getElementById('itemSubCategory');
-            subDropdown.innerHTML = '';
-            const list = (subCategoriesConfig[sec] || []).filter(x => x !== 'الكل');
-            list.forEach(c => {
-                subDropdown.innerHTML += `<option value="${c}">${c}</option>`;
-            });
-        }
-
-        function openAddModal() {
-            document.getElementById('adminModalTitle').innerHTML = '<span>✨</span> إضافة عنصر طبي جديد';
-            document.getElementById('editItemId').value = '';
-            document.getElementById('itemSectionType').value = currentMainTab === 'consult' ? 'services' : currentMainTab;
-            updateCategoryDropdownOptions();
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemUsage').value = '';
-            document.getElementById('itemPrice').value = '';
-            document.getElementById('itemImage').value = '';
-            document.getElementById('adminItemModal').classList.remove('hidden');
-            document.getElementById('adminItemModal').classList.add('modal-active');
+        function renderReviews() {
+            const container = document.getElementById('reviewsBannerContainer');
+            if (!container) return;
+            const list = reviewsList.length > 0 ? reviewsList : [
+                { author: "أبو سيف", stars: "★★★★★", text: "كادر سريع ومحترف بالزيارة المنزلية، دقة عالية بزرق الإبر والكانيولا بدون ألم." }
+            ];
+            const r = list[0];
+            container.innerHTML = `
+                <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-cyan-300">${r.author}</span>
+                        <span class="text-[10.5px] text-amber-400">${r.stars}</span>
+                    </div>
+                    <p class="text-[10px] text-slate-300 font-semibold">${r.text}</p>
+                </div>
+            `;
         }
 
-        function openEditItemModal(id, sec) {
-            const item = (allClinicData[sec] || []).find(x => String(x.id) === String(id));
-            if (!item) return;
-            document.getElementById('adminModalTitle').innerHTML = '<span>✏️</span> تعديل العنصر الطبي';
-            document.getElementById('editItemId').value = item.id;
-            document.getElementById('itemSectionType').value = sec;
-            updateCategoryDropdownOptions();
-            document.getElementById('itemSubCategory').value = item.category;
-            document.getElementById('itemName').value = item.name;
-            document.getElementById('itemUsage').value = item.usage;
-            document.getElementById('itemPrice').value = item.price;
-            document.getElementById('itemImage').value = item.image || '';
-            document.getElementById('adminItemModal').classList.remove('hidden');
-            document.getElementById('adminItemModal').classList.add('modal-active');
+        function openDrawer() {
+            document.getElementById('sideDrawer').classList.remove('drawer-closed');
+            document.getElementById('drawerBackdrop').classList.remove('hidden');
         }
-
-        function closeAdminItemModal() {
-            document.getElementById('adminItemModal').classList.remove('modal-active');
-            document.getElementById('adminItemModal').classList.add('hidden');
+        function closeDrawer() {
+            document.getElementById('sideDrawer').classList.add('drawer-closed');
+            document.getElementById('drawerBackdrop').classList.add('hidden');
         }
-
-        function saveItemRecord(e) {
-            e.preventDefault();
-            const editId = document.getElementById('editItemId').value;
-            const sec = document.getElementById('itemSectionType').value;
-            const subCat = document.getElementById('itemSubCategory').value;
-            const name = document.getElementById('itemName').value.trim();
-            const usage = document.getElementById('itemUsage').value.trim();
-            let rawPrice = document.getElementById('itemPrice').value.trim();
-            let formattedPrice = rawPrice.includes('د.ع') ? rawPrice : Number(rawPrice.replace(/[^0-9]/g, '')).toLocaleString() + ' د.ع';
-            let img = document.getElementById('itemImage').value.trim() || 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85';
-
-            if (!allClinicData[sec]) allClinicData[sec] = [];
-
-            if (editId) {
-                const idx = allClinicData[sec].findIndex(x => String(x.id) === String(editId));
-                if (idx !== -1) {
-                    allClinicData[sec][idx] = { id: editId, category: subCat, name, usage, price: formattedPrice, image: img };
-                }
-            } else {
-                allClinicData[sec].unshift({
-                    id: 'itm_' + Date.now(),
-                    category: subCat,
-                    name,
-                    usage,
-                    price: formattedPrice,
-                    image: img
-                });
-            }
-
-            dataRef.set(allClinicData);
-            closeAdminItemModal();
-            showToast('تم حفظ ونشر البيانات السحابية ☁️');
+        function openTrackerModal() {
+            closeDrawer();
+            document.getElementById('patientTrackerModal').classList.remove('hidden');
+            document.getElementById('patientTrackerModal').classList.add('modal-active');
         }
-
-        function deleteItemRecord(id, sec) {
-            playUiClick();
-            if (allClinicData[sec]) {
-                allClinicData[sec] = allClinicData[sec].filter(x => String(x.id) !== String(id));
-                dataRef.set(allClinicData);
-                showToast('تم حذف العنصر بنجاح', '🗑️');
-            }
+        function closeTrackerModal() {
+            document.getElementById('patientTrackerModal').classList.remove('modal-active');
+            document.getElementById('patientTrackerModal').classList.add('hidden');
+        }
+        function searchPatientOrder() {
+            const phone = document.getElementById('trackPhoneInput').value.trim();
+            const resBox = document.getElementById('trackerResultContainer');
+            const matched = ordersList.filter(o => String(o.patientPhone).includes(phone));
+            resBox.innerHTML = matched.length === 0 
+                ? `<p class="text-xs text-rose-400 text-center py-2">لا توجد نتائج</p>`
+                : matched.map(o => `
+                    <div class="bg-slate-950 p-2.5 rounded-xl border border-cyan-500/40 text-right space-y-1">
+                        <div class="flex justify-between text-xs font-black">
+                            <span class="text-white">${o.patientName}</span>
+                            <span class="${o.status === 'completed' ? 'text-emerald-400' : 'text-amber-400'}">${o.status === 'completed' ? 'تم الإنجاز ✅' : '🚗 في الطريق'}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400">${o.locationType} - الإجمالي: ${o.totalPrice}</p>
+                    </div>
+                `).join('');
         }
 
         initClinicSystem();
