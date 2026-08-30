@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <!-- PWA iOS Modal (إرشادات التثبيت المخصصة للآيفون) -->
+    <!-- PWA iOS Modal -->
     <div id="iosInstallModal" onclick="handleOutsideModalClick(event, 'iosInstallModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-4">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs text-right space-y-3.5 border border-cyan-500/40 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -119,7 +119,7 @@
     </div>
 
     <!-- Floating Emergency Call Button -->
-    <a href="tel:07726053522" class="fixed bottom-24 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
+    <a id="floatingCallBtn" href="tel:07726053522" class="fixed bottom-24 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
         📞
     </a>
 
@@ -162,23 +162,26 @@
             </div>
         </div>
 
-        <!-- Authenticated Admin Action Header -->
+        <!-- Authenticated Admin Action Header (مع زر الإعدادات الجديد) -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
-            <div class="grid grid-cols-5 gap-1 w-full text-center">
-                <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[10px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
+            <div class="grid grid-cols-6 gap-1 w-full text-center">
+                <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[9.5px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
                     <span>🔔 حجز</span>
                     <span id="pendingOrdersBadge" class="hidden bg-rose-600 text-white text-[7.5px] font-black px-1 rounded-full animate-pulse">0</span>
                 </button>
-                <button onclick="playUiAction(); openToolsModal()" class="bg-cyan-950/90 border border-cyan-500/60 text-cyan-300 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                <button onclick="playUiAction(); openClinicSettingsModal()" class="bg-amber-950/90 border border-amber-500/60 text-amber-300 text-[9.5px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                    ⚙️ إعدادات
+                </button>
+                <button onclick="playUiAction(); openToolsModal()" class="bg-cyan-950/90 border border-cyan-500/60 text-cyan-300 text-[9.5px] font-black py-1.5 rounded-xl active:scale-95 transition">
                     🧮 أدوات
                 </button>
-                <button onclick="playUiAction(); openAddStaffModal()" class="bg-indigo-950/90 border border-indigo-500/60 text-indigo-200 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                <button onclick="playUiAction(); openAddStaffModal()" class="bg-indigo-950/90 border border-indigo-500/60 text-indigo-200 text-[9.5px] font-black py-1.5 rounded-xl active:scale-95 transition">
                     + كادر
                 </button>
-                <button onclick="playUiAction(); openAddModal()" class="bg-sky-950/90 border border-sky-400/60 text-sky-200 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                <button onclick="playUiAction(); openAddModal()" class="bg-sky-950/90 border border-sky-400/60 text-sky-200 text-[9.5px] font-black py-1.5 rounded-xl active:scale-95 transition">
                     + خدمة
                 </button>
-                <button onclick="playUiAction(); logoutAdmin()" class="bg-rose-950/90 border border-rose-800/80 text-rose-300 text-[10px] font-black py-1.5 rounded-xl active:scale-95 transition">
+                <button onclick="playUiAction(); logoutAdmin()" class="bg-rose-950/90 border border-rose-800/80 text-rose-300 text-[9.5px] font-black py-1.5 rounded-xl active:scale-95 transition">
                     خروج 🔒
                 </button>
             </div>
@@ -205,6 +208,14 @@
                    class="w-full bg-slate-950/90 text-white placeholder-slate-500 text-xs rounded-xl pl-3 pr-9 py-2 border border-slate-800 focus:outline-none focus:border-cyan-400">
         </div>
     </header>
+
+    <!-- Banner تنبيه إيقاف الطلبات إن وُجد -->
+    <div id="ordersStoppedBanner" class="hidden max-w-xl mx-auto px-3 pt-3">
+        <div class="bg-rose-950/90 border border-rose-600/60 p-2.5 rounded-xl text-center flex items-center justify-center gap-2 shadow-lg">
+            <span class="text-sm">⚠️</span>
+            <p class="text-[11px] font-bold text-rose-200">نعتذر، استقبال الحجوزات متوقف مؤقتاً في الوقت الحالي.</p>
+        </div>
+    </div>
 
     <!-- Side Drawer -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
@@ -312,7 +323,7 @@
             <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
         </div>
 
-        <!-- Items Grid (مع دعم السحب والإفلات لإعادة الترتيب للمشرف) -->
+        <!-- Items Grid -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
         <!-- Consultation Hub View -->
@@ -379,6 +390,39 @@
             <span class="text-lg">📋</span>
             <span>الحجز</span>
         </button>
+    </div>
+
+    <!-- Clinic Settings Modal (تغيير رقم الهاتف والتحكم بالطلبات) -->
+    <div id="clinicSettingsModal" onclick="handleOutsideModalClick(event, 'clinicSettingsModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-sm shadow-2xl relative space-y-3.5 text-right border border-amber-500/40">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-amber-300 flex items-center gap-1.5"><span>⚙️</span> إعدادات العيادة والحجوزات</h3>
+                <button onclick="playUiAction(); closeAnyModal('clinicSettingsModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <form onsubmit="saveClinicSettings(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[10.5px] font-bold text-slate-300 mb-1">رقم هاتف العيادة والواتساب:</label>
+                    <input type="tel" id="settingsPhoneInput" required placeholder="077XXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 font-bold">
+                    <span class="text-[9px] text-slate-400 mt-1 block">يُستخدم للاتصال الفوري وإرسال رسائل حجز الواتساب.</span>
+                </div>
+
+                <div class="bg-slate-950/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h4 class="text-xs font-black text-white">حالة استقبال الطلبات</h4>
+                        <p class="text-[9px] text-slate-400">إيقاف أو استئناف استلام الحجوزات</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="settingsOrdersActive" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeAnyModal('clinicSettingsModal')" class="flex-1 bg-slate-800 text-slate-300 py-2 rounded-xl text-xs font-semibold">إلغاء</button>
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-black py-2 rounded-xl text-xs shadow active:scale-95">حفظ الإعدادات 💾</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -454,7 +498,7 @@
             </div>
             <div class="flex gap-2 pt-1">
                 <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
-                <a href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
+                <a id="modalCallBtn" href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
             </div>
         </div>
     </div>
@@ -741,7 +785,7 @@
         <div class="text-center border-b pb-2 mb-2">
             <h2 class="text-base font-black">عيادة حي الحسين التمريضية</h2>
             <p class="text-xs">خدمات طبية وتمريضية متكاملة 24 ساعة</p>
-            <p class="text-[10px]">هاتف: 07726053522</p>
+            <p class="text-[10px]" id="receiptPhone">هاتف: 07726053522</p>
         </div>
         <div id="receiptContent" class="text-xs space-y-1"></div>
         <div class="border-t pt-2 mt-3 text-center text-[10px]">
@@ -830,7 +874,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v15';
+                const CACHE_NAME = 'hay-alhussein-cache-v16';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -857,6 +901,7 @@
         const ordersRef = db.ref('clinic_bookings_queue');
         const staffRef = db.ref('clinic_staff_members');
         const reviewsRef = db.ref('clinic_reviews_data');
+        const settingsRef = db.ref('clinic_config_settings');
 
         let isAdmin = false;
         let currentMainTab = 'services';
@@ -867,6 +912,12 @@
         let ordersList = [];
         let cart = [];
         let sortableInstance = null;
+
+        // إعدادات العيادة الافتراضية
+        let clinicSettings = {
+            phone: "07726053522",
+            ordersActive: true
+        };
 
         const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -894,7 +945,7 @@
         }
 
         window.addEventListener('popstate', function(event) {
-            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal', 'iosInstallModal'];
+            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal', 'iosInstallModal', 'clinicSettingsModal'];
             
             allModals.forEach(id => {
                 const el = document.getElementById(id);
@@ -1088,7 +1139,7 @@
             }
         }, { passive: true });
 
-        // PWA Install System (Android & iOS)
+        // PWA Install System
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -1238,7 +1289,54 @@
             reader.readAsDataURL(file);
         }
 
-        // تفعيل مكتبة SortableJS لإعادة ترتيب الخدمات بالسحب والإفلات
+        // إدارة وحفظ إعدادات العيادة والهاتف
+        function openClinicSettingsModal() {
+            document.getElementById('settingsPhoneInput').value = clinicSettings.phone || "07726053522";
+            document.getElementById('settingsOrdersActive').checked = clinicSettings.ordersActive !== false;
+            
+            const modal = document.getElementById('clinicSettingsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('clinicSettingsModal');
+        }
+
+        function saveClinicSettings(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+            const newPhone = document.getElementById('settingsPhoneInput').value.trim();
+            const isActive = document.getElementById('settingsOrdersActive').checked;
+
+            clinicSettings = { phone: newPhone, ordersActive: isActive };
+            settingsRef.set(clinicSettings);
+            applyClinicSettingsUI();
+            closeAnyModal('clinicSettingsModal');
+            showToast('تم تحديث إعدادات العيادة بنجاح ⚙️');
+        }
+
+        function applyClinicSettingsUI() {
+            const rawPhone = clinicSettings.phone || "07726053522";
+            const telLink = `tel:${rawPhone}`;
+            
+            const flBtn = document.getElementById('floatingCallBtn');
+            if (flBtn) flBtn.href = telLink;
+
+            const modalCall = document.getElementById('modalCallBtn');
+            if (modalCall) modalCall.href = telLink;
+
+            const recPhone = document.getElementById('receiptPhone');
+            if (recPhone) recPhone.innerText = `هاتف: ${rawPhone}`;
+
+            const banner = document.getElementById('ordersStoppedBanner');
+            if (banner) {
+                if (clinicSettings.ordersActive === false) {
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
+            }
+        }
+
+        // تفعيل وترتيب الخدمات بالسحب والإفلات
         function initSortableSystem() {
             const grid = document.getElementById('mainItemsGrid');
             if (sortableInstance) {
@@ -1530,6 +1628,14 @@
         }
 
         function initClinicSystem() {
+            settingsRef.on('value', (snapshot) => {
+                const val = snapshot.val();
+                if (val) {
+                    clinicSettings = val;
+                    applyClinicSettingsUI();
+                }
+            });
+
             dataRef.on('value', (snapshot) => {
                 const val = snapshot.val();
                 if (val && val.services && val.services.length >= 2) {
@@ -1690,12 +1796,6 @@
 
                 grid.innerHTML += `
                     <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
-                        ${isAdmin && currentSubFilter === 'الكل' ? `
-                            <div class="drag-handle absolute top-2 left-2 bg-slate-950/90 border border-slate-700 text-slate-300 text-xs px-1.5 py-0.5 rounded-md z-10 flex items-center gap-1" title="اسحب للترتيب">
-                                <span>⠿</span>
-                            </div>
-                        ` : ''}
-
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full aspect-[4/3] rounded-xl bg-[#0b1329] med-img-frame flex items-center justify-center relative overflow-hidden">
                                 ${imgContent}
@@ -1714,6 +1814,11 @@
                             </button>
                             ${isAdmin ? `
                             <div class="flex items-center justify-between gap-1 pt-0.5">
+                                ${currentSubFilter === 'الكل' ? `
+                                <button class="drag-handle bg-slate-950 border border-slate-700 text-slate-300 px-2 py-1 rounded-lg text-xs flex items-center justify-center active:scale-95" title="اسحب للترتيب">
+                                    <span>⠿</span>
+                                </button>
+                                ` : ''}
                                 <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95" title="تعديل الخدمة والصورة">✏️ تعديل</button>
                                 <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95" title="حذف الخدمة">🗑️</button>
                             </div>
@@ -1759,6 +1864,11 @@
         }
 
         function addToCart(id, section) {
+            if (clinicSettings.ordersActive === false && !isAdmin) {
+                showToast('نعتذر، استقبال الحجوزات متوقف مؤقتاً', '⚠️');
+                return;
+            }
+
             const item = (allClinicData[section] || []).find(x => String(x.id) === String(id));
             if (!item) return;
             const exist = cart.find(c => String(c.id) === String(id));
@@ -1842,6 +1952,10 @@
         }
 
         function openCustomerDetailsModal() {
+            if (clinicSettings.ordersActive === false && !isAdmin) {
+                showToast('نعتذر، استقبال الحجوزات متوقف مؤقتاً', '⚠️');
+                return;
+            }
             if (cart.length === 0) { showToast('يرجى اختيار عناصر أولاً', '⚠️'); return; }
             closeCartModal();
             updateCostBreakdown();
@@ -1891,6 +2005,11 @@
 
         function processBookingSubmission(e) {
             e.preventDefault();
+            if (clinicSettings.ordersActive === false && !isAdmin) {
+                showToast('استقبال الطلبات متوقف حالياً', '⚠️');
+                return;
+            }
+
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const urgency = document.getElementById('urgencyLevel').value;
@@ -1945,7 +2064,12 @@
             updateCartBadge();
             closeCustomerModal();
 
-            const targetPhone = "9647726053522";
+            let targetPhone = clinicSettings.phone || "07726053522";
+            targetPhone = targetPhone.replace(/[^0-9]/g, '');
+            if (targetPhone.startsWith('07')) {
+                targetPhone = '964' + targetPhone.substring(1);
+            }
+
             window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
         }
 
