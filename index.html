@@ -219,7 +219,7 @@
         </div>
     </div>
 
-    <!-- Side Drawer (تم مسح الزر المكرر الأخير) -->
+    <!-- Side Drawer -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-3.5">
@@ -285,7 +285,7 @@
         </div>
     </nav>
 
-    <!-- Subcategories Scroll Bar (مع تضمين الحجامة الطبية المحدثة) -->
+    <!-- Subcategories Scroll Bar -->
     <div id="subFilterBar" class="bg-[#050b14] border-b border-slate-800/40 py-1.5 px-3">
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="subCategoryPills"></div>
     </div>
@@ -293,6 +293,30 @@
     <!-- Main Content Container -->
     <main class="flex-grow w-full px-3 py-3 space-y-3.5 max-w-xl mx-auto">
         
+        <!-- Trust Badges Bar (شريط مميزات وثقة المراجع المستوحى من الإعلان) -->
+        <div class="grid grid-cols-4 gap-1.5 bg-slate-950/80 p-2 rounded-2xl border border-slate-800/80 text-center shadow-md">
+            <div class="flex flex-col items-center justify-center p-1 bg-[#0b1329] rounded-xl border border-cyan-500/20">
+                <span class="text-sm">🛡️</span>
+                <span class="text-[8.5px] font-black text-cyan-300 mt-0.5">تعقيم 100%</span>
+                <span class="text-[7px] text-slate-400">استخدام مفرد</span>
+            </div>
+            <div class="flex flex-col items-center justify-center p-1 bg-[#0b1329] rounded-xl border border-cyan-500/20">
+                <span class="text-sm">⚡</span>
+                <span class="text-[8.5px] font-black text-cyan-300 mt-0.5">وصول سريع</span>
+                <span class="text-[7px] text-slate-400">استجابة فورية</span>
+            </div>
+            <div class="flex flex-col items-center justify-center p-1 bg-[#0b1329] rounded-xl border border-cyan-500/20">
+                <span class="text-sm">👥</span>
+                <span class="text-[8.5px] font-black text-cyan-300 mt-0.5">رجالي / نسائي</span>
+                <span class="text-[7px] text-slate-400">كادر متخصص</span>
+            </div>
+            <div class="flex flex-col items-center justify-center p-1 bg-[#0b1329] rounded-xl border border-cyan-500/20">
+                <span class="text-sm">🕒</span>
+                <span class="text-[8.5px] font-black text-cyan-300 mt-0.5">خدمة 24/7</span>
+                <span class="text-[7px] text-slate-400">طوارئ مستمرة</span>
+            </div>
+        </div>
+
         <!-- Interactive Swipeable Vital Banner -->
         <div id="vitalSwipeContainer" class="dark-glass rounded-2xl p-3.5 border border-cyan-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow relative overflow-hidden select-none cursor-grab">
             <div id="vitalCardInner" class="space-y-1 text-right transition-all duration-300"></div>
@@ -356,6 +380,48 @@
                 </div>
             </div>
             <div id="staffMembersGrid" class="grid grid-cols-1 gap-2"></div>
+        </div>
+
+        <!-- FAQ Accordion Section (قسم الأسئلة المتكررة المباشر) -->
+        <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2 text-right">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h4 class="text-xs font-black text-white flex items-center gap-1.5">
+                    <span class="text-cyan-400">❓</span> الأسئلة الأكثر تكراراً وشيوعاً
+                </h4>
+                <span class="text-[8.5px] text-slate-400 font-bold">إجابات سريعة</span>
+            </div>
+
+            <div class="space-y-1.5">
+                <details class="bg-[#0b1329] p-2.5 rounded-xl border border-slate-800/80 group">
+                    <summary class="text-[11px] font-bold text-slate-200 cursor-pointer flex justify-between items-center list-none">
+                        <span>👩‍⚕️ هل تتوفر ممرضة للزيارات المنزلية النسائية؟</span>
+                        <span class="text-cyan-400 group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <p class="text-[10px] text-slate-400 mt-2 pr-2 border-r-2 border-cyan-500 leading-relaxed">
+                        نعم، يتوفر كادر تمريضي نسائي متخصص ومدرب لتقديم كافة الخدمات المنزلية براحة وخصوصية تامة.
+                    </p>
+                </details>
+
+                <details class="bg-[#0b1329] p-2.5 rounded-xl border border-slate-800/80 group">
+                    <summary class="text-[11px] font-bold text-slate-200 cursor-pointer flex justify-between items-center list-none">
+                        <span>⏱️ كم يستغرق وصول الكادر للبيت بعد الحجز؟</span>
+                        <span class="text-cyan-400 group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <p class="text-[10px] text-slate-400 mt-2 pr-2 border-r-2 border-cyan-500 leading-relaxed">
+                        يتحرك الكادر فور تأكيد الحجز على WhatsApp، ويصل عادةً خلال <b>30 إلى 45 دقيقة</b> داخل قاطع حي الحسين والمناطق المجاورة.
+                    </p>
+                </details>
+
+                <details class="bg-[#0b1329] p-2.5 rounded-xl border border-slate-800/80 group">
+                    <summary class="text-[11px] font-bold text-slate-200 cursor-pointer flex justify-between items-center list-none">
+                        <span>🧪 هل تجلبون كافة الأدوات والمستهلكات المعقمة؟</span>
+                        <span class="text-cyan-400 group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <p class="text-[10px] text-slate-400 mt-2 pr-2 border-r-2 border-cyan-500 leading-relaxed">
+                        نعم، الكادر مجهز بشنطة طوارئ وتمريض متكاملة تحتوي على سرنجات، كانيولات، معقمات، كؤوس حجامة، وتيوبات سحب الدم المعقمة.
+                    </p>
+                </details>
+            </div>
         </div>
 
         <!-- Panoramic Reviews Banner -->
@@ -876,7 +942,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v18';
+                const CACHE_NAME = 'hay-alhussein-cache-v19';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -970,7 +1036,6 @@
             initSortableSystem();
         });
 
-        // قائمة التصنيفات الفرعية بعد تحديث الحجامة
         const subCategoriesConfig = {
             services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية رجالية ونسائية"],
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر"]
@@ -2181,9 +2246,8 @@
         function stopClinicCallExperience() {
             const modal = document.getElementById('callAudioModal');
             if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('modal-active');
-                pushModalState('callAudioModal');
+                modal.classList.remove('modal-active');
+                modal.classList.add('hidden');
             }
         }
 
