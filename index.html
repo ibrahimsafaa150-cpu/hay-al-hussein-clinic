@@ -60,6 +60,9 @@
 
         @keyframes pulseSoft { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-btn { animation: pulseSoft 2.5s infinite ease-in-out; }
+        .drag-handle { touch-action: none; cursor: grab; }
+        .drag-handle:active { cursor: grabbing; }
+
         @media print {
             body * { visibility: hidden; }
             #printableReceipt, #printableReceipt * { visibility: visible; }
@@ -75,7 +78,7 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Smart Banner -->
+    <!-- PWA Android Smart Banner -->
     <div id="installAppPrompt" class="hidden fixed bottom-24 left-3 right-3 z-40 bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 p-3 rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.25)] flex items-center justify-between gap-2 max-w-xl mx-auto">
         <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-slate-950 p-1 border border-cyan-500/40 flex items-center justify-center shrink-0 text-lg">🩺</div>
@@ -90,12 +93,37 @@
         </div>
     </div>
 
+    <!-- PWA iOS Modal (إرشادات التثبيت المخصصة للآيفون) -->
+    <div id="iosInstallModal" onclick="handleOutsideModalClick(event, 'iosInstallModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs text-right space-y-3.5 border border-cyan-500/40 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>📲</span> تثبيت التطبيق على iPhone</h3>
+                <button onclick="playUiAction(); closeAnyModal('iosInstallModal')" class="text-slate-400 font-bold p-1">✕</button>
+            </div>
+            <div class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+                <p class="flex items-center gap-2">
+                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">1</span>
+                    <span>اضغط على زر المشاركة <b>(Share ⎋)</b> في متصفح Safari بالأسفل.</span>
+                </p>
+                <p class="flex items-center gap-2">
+                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">2</span>
+                    <span>مرر للأسفل واختر <b>"إضافة إلى الصفحة الرئيسية"</b> (Add to Home Screen ➕).</span>
+                </p>
+                <p class="flex items-center gap-2">
+                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">3</span>
+                    <span>اضغط <b>"إضافة (Add)"</b> وسيظهر التطبيق على شاشتك الرئيسية فوراً.</span>
+                </p>
+            </div>
+            <button onclick="playUiAction(); closeAnyModal('iosInstallModal')" class="w-full bg-cyan-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95 shadow">حسناً، فهمت ذلك 👍</button>
+        </div>
+    </div>
+
     <!-- Floating Emergency Call Button -->
     <a href="tel:07726053522" class="fixed bottom-24 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
         📞
     </a>
 
-    <!-- Header Navigation (تم ترتيب المسافات وعلامة 24H بالكامل) -->
+    <!-- Header Navigation -->
     <header class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-slate-800 shadow-xl px-3 app-header w-full">
         <div class="flex items-center justify-between gap-2 w-full max-w-xl mx-auto">
             
@@ -113,7 +141,6 @@
                     </div>
                 </div>
 
-                <!-- اسم العيادة مع علامة 24H مفصولة ومرتبة -->
                 <div class="flex flex-col min-w-0 cursor-pointer justify-center flex-1 pr-1" onclick="playUiAction(); switchMainTab('services')">
                     <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                         <h1 class="text-[12.5px] sm:text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-teal-200 to-emerald-400 whitespace-nowrap truncate">
@@ -127,7 +154,6 @@
                 </div>
             </div>
 
-            <!-- زر سلة الحجز مفصول بمسافة مريحة -->
             <div class="flex items-center gap-1.5 shrink-0 pl-0.5">
                 <button onclick="playUiAction(); openCartModal()" class="relative w-10 h-10 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center active:scale-90 transition">
                     <span class="text-sm">📋</span>
@@ -286,7 +312,7 @@
             <span id="itemsCounterText" class="text-[10px] text-slate-400 font-bold"></span>
         </div>
 
-        <!-- Items Grid -->
+        <!-- Items Grid (مع دعم السحب والإفلات لإعادة الترتيب للمشرف) -->
         <div id="mainItemsGrid" class="grid grid-cols-2 gap-2.5 w-full"></div>
 
         <!-- Consultation Hub View -->
@@ -339,7 +365,7 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation Bar (Safe for iOS Home Indicator) -->
+    <!-- Bottom Navigation Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#030712]/95 backdrop-blur-xl border-t border-slate-800 z-40 pt-2.5 px-6 app-bottom-nav flex justify-around items-center">
         <button onclick="playUiAction(); switchMainTab('services')" class="flex flex-col items-center text-cyan-400 text-[10px] font-bold active:scale-95 transition">
             <span class="text-lg">🩺</span>
@@ -512,7 +538,6 @@
                     <input type="text" id="itemPrice" required placeholder="مثال: 15000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
-                <!-- 1080p Image Upload -->
                 <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-2">
                     <label class="block text-[10px] font-bold text-cyan-400">صورة الخدمة / الإجراء بدقة عالية:</label>
                     <div>
@@ -805,7 +830,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v14';
+                const CACHE_NAME = 'hay-alhussein-cache-v15';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -841,6 +866,9 @@
         let reviewsList = [];
         let ordersList = [];
         let cart = [];
+        let sortableInstance = null;
+
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
         function pushModalState(modalName) {
             history.pushState({ activeModal: modalName }, "");
@@ -866,7 +894,7 @@
         }
 
         window.addEventListener('popstate', function(event) {
-            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal'];
+            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal', 'iosInstallModal'];
             
             allModals.forEach(id => {
                 const el = document.getElementById(id);
@@ -887,6 +915,7 @@
         auth.onAuthStateChanged((user) => {
             isAdmin = !!user;
             updateAdminUI();
+            initSortableSystem();
         });
 
         const subCategoriesConfig = {
@@ -1059,7 +1088,7 @@
             }
         }, { passive: true });
 
-        // PWA Install System
+        // PWA Install System (Android & iOS)
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -1074,6 +1103,14 @@
         function triggerAppInstall() {
             playUiAction();
             closeDrawer();
+            if (isIos) {
+                const modal = document.getElementById('iosInstallModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('modal-active');
+                pushModalState('iosInstallModal');
+                return;
+            }
+
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
@@ -1199,6 +1236,43 @@
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        // تفعيل مكتبة SortableJS لإعادة ترتيب الخدمات بالسحب والإفلات
+        function initSortableSystem() {
+            const grid = document.getElementById('mainItemsGrid');
+            if (sortableInstance) {
+                sortableInstance.destroy();
+                sortableInstance = null;
+            }
+
+            if (isAdmin && currentMainTab !== 'consult' && currentSubFilter === 'الكل') {
+                sortableInstance = Sortable.create(grid, {
+                    animation: 180,
+                    handle: '.drag-handle',
+                    ghostClass: 'opacity-40',
+                    onEnd: function() {
+                        const newOrderIds = Array.from(grid.children).map(el => el.getAttribute('data-id'));
+                        const currentList = allClinicData[currentMainTab] || [];
+                        const reordered = [];
+
+                        newOrderIds.forEach(id => {
+                            const found = currentList.find(x => String(x.id) === String(id));
+                            if (found) reordered.push(found);
+                        });
+
+                        currentList.forEach(item => {
+                            if (!reordered.find(x => String(x.id) === String(item.id))) {
+                                reordered.push(item);
+                            }
+                        });
+
+                        allClinicData[currentMainTab] = reordered;
+                        dataRef.child(currentMainTab).set(reordered);
+                        showToast('تم حفظ الترتيب الجديد بنجاح 🔄');
+                    }
+                });
+            }
         }
 
         // Clinical Tools
@@ -1608,14 +1682,20 @@
             dataset.forEach(item => {
                 let imgContent = '';
                 if (item.image && item.image.trim() !== '') {
-                    imgContent = `<img src="${item.image}" alt="${item.name}" class="object-cover w-full h-full block" loading="lazy">`;
+                    imgContent = `<img src="${item.image}" alt="${item.name}" class="object-cover w-full h-full block pointer-events-none" loading="lazy">`;
                 } else {
                     const fallbackIcon = currentMainTab === 'lab' ? '🧪' : '🩺';
-                    imgContent = `<div class="flex flex-col items-center justify-center gap-1 text-slate-600"><span class="text-3xl">${fallbackIcon}</span><span class="text-[8px] font-bold text-slate-500">عيادة حي الحسين</span></div>`;
+                    imgContent = `<div class="flex flex-col items-center justify-center gap-1 text-slate-600 pointer-events-none"><span class="text-3xl">${fallbackIcon}</span><span class="text-[8px] font-bold text-slate-500">عيادة حي الحسين</span></div>`;
                 }
 
                 grid.innerHTML += `
                     <div data-id="${item.id}" class="dark-glass-card rounded-2xl p-2.5 w-full flex flex-col justify-between gap-2 shadow-md relative border border-slate-800/80">
+                        ${isAdmin && currentSubFilter === 'الكل' ? `
+                            <div class="drag-handle absolute top-2 left-2 bg-slate-950/90 border border-slate-700 text-slate-300 text-xs px-1.5 py-0.5 rounded-md z-10 flex items-center gap-1" title="اسحب للترتيب">
+                                <span>⠿</span>
+                            </div>
+                        ` : ''}
+
                         <div class="flex flex-col gap-2 cursor-pointer" onclick="openItemDetails('${item.id}', '${currentMainTab}')">
                             <div class="w-full aspect-[4/3] rounded-xl bg-[#0b1329] med-img-frame flex items-center justify-center relative overflow-hidden">
                                 ${imgContent}
@@ -1642,6 +1722,8 @@
                     </div>
                 `;
             });
+
+            initSortableSystem();
         }
 
         function openItemDetails(id, sec) {
