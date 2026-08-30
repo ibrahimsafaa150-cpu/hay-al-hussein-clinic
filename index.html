@@ -277,13 +277,18 @@
             </div>
         </div>
 
-        <!-- Nursing Team Section -->
+        <!-- Nursing Team Section (مع أزرار الحذف والتعديل للمشرف) -->
         <div class="dark-glass rounded-2xl p-3.5 border border-slate-800 space-y-2.5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                 <h4 class="text-xs font-black text-white flex items-center gap-1.5">
                     <span class="text-cyan-400">👥</span> نخبة الكادر التمريضي الطبي (24 ساعة)
                 </h4>
-                <span class="text-[9px] text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded-md font-bold">رجالي - نسائي</span>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-[9px] text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded-md font-bold">رجالي - نسائي</span>
+                    <button id="addStaffQuickBtn" onclick="playUiAction(); openAddStaffModal()" class="hidden bg-indigo-950/80 border border-indigo-500/50 text-indigo-300 text-[9.5px] font-bold px-2 py-0.5 rounded-lg active:scale-95 transition">
+                        + إضافة كادر
+                    </button>
+                </div>
             </div>
             <div id="staffMembersGrid" class="grid grid-cols-1 gap-2"></div>
         </div>
@@ -415,7 +420,7 @@
         </div>
     </div>
 
-    <!-- Staff Management Modal -->
+    <!-- Staff Management Modal (إضافة وتعديل الكادر) -->
     <div id="staffEditModal" onclick="handleOutsideModalClick(event, 'staffEditModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-4 w-full max-w-sm shadow-2xl relative space-y-2.5 text-right">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -433,12 +438,12 @@
                     <input type="text" id="staffRole" required placeholder="مثال: اختصاص زيارات منزلية، كانيولا وتخطيط قلب" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-[10px] text-slate-300 mb-0.5">رمز الحروف أو رابط الصورة:</label>
+                    <label class="block text-[10px] text-slate-300 mb-0.5">رمز الحروف (أو رابط الصورة):</label>
                     <input type="text" id="staffAvatar" placeholder="مثال: ع.س أو رابط صورة" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                 </div>
                 <div class="pt-1 flex gap-2">
                     <button type="button" onclick="closeStaffModal()" class="flex-1 bg-slate-800 text-slate-300 py-1.5 rounded-xl text-xs">إلغاء</button>
-                    <button type="submit" class="flex-1 bg-cyan-600 text-white font-bold py-1.5 rounded-xl text-xs">حفظ</button>
+                    <button type="submit" class="flex-1 bg-cyan-600 text-white font-bold py-1.5 rounded-xl text-xs">حفظ الكادر 💾</button>
                 </div>
             </form>
         </div>
@@ -481,7 +486,7 @@
                     <input type="text" id="itemPrice" required placeholder="مثال: 15000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400">
                 </div>
 
-                <!-- قسم رفع واختيار الصور مثل الصيدلية -->
+                <!-- قسم رفع واختيار الصور بدقة 1080p -->
                 <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800 space-y-2">
                     <label class="block text-[10px] font-bold text-cyan-400">صورة الخدمة / الإجراء بدقة عالية:</label>
                     <div>
@@ -774,7 +779,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v9';
+                const CACHE_NAME = 'hay-alhussein-cache-v10';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -1127,7 +1132,7 @@
             setTimeout(() => toast.classList.remove('toast-show'), 2200);
         }
 
-        // معالجة وضغط الصور بدقة 1080p مثل نظام الصيدلية
+        // معالجة وضغط الصور بدقة 1080p
         function handleClinicImageUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1261,16 +1266,43 @@
             modal.classList.add('hidden');
         }
 
-        // Staff CRUD
+        // Staff CRUD (إضافة، تعديل، وحذف أعضاء الكادر التمريضي)
         function openAddStaffModal() {
             document.getElementById('staffModalTitle').innerText = 'إضافة عضو كادر تمريضي';
             document.getElementById('staffEditId').value = '';
             document.getElementById('staffName').value = '';
             document.getElementById('staffRole').value = '';
             document.getElementById('staffAvatar').value = '';
-            document.getElementById('staffEditModal').classList.remove('hidden');
-            document.getElementById('staffEditModal').classList.add('modal-active');
+            
+            const modal = document.getElementById('staffEditModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
             pushModalState('staffEditModal');
+        }
+
+        function openEditStaffModal(id) {
+            const member = staffList.find(s => String(s.id) === String(id));
+            if (!member) return;
+
+            document.getElementById('staffModalTitle').innerText = 'تعديل بيانات عضو الكادر';
+            document.getElementById('staffEditId').value = member.id;
+            document.getElementById('staffName').value = member.name;
+            document.getElementById('staffRole').value = member.role;
+            document.getElementById('staffAvatar').value = member.avatar || '';
+
+            const modal = document.getElementById('staffEditModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('staffEditModal');
+        }
+
+        function deleteStaffMember(id) {
+            if (!isAdmin) return;
+            if (confirm('هل تريد بالتأكيد حذف هذا الممرض/الممرضة من قائمة الكادر؟')) {
+                staffList = staffList.filter(s => String(s.id) !== String(id));
+                staffRef.set(staffList);
+                showToast('تم حذف عضو الكادر بنجاح 🗑️');
+            }
         }
 
         function closeStaffModal() {
@@ -1962,14 +1994,18 @@
 
         function updateAdminUI() {
             const h = document.getElementById('adminActionHeader');
+            const addStaffQuickBtn = document.getElementById('addStaffQuickBtn');
             if (isAdmin) {
                 h.classList.remove('hidden');
                 h.classList.add('flex');
+                if (addStaffQuickBtn) addStaffQuickBtn.classList.remove('hidden');
             } else {
                 h.classList.add('hidden');
                 h.classList.remove('flex');
+                if (addStaffQuickBtn) addStaffQuickBtn.classList.add('hidden');
             }
             renderReviews();
+            renderStaff();
             renderActiveTabContent();
             updateAdminMetrics();
         }
@@ -1977,11 +2013,19 @@
         function renderStaff() {
             const grid = document.getElementById('staffMembersGrid');
             grid.innerHTML = staffList.map(s => `
-                <div class="bg-[#0b1329] p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-3 shadow">
+                <div class="bg-[#0b1329] p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-2 shadow">
                     <div class="text-right min-w-0 flex-1">
                         <h5 class="text-xs font-black text-white truncate">${s.name}</h5>
                         <p class="text-[9.5px] text-slate-400 truncate mt-0.5">${s.role}</p>
                     </div>
+
+                    ${isAdmin ? `
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="playUiAction(); openEditStaffModal('${s.id}')" class="bg-slate-800 text-cyan-300 text-[10px] font-bold px-2 py-1 rounded-lg border border-slate-700 active:scale-95" title="تعديل">✏️</button>
+                        <button onclick="playUiAction(); deleteStaffMember('${s.id}')" class="bg-rose-950/60 text-rose-400 text-[10px] font-bold px-2 py-1 rounded-lg border border-rose-900 active:scale-95" title="حذف الكادر">🗑️</button>
+                    </div>
+                    ` : ''}
+
                     <div class="w-10 h-10 rounded-2xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-xs font-black text-cyan-300 shrink-0 shadow-inner">
                         ${s.avatar || s.name.substring(0, 2)}
                     </div>
