@@ -78,43 +78,46 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Android Smart Banner -->
+    <!-- PWA Smart Banner (مع زر الباركود والتثبيت المباشر) -->
     <div id="installAppPrompt" class="hidden fixed bottom-24 left-3 right-3 z-40 bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 p-3 rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.25)] flex items-center justify-between gap-2 max-w-xl mx-auto">
         <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-slate-950 p-1 border border-cyan-500/40 flex items-center justify-center shrink-0 text-lg">🩺</div>
             <div class="min-w-0 text-right">
                 <h4 class="text-xs font-black text-white truncate">تثبيت تطبيق عيادة حي الحسين</h4>
-                <p class="text-[9px] text-slate-400 truncate">تصفح أسرع وحجز زيارة فورية بدون متصفح</p>
+                <p class="text-[9px] text-slate-400 truncate">تصفح أسرع أو امسح الباركود</p>
             </div>
         </div>
         <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="openQrInstallModal()" class="bg-slate-800 text-cyan-300 text-[11px] font-bold px-2.5 py-1.5 rounded-xl border border-cyan-500/30 active:scale-95 transition" title="عرض الباركود">📷 باركود</button>
             <button onclick="triggerAppInstall()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow active:scale-95 transition">تثبيت</button>
             <button onclick="dismissInstallPrompt()" class="text-slate-400 hover:text-white p-1 text-xs font-bold">✕</button>
         </div>
     </div>
 
-    <!-- PWA iOS Modal -->
-    <div id="iosInstallModal" onclick="handleOutsideModalClick(event, 'iosInstallModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-4">
-        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs text-right space-y-3.5 border border-cyan-500/40 shadow-2xl relative">
+    <!-- QR Code & Multi-Device Install Modal -->
+    <div id="qrInstallModal" onclick="handleOutsideModalClick(event, 'qrInstallModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-xs text-center space-y-3.5 border border-cyan-500/40 shadow-2xl relative">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>📲</span> تثبيت التطبيق على iPhone</h3>
-                <button onclick="playUiAction(); closeAnyModal('iosInstallModal')" class="text-slate-400 font-bold p-1">✕</button>
+                <h3 class="text-xs font-black text-white flex items-center gap-1.5"><span>📷</span> باركود وتثبيت التطبيق</h3>
+                <button onclick="playUiAction(); closeAnyModal('qrInstallModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
-            <div class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
-                <p class="flex items-center gap-2">
-                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">1</span>
-                    <span>اضغط على زر المشاركة <b>(Share ⎋)</b> في متصفح Safari بالأسفل.</span>
-                </p>
-                <p class="flex items-center gap-2">
-                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">2</span>
-                    <span>مرر للأسفل واختر <b>"إضافة إلى الصفحة الرئيسية"</b> (Add to Home Screen ➕).</span>
-                </p>
-                <p class="flex items-center gap-2">
-                    <span class="bg-slate-800 px-2 py-0.5 rounded font-black text-cyan-300 shrink-0">3</span>
-                    <span>اضغط <b>"إضافة (Add)"</b> وسيظهر التطبيق على شاشتك الرئيسية فوراً.</span>
-                </p>
+
+            <!-- صورة الباركود الديناميكي المولدة تلقائياً للموقع -->
+            <div class="p-3 bg-white rounded-2xl w-44 h-44 mx-auto flex items-center justify-center shadow-inner">
+                <img id="clinicQrImage" src="" alt="باركود عيادة حي الحسين" class="w-full h-full object-contain">
             </div>
-            <button onclick="playUiAction(); closeAnyModal('iosInstallModal')" class="w-full bg-cyan-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95 shadow">حسناً، فهمت ذلك 👍</button>
+            
+            <p class="text-[10px] text-slate-300 leading-relaxed font-semibold">
+                امسح الكود بكاميرا أي هاتف لفتح التطبيق فوراً.
+            </p>
+
+            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 text-right space-y-1.5 text-[10px] text-slate-300">
+                <p class="font-bold text-cyan-300">طريقة التثبيت على الآيفون (iOS):</p>
+                <p>1. اضغط زر المشاركة <b>(Share ⎋)</b> في Safari.</p>
+                <p>2. اختر <b>"إضافة إلى الصفحة الرئيسية (Add to Home Screen ➕)"</b>.</p>
+            </div>
+
+            <button onclick="triggerAppInstall(); closeAnyModal('qrInstallModal');" class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95 shadow">تثبيت التطبيق على هذا الجهاز 📲</button>
         </div>
     </div>
 
@@ -162,7 +165,7 @@
             </div>
         </div>
 
-        <!-- Authenticated Admin Action Header (مع زر الإعدادات الجديد) -->
+        <!-- Authenticated Admin Action Header -->
         <div id="adminActionHeader" class="hidden max-w-xl mx-auto mt-2 pt-2 border-t border-slate-800/80 flex-col gap-1.5 text-xs">
             <div class="grid grid-cols-6 gap-1 w-full text-center">
                 <button onclick="playUiAction(); openOrdersQueueModal()" class="relative bg-teal-950/90 border border-teal-500/60 text-teal-300 text-[9.5px] font-black py-1.5 rounded-xl flex items-center justify-center gap-1 active:scale-95 transition">
@@ -247,6 +250,9 @@
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); openAddReviewModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>⭐</span> <span class="font-bold">إضافة تقييم ورأي المراجع</span>
+                </button>
+                <button onclick="playUiAction(); closeDrawer(); openQrInstallModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
+                    <span>📷</span> <span class="font-bold">باركود التطبيق وتثبيته</span>
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
@@ -392,7 +398,7 @@
         </button>
     </div>
 
-    <!-- Clinic Settings Modal (تغيير رقم الهاتف والتحكم بالطلبات) -->
+    <!-- Clinic Settings Modal -->
     <div id="clinicSettingsModal" onclick="handleOutsideModalClick(event, 'clinicSettingsModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-2xl p-5 w-full max-w-sm shadow-2xl relative space-y-3.5 text-right border border-amber-500/40">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
@@ -403,7 +409,7 @@
                 <div>
                     <label class="block text-[10.5px] font-bold text-slate-300 mb-1">رقم هاتف العيادة والواتساب:</label>
                     <input type="tel" id="settingsPhoneInput" required placeholder="077XXXXXXXX" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-400 font-bold">
-                    <span class="text-[9px] text-slate-400 mt-1 block">يُستخدم للاتصال الفوري وإرسال رسائل حجز الواتساب.</span>
+                    <span class="text-[9px] text-slate-400 mt-1 block">يُستخدم للاتصال الفوري وتوجيه رسائل WhatsApp.</span>
                 </div>
 
                 <div class="bg-slate-950/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
@@ -874,7 +880,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v16';
+                const CACHE_NAME = 'hay-alhussein-cache-v17';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -913,7 +919,6 @@
         let cart = [];
         let sortableInstance = null;
 
-        // إعدادات العيادة الافتراضية
         let clinicSettings = {
             phone: "07726053522",
             ordersActive: true
@@ -945,7 +950,7 @@
         }
 
         window.addEventListener('popstate', function(event) {
-            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal', 'iosInstallModal', 'clinicSettingsModal'];
+            const allModals = ['howToUseModal', 'privacyModal', 'locationModal', 'callAudioModal', 'ordersQueueModal', 'staffEditModal', 'adminItemModal', 'clinicalToolsModal', 'patientTrackerModal', 'cartModal', 'customerModal', 'addReviewModal', 'adminPinModal', 'detailViewModal', 'qrInstallModal', 'clinicSettingsModal'];
             
             allModals.forEach(id => {
                 const el = document.getElementById(id);
@@ -1139,7 +1144,7 @@
             }
         }, { passive: true });
 
-        // PWA Install System
+        // PWA Install & QR System
         let deferredPrompt = null;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
@@ -1155,10 +1160,7 @@
             playUiAction();
             closeDrawer();
             if (isIos) {
-                const modal = document.getElementById('iosInstallModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('modal-active');
-                pushModalState('iosInstallModal');
+                openQrInstallModal();
                 return;
             }
 
@@ -1174,6 +1176,17 @@
             } else {
                 showToast('التطبيق مثبت بالفعل أو يمكنك إضافته من خيارات المتصفح (⋮)', 'ℹ️');
             }
+        }
+
+        function openQrInstallModal() {
+            const currentUrl = window.location.href;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(currentUrl)}`;
+            document.getElementById('clinicQrImage').src = qrUrl;
+
+            const modal = document.getElementById('qrInstallModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+            pushModalState('qrInstallModal');
         }
 
         function dismissInstallPrompt() {
@@ -2070,7 +2083,8 @@
                 targetPhone = '964' + targetPhone.substring(1);
             }
 
-            window.location.href = `https://api.whatsapp.com/send?phone=${targetPhone}&text=${encodeURIComponent(msg)}`;
+            // استخدام الرابط القياسي الموثوق لواتساب لتفادي أي مشاكل بالمتصفحات
+            window.location.href = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
         }
 
         function printOrderReceipt(orderKey) {
@@ -2347,6 +2361,11 @@
                             <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
                             ${isAdmin ? `
                             <div class="flex items-center justify-between gap-1 pt-0.5">
+                                ${currentSubFilter === 'الكل' ? `
+                                <button class="drag-handle bg-slate-950 border border-slate-700 text-slate-300 px-2 py-1 rounded-lg text-xs flex items-center justify-center active:scale-95" title="اسحب للترتيب">
+                                    <span>⠿</span>
+                                </button>
+                                ` : ''}
                                 <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95">✏️ تعديل</button>
                                 <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95">🗑️</button>
                             </div>
