@@ -78,7 +78,7 @@
         <span id="toastMessage" class="tracking-wide">تمت العملية بنجاح</span>
     </div>
 
-    <!-- PWA Smart Banner (مع زر الباركود والتثبيت المباشر) -->
+    <!-- PWA Smart Banner -->
     <div id="installAppPrompt" class="hidden fixed bottom-24 left-3 right-3 z-40 bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 p-3 rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.25)] flex items-center justify-between gap-2 max-w-xl mx-auto">
         <div class="flex items-center gap-2.5 min-w-0">
             <div class="w-9 h-9 rounded-xl bg-slate-950 p-1 border border-cyan-500/40 flex items-center justify-center shrink-0 text-lg">🩺</div>
@@ -102,7 +102,6 @@
                 <button onclick="playUiAction(); closeAnyModal('qrInstallModal')" class="text-slate-400 font-bold p-1">✕</button>
             </div>
 
-            <!-- صورة الباركود الديناميكي المولدة تلقائياً للموقع -->
             <div class="p-3 bg-white rounded-2xl w-44 h-44 mx-auto flex items-center justify-center shadow-inner">
                 <img id="clinicQrImage" src="" alt="باركود عيادة حي الحسين" class="w-full h-full object-contain">
             </div>
@@ -220,7 +219,7 @@
         </div>
     </div>
 
-    <!-- Side Drawer -->
+    <!-- Side Drawer (تم مسح الزر المكرر الأخير) -->
     <div id="drawerBackdrop" onclick="closeDrawer()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden transition-opacity"></div>
     <div id="sideDrawer" class="fixed top-0 right-0 h-full w-72 bg-[#090d1a] border-l border-slate-800 z-50 p-4 flex flex-col justify-between overflow-y-auto drawer-closed">
         <div class="space-y-3.5">
@@ -263,9 +262,6 @@
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('locationModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>📍</span> <span class="font-bold">موقع العيادة وأوقات الدوام</span>
                 </button>
-                <button id="drawerInstallBtn" onclick="triggerAppInstall()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
-                    <span>📲</span> <span class="font-bold">تثبيت التطبيق على الشاشة</span>
-                </button>
             </div>
         </div>
 
@@ -289,7 +285,7 @@
         </div>
     </nav>
 
-    <!-- Subcategories Scroll Bar -->
+    <!-- Subcategories Scroll Bar (مع تضمين الحجامة الطبية المحدثة) -->
     <div id="subFilterBar" class="bg-[#050b14] border-b border-slate-800/40 py-1.5 px-3">
         <div class="flex gap-2 overflow-x-auto no-scrollbar max-w-xl mx-auto" id="subCategoryPills"></div>
     </div>
@@ -880,7 +876,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v17';
+                const CACHE_NAME = 'hay-alhussein-cache-v18';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -974,8 +970,9 @@
             initSortableSystem();
         });
 
+        // قائمة التصنيفات الفرعية بعد تحديث الحجامة
         const subCategoriesConfig = {
-            services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية"],
+            services: ["الكل", "تمريض منزلي ورعاية", "كانيولا وزرق ومحاليل", "جراحة صغرى وتضميد", "فحوصات وECG", "قسطرة وتجبير كسور", "حجامة طبية رجالية ونسائية"],
             lab: ["الكل", "فحوصات الدم الشاملة", "الهرمونات والفيتامينات", "وظائف كبد وكلى", "فحوصات سريعة وسكر"]
         };
 
@@ -1657,7 +1654,8 @@
                     allClinicData = {
                         services: [
                             { id: "srv_1", category: "تمريض منزلي ورعاية", name: "زيارة تمريضية منزلية (كادر رجالي / نسائي)", usage: "خدمة تمريضية متكاملة في المنزل ومتابعة العلامات الحيوية", price: "15,000 د.ع", image: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1080&q=85" },
-                            { id: "srv_2", category: "تمريض منزلي ورعاية", name: "رعاية صحية ومتابعة بعد العمليات الجراحية", usage: "غيار معقم وتضميد ومتابعة التئام الجروح الجراحية بالمنزل", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1080&q=85" }
+                            { id: "srv_2", category: "تمريض منزلي ورعاية", name: "رعاية صحية ومتابعة بعد العمليات الجراحية", usage: "غيار معقم وتضميد ومتابعة التئام الجروح الجراحية بالمنزل", price: "20,000 د.ع", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1080&q=85" },
+                            { id: "srv_3", category: "حجامة طبية رجالية ونسائية", name: "حجامة طبية وقائية وعلاجية متكاملة (كادر رجالي / نسائي)", usage: "كؤوس معقمة استخدام مفرد مع مشرط طبي جراحي معقم وتعقيم كامل", price: "25,000 د.ع", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1080&q=85" }
                         ],
                         lab: [
                             { id: "lab_1", category: "فحوصات الدم الشاملة", name: "تحليل صورة الدم الكاملة CBC", usage: "فحص كريات الدم، الهيموغلوبين والصفائح - سحب وريدي سريع", price: "8,000 د.ع", image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1080&q=85" }
@@ -2083,7 +2081,6 @@
                 targetPhone = '964' + targetPhone.substring(1);
             }
 
-            // استخدام الرابط القياسي الموثوق لواتساب لتفادي أي مشاكل بالمتصفحات
             window.location.href = `https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`;
         }
 
@@ -2184,8 +2181,9 @@
         function stopClinicCallExperience() {
             const modal = document.getElementById('callAudioModal');
             if (modal) {
-                modal.classList.remove('modal-active');
-                modal.classList.add('hidden');
+                modal.classList.remove('hidden');
+                modal.classList.add('modal-active');
+                pushModalState('callAudioModal');
             }
         }
 
@@ -2361,11 +2359,6 @@
                             <button onclick="addToCart('${item.id}', '${currentMainTab}')" class="w-full bg-cyan-600 text-white font-black py-1.5 rounded-xl text-xs">➕ طلب للحجز</button>
                             ${isAdmin ? `
                             <div class="flex items-center justify-between gap-1 pt-0.5">
-                                ${currentSubFilter === 'الكل' ? `
-                                <button class="drag-handle bg-slate-950 border border-slate-700 text-slate-300 px-2 py-1 rounded-lg text-xs flex items-center justify-center active:scale-95" title="اسحب للترتيب">
-                                    <span>⠿</span>
-                                </button>
-                                ` : ''}
                                 <button onclick="playUiAction(); openEditItemModal('${item.id}', '${currentMainTab}')" class="flex-1 bg-slate-800 text-slate-200 py-1 rounded-lg text-xs border border-slate-700 active:scale-95">✏️ تعديل</button>
                                 <button onclick="playUiAction(); deleteItemRecord('${item.id}', '${currentMainTab}')" class="bg-rose-950/60 text-rose-400 px-2.5 py-1 rounded-lg text-xs border border-rose-900 active:scale-95">🗑️</button>
                             </div>
