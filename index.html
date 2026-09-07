@@ -260,7 +260,7 @@
                     <span>📷</span> <span class="font-bold">باركود التطبيق وتثبيته</span>
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('howToUseModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
-                    <span>📖</span> <span class="font-bold">طريقة الاستخدام والحجز</span>
+                    <span>📖</span> <span class="font-bold">طريقة الحجز والطلب</span>
                 </button>
                 <button onclick="playUiAction(); closeDrawer(); openStaticModal('privacyModal')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-900/60 text-slate-200 text-right transition">
                     <span>🔒</span> <span class="font-bold">سياسة الخصوصية والشروط</span>
@@ -475,19 +475,19 @@
         </div>
     </div>
 
-    <!-- Modals: How To Use (Animated Interactive Demo Video Simulator) -->
+    <!-- Modals: How To Use (طريقة الحجز والطلب - سحب يدوي وانتقال تلقائي كل 8 ثوانٍ) -->
     <div id="howToUseModal" onclick="handleOutsideModalClick(event, 'howToUseModal')" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 hidden items-center justify-center p-3">
         <div onclick="event.stopPropagation()" class="dark-glass rounded-3xl p-4 w-full max-w-sm shadow-2xl relative space-y-3 text-right border border-cyan-500/40">
             <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                 <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
-                    <h3 class="text-xs font-black text-white">🎬 طريقة الحجز والطلب (عرض تفاعلي)</h3>
+                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    <h3 class="text-xs font-black text-white">📖 طريقة الحجز والطلب</h3>
                 </div>
                 <button onclick="playUiAction(); closeStaticModal('howToUseModal')" class="text-slate-400 hover:text-white font-bold p-1">✕</button>
             </div>
 
-            <!-- محاكي شاشة الهاتف المتحرك -->
-            <div class="relative bg-slate-950 rounded-2xl border border-cyan-500/30 p-3 overflow-hidden min-h-[170px] flex flex-col justify-between shadow-inner">
+            <!-- حاوية السحب التفاعلية للمحاكي -->
+            <div id="demoSwipeArea" class="relative bg-slate-950 rounded-2xl border border-cyan-500/30 p-3 overflow-hidden min-h-[175px] flex flex-col justify-between shadow-inner cursor-grab select-none">
                 <!-- شريط التقدم الزمني -->
                 <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden mb-2">
                     <div id="demoProgressBar" class="bg-gradient-to-r from-cyan-400 to-teal-400 h-full w-1/4 transition-all duration-500"></div>
@@ -501,20 +501,16 @@
                 </div>
             </div>
 
-            <!-- الشرح الصوتي والنص المرافق -->
-            <div class="bg-[#0b1329] p-2.5 rounded-xl border border-slate-800 space-y-1">
-                <div class="flex items-center justify-between">
-                    <span id="demoStepBadge" class="text-[9px] bg-cyan-950 text-cyan-300 font-bold px-2 py-0.5 rounded-md">المشهد 1 من 4</span>
-                    <span id="demoStepTimer" class="text-[9px] text-slate-400 font-bold">المدة: 6 ثوانٍ</span>
-                </div>
-                <p id="demoVoiceoverText" class="text-[10.5px] text-slate-200 font-semibold leading-relaxed min-h-[38px]"></p>
+            <!-- الشرح التفصيلي الموسع -->
+            <div class="bg-[#0b1329] p-3 rounded-xl border border-slate-800 space-y-1.5">
+                <h4 id="demoStepTitle" class="text-xs font-black text-cyan-300"></h4>
+                <p id="demoVoiceoverText" class="text-[10.5px] text-slate-200 font-semibold leading-relaxed min-h-[55px]"></p>
             </div>
 
-            <!-- أزرار التحكم بالخطوات -->
-            <div class="flex gap-1.5 pt-1">
-                <button onclick="prevDemoStep()" class="bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-bold px-3 py-1.5 rounded-xl active:scale-95 transition">السابق</button>
-                <button onclick="toggleDemoAutoplay()" id="demoPlayBtn" class="flex-1 bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-bold py-1.5 rounded-xl active:scale-95 transition">إيقاف مؤقت ⏸️</button>
-                <button onclick="nextDemoStep()" class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl active:scale-95 transition">التالي</button>
+            <!-- مؤشرات الخطوات التفاعلية بالأسفل -->
+            <div class="flex items-center justify-between pt-1 px-1">
+                <span class="text-[9.5px] text-slate-400 font-bold">اسحب يميناً ويساراً للتنقل ↔️</span>
+                <div class="flex items-center gap-1.5" id="demoDotsContainer"></div>
             </div>
         </div>
     </div>
@@ -823,8 +819,8 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">ملاحظات إضافية (اختياري):</label>
-                    <input type="text" id="custNotes" placeholder="اكتب ملاحظاتك هنا..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
+                    <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">ملاحظات إضافية والأعراض (مثل هبوط أو صعود ضغط، سكر، وغيرها):</label>
+                    <input type="text" id="custNotes" placeholder="مثال: يعاني من هبوط ضغط، صعود سكر، دوار شديد..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none">
                 </div>
 
                 <div>
@@ -952,7 +948,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v21';
+                const CACHE_NAME = 'hay-alhussein-cache-v22';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -1041,22 +1037,20 @@
             }
         });
 
-        // Interactive Booking Video Simulation System (طريقة الاستخدام التفاعلية)
+        // Interactive Booking Steps System (طريقة الحجز والطلب - سحب يدوي + 8 ثوانٍ)
         let currentDemoStep = 0;
         let demoIntervalTimer = null;
-        let isDemoPlaying = true;
 
         const demoScenes = [
             {
-                badge: "المشهد 1 من 4: اختيار الخدمة",
-                duration: "المدة: 6 ثوانٍ",
-                voiceover: "محتاج كادر تمريضي بالبيت أو فحص فوري؟ ادخل لموقع عيادة حي الحسين واختر الخدمة اللي تحتاجها بضغطة واحدة",
+                title: "1️⃣ اختيار الخدمة الطبية ومعرفة السعر",
+                voiceover: "تصفح قائمة الخدمات التمريضية أو تحاليل المختبر واطلع على السعر والتفاصيل، ثم اضغط زر طلب للحجز لإضافتها إلى قائمتك",
                 handPos: "bottom-4 left-6",
                 progressWidth: "25%",
                 html: `
                     <div class="bg-slate-900/90 p-2 rounded-xl border border-cyan-500/40 flex items-center justify-between">
                         <div class="text-right">
-                            <span class="text-[8px] bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded font-bold">تمريض منزلي</span>
+                            <span class="text-[8px] bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded font-bold">تمريض منزلي ورعاية</span>
                             <h5 class="text-xs font-black text-white mt-1">زيارة تمريضية منزلية (كادر رجالي / نسائي)</h5>
                             <span class="text-[10px] text-cyan-400 font-bold">15,000 د.ع</span>
                         </div>
@@ -1068,16 +1062,15 @@
                 `
             },
             {
-                badge: "المشهد 2 من 4: سلة الحجز",
-                duration: "المدة: 6 ثوانٍ",
-                voiceover: "افتح قائمة الحجز وتأكد من خدماتك والتكلفة التقديرية بكل شفافية",
+                title: "2️⃣ مراجعة السلة وتثبيت الموعد",
+                voiceover: "افتح أيقونة الحجز من أسفل الشاشة للتأكد من الخدمات المطلوبة والمجموع التقديري، ثم اضغط تثبيت الموعد وتأكيد الطلب",
                 handPos: "bottom-3 left-10",
                 progressWidth: "50%",
                 html: `
                     <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800 space-y-1.5">
                         <div class="flex justify-between items-center text-xs font-black text-white border-b border-slate-800 pb-1">
-                            <span>العنصر المختار:</span>
-                            <span class="text-cyan-400">1x زيارة منزلية</span>
+                            <span>الخدمات المختارة:</span>
+                            <span class="text-cyan-400">1x زيارة تمريضية منزلية</span>
                         </div>
                         <div class="flex justify-between items-center text-xs font-bold text-slate-300">
                             <span>المجموع التقديري:</span>
@@ -1090,38 +1083,38 @@
                 `
             },
             {
-                badge: "المشهد 3 من 4: تعبئة البيانات و GPS",
-                duration: "المدة: 8 ثوانٍ",
-                voiceover: "اكتب اسمك وعنوانك، واختر إذا تفضل كادر رجالي أو نسائي، وتقدر ترفق موقعك بالخريطة حتى يوصلك الكادر بدون أي تأخير",
+                title: "3️⃣ كتابة البيانات، الأعراض والموقع GPS",
+                voiceover: "اكتب اسم المريض ورقم الهاتف، وحدد إذا كانت الزيارة منزلية أو داخل العيادة، واختر كادر رجالي أو نسائي ودرجة الاستعجال، واذكر أي أعراض مثل هبوط الضغط أو صعود السكر، ثم اضغط إرفاق موقع الخريطة GPS",
                 handPos: "bottom-3 left-8",
                 progressWidth: "75%",
                 html: `
-                    <div class="space-y-1.5 text-[10px] text-right">
+                    <div class="space-y-1.5 text-[9.5px] text-right">
                         <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 flex justify-between text-slate-300">
-                            <span>المريض: علي محمد حسين</span>
+                            <span>المريض: علي محمد</span>
                             <span>كادر: رجالي</span>
+                            <span class="text-rose-400 font-bold">عاجل 🚨</span>
                         </div>
-                        <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 text-slate-300 truncate">
-                            العنوان: حي الحسين - شارع 20
+                        <div class="bg-slate-900 p-1.5 rounded-lg border border-slate-800 text-slate-300 flex justify-between">
+                            <span>المكان: زيارة منزلية</span>
+                            <span class="text-amber-300 truncate">الأعراض: هبوط ضغط ودوار</span>
                         </div>
                         <div class="bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 font-bold p-1.5 rounded-lg text-center flex items-center justify-center gap-1">
-                            <span>📍</span> <span>تم إرفاق الموقع الجغرافي GPS بنجاح</span>
+                            <span>📍</span> <span>تم حفظ موقع البيت بدقة عبر الخريطة GPS</span>
                         </div>
                     </div>
                 `
             },
             {
-                badge: "المشهد 4 من 4: الإرسال عبر واتساب",
-                duration: "المدة: 7 ثوانٍ",
-                voiceover: "اضغط إرسال وطلبك يوصل للعيادة فوراً، وكادرنا خافر بخدمتكم 24 ساعة طيلة أيام الأسبوع",
+                title: "4️⃣ الإرسال المباشر وتأكيد الحجز عبر WhatsApp",
+                voiceover: "بمجرد الضغط على زر الإرسال سيفتح تطبيق الواتساب مع رسالة مرتبة بكافة تفاصيل حالتك وموقعك، ليتحرك الكادر الطبي المختص فوراً لخدمتكم 24 ساعة",
                 handPos: "bottom-3 left-1/2 -translate-x-1/2",
                 progressWidth: "100%",
                 html: `
                     <div class="bg-emerald-950/90 border border-emerald-500/50 p-2 rounded-xl text-right space-y-1">
                         <div class="flex items-center gap-1 text-emerald-300 font-black text-xs">
-                            <span>💬</span> <span>جاهز للتحويل إلى واتساب العيادة...</span>
+                            <span>💬</span> <span>التحويل التلقائي إلى واتساب العيادة...</span>
                         </div>
-                        <p class="text-[9.5px] text-emerald-200">الرسالة منسقة تلقائياً مع تفاصيل الحجز وموقع البيت</p>
+                        <p class="text-[9px] text-emerald-200">يتم إرسال نوع الخدمة، نوع الكادر، الأعراض المرضية وموقع GPS مباشرة</p>
                     </div>
                     <div class="w-full bg-gradient-to-r from-emerald-600 to-green-600 text-white text-[11px] font-black py-1.5 rounded-xl text-center shadow flex items-center justify-center gap-1">
                         <span>📲</span> <span>إرسال الحجز فوراً عبر WhatsApp</span>
@@ -1132,24 +1125,35 @@
 
         function renderDemoScene(index) {
             const scene = demoScenes[index];
-            document.getElementById('demoStepBadge').innerText = scene.badge;
-            document.getElementById('demoStepTimer').innerText = scene.duration;
+            document.getElementById('demoStepTitle').innerText = scene.title;
             document.getElementById('demoVoiceoverText').innerText = scene.voiceover;
             document.getElementById('demoProgressBar').style.width = scene.progressWidth;
             document.getElementById('demoSceneContent').innerHTML = scene.html;
             
             const hand = document.getElementById('demoHandPointer');
             hand.className = `absolute ${scene.handPos} text-xl animate-tap select-none pointer-events-none transition-all duration-500`;
+
+            const dotsContainer = document.getElementById('demoDotsContainer');
+            if (dotsContainer) {
+                dotsContainer.innerHTML = demoScenes.map((_, i) => `
+                    <span onclick="goToDemoStep(${i})" class="cursor-pointer transition-all ${i === index ? 'w-4 h-1.5 bg-cyan-400 rounded-full' : 'w-1.5 h-1.5 bg-slate-700 rounded-full'}"></span>
+                `).join('');
+            }
+        }
+
+        function goToDemoStep(idx) {
+            playUiAction();
+            currentDemoStep = idx;
+            renderDemoScene(currentDemoStep);
+            restartDemoTimer();
         }
 
         function nextDemoStep() {
-            playUiAction();
             currentDemoStep = (currentDemoStep + 1) % demoScenes.length;
             renderDemoScene(currentDemoStep);
         }
 
         function prevDemoStep() {
-            playUiAction();
             currentDemoStep = (currentDemoStep - 1 + demoScenes.length) % demoScenes.length;
             renderDemoScene(currentDemoStep);
         }
@@ -1157,29 +1161,42 @@
         function startDemoSimulation() {
             currentDemoStep = 0;
             renderDemoScene(0);
-            clearInterval(demoIntervalTimer);
-            isDemoPlaying = true;
-            document.getElementById('demoPlayBtn').innerText = 'إيقاف مؤقت ⏸️';
-            demoIntervalTimer = setInterval(() => {
-                currentDemoStep = (currentDemoStep + 1) % demoScenes.length;
-                renderDemoScene(currentDemoStep);
-            }, 6800);
+            restartDemoTimer();
         }
 
         function stopDemoSimulation() {
             clearInterval(demoIntervalTimer);
         }
 
-        function toggleDemoAutoplay() {
-            playUiAction();
-            if (isDemoPlaying) {
-                stopDemoSimulation();
-                isDemoPlaying = false;
-                document.getElementById('demoPlayBtn').innerText = 'تشغيل تلقائي ▶️';
-            } else {
-                startDemoSimulation();
-            }
+        function restartDemoTimer() {
+            clearInterval(demoIntervalTimer);
+            demoIntervalTimer = setInterval(() => {
+                nextDemoStep();
+            }, 8000);
         }
+
+        // Swipe Touch Handling for Demo Area
+        let dTouchStartX = 0;
+        let dTouchEndX = 0;
+        const demoSwipeArea = document.getElementById('demoSwipeArea');
+
+        demoSwipeArea.addEventListener('touchstart', e => {
+            dTouchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        demoSwipeArea.addEventListener('touchend', e => {
+            dTouchEndX = e.changedTouches[0].screenX;
+            const diff = dTouchEndX - dTouchStartX;
+            if (Math.abs(diff) > 40) {
+                playUiAction();
+                if (diff < 0) {
+                    nextDemoStep();
+                } else {
+                    prevDemoStep();
+                }
+                restartDemoTimer();
+            }
+        }, { passive: true });
 
         // Auth Security Observer
         auth.onAuthStateChanged((user) => {
@@ -2257,7 +2274,7 @@
             msg += `👥 *الكادر المطلوب:* ${staff}\n`;
             msg += `📍 *المكان:* ${type}\n`;
             msg += `🏠 *العنوان:* ${address}\n`;
-            if (notes) msg += `📝 *ملاحظات:* ${notes}\n`;
+            if (notes) msg += `📝 *ملاحظات والأعراض:* ${notes}\n`;
             if (gpsLink) msg += `🗺️ *الموقع GPS:* ${gpsLink}\n`;
             msg += `━━━━━━━━━━━━━━━━━━━━\n📦 *الخدمات والتحاليل:*\n`;
 
