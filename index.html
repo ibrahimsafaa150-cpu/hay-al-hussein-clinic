@@ -127,7 +127,7 @@
     </div>
 
     <!-- Floating Emergency Call Button -->
-    <a id="floatingCallBtn" href="tel:07726053522" class="fixed bottom-24 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
+    <a id="floatingCallBtn" href="tel:07733670772" class="fixed bottom-24 left-4 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center text-white text-xl pulse-btn active:scale-90 transition">
         📞
     </a>
 
@@ -572,7 +572,7 @@
             </div>
             <div class="flex gap-2 pt-1">
                 <button onclick="stopClinicCallExperience()" class="flex-1 bg-rose-900 text-rose-200 py-2 rounded-xl text-xs font-bold active:scale-95">خروج</button>
-                <a id="modalCallBtn" href="tel:07726053522" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
+                <a id="modalCallBtn" href="tel:07733670772" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 active:scale-95">اتصال هاتفي</a>
             </div>
         </div>
     </div>
@@ -859,7 +859,7 @@
         <div class="text-center border-b pb-2 mb-2">
             <h2 class="text-base font-black">عيادة حي الحسين التمريضية</h2>
             <p class="text-xs">خدمات طبية وتمريضية متكاملة 24 ساعة</p>
-            <p class="text-[10px]" id="receiptPhone">هاتف: 07726053522</p>
+            <p class="text-[10px]" id="receiptPhone">هاتف: 07733670772</p>
         </div>
         <div id="receiptContent" class="text-xs space-y-1"></div>
         <div class="border-t pt-2 mt-3 text-center text-[10px]">
@@ -948,7 +948,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const CACHE_NAME = 'hay-alhussein-cache-v22';
+                const CACHE_NAME = 'hay-alhussein-cache-v23';
                 self.addEventListener('install', e => self.skipWaiting());
                 self.addEventListener('fetch', e => {
                     e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
@@ -987,8 +987,9 @@
         let cart = [];
         let sortableInstance = null;
 
+        // الرقم الأساسي المعتمد والمحدث للعيادة
         let clinicSettings = {
-            phone: "07726053522",
+            phone: "07733670772",
             ordersActive: true
         };
 
@@ -1533,9 +1534,10 @@
             reader.readAsDataURL(file);
         }
 
-        // إدارة وحفظ إعدادات العيادة والهاتف
+        // إدارة وحفظ إعدادات العيادة والهاتف مع دعم الحفظ المزدوج (Local + Cloud)
         function openClinicSettingsModal() {
-            document.getElementById('settingsPhoneInput').value = clinicSettings.phone || "07726053522";
+            const raw = clinicSettings.phone || "07733670772";
+            document.getElementById('settingsPhoneInput').value = raw;
             document.getElementById('settingsOrdersActive').checked = clinicSettings.ordersActive !== false;
             
             const modal = document.getElementById('clinicSettingsModal');
@@ -1546,19 +1548,34 @@
 
         function saveClinicSettings(e) {
             e.preventDefault();
-            if (!isAdmin) return;
-            const newPhone = document.getElementById('settingsPhoneInput').value.trim();
+            let rawPhone = document.getElementById('settingsPhoneInput').value.trim();
+            // تنظيف الرقم من أي مسافات أو رموز
+            rawPhone = rawPhone.replace(/\s+/g, '').replace(/-/g, '');
             const isActive = document.getElementById('settingsOrdersActive').checked;
 
-            clinicSettings = { phone: newPhone, ordersActive: isActive };
-            settingsRef.set(clinicSettings);
+            clinicSettings = { 
+                phone: rawPhone, 
+                ordersActive: isActive 
+            };
+
+            // حفظ فوري محلي لتحديث الواجهة فوراً
+            localStorage.setItem('clinic_local_config', JSON.stringify(clinicSettings));
             applyClinicSettingsUI();
+
+            // حفظ متزامن في Firebase
+            settingsRef.set(clinicSettings)
+            .then(() => {
+                showToast('تم حفظ الرقم وتحديث الإعدادات بنجاح 💾');
+            })
+            .catch(() => {
+                showToast('تم الحفظ محلياً على هذا الجهاز بنجاح ✅');
+            });
+
             closeAnyModal('clinicSettingsModal');
-            showToast('تم تحديث إعدادات العيادة بنجاح ⚙️');
         }
 
         function applyClinicSettingsUI() {
-            const rawPhone = clinicSettings.phone || "07726053522";
+            const rawPhone = clinicSettings.phone || "07733670772";
             const telLink = `tel:${rawPhone}`;
             
             const flBtn = document.getElementById('floatingCallBtn');
@@ -1872,10 +1889,20 @@
         }
 
         function initClinicSystem() {
+            // قراءة الإعدادات من التخزين المحلي فوراً
+            const localCfg = localStorage.getItem('clinic_local_config');
+            if (localCfg) {
+                try {
+                    clinicSettings = JSON.parse(localCfg);
+                    applyClinicSettingsUI();
+                } catch(e) {}
+            }
+
             settingsRef.on('value', (snapshot) => {
                 const val = snapshot.val();
-                if (val) {
+                if (val && val.phone) {
                     clinicSettings = val;
+                    localStorage.setItem('clinic_local_config', JSON.stringify(val));
                     applyClinicSettingsUI();
                 }
             });
@@ -1937,6 +1964,7 @@
 
             renderVitalCard(0);
             restartVitalTimer();
+            applyClinicSettingsUI();
             updateAdminUI();
             updateCartBadge();
         }
@@ -2309,7 +2337,7 @@
             updateCartBadge();
             closeCustomerModal();
 
-            let targetPhone = clinicSettings.phone || "07726053522";
+            let targetPhone = clinicSettings.phone || "07733670772";
             targetPhone = targetPhone.replace(/[^0-9]/g, '');
             if (targetPhone.startsWith('07')) {
                 targetPhone = '964' + targetPhone.substring(1);
